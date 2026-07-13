@@ -1,0 +1,13 @@
+node_modules
+.next
+.env
+.env.local
+*.log
+.DS_Store
+public/renders/
+data/
+*.tsbuildinfo
+.claude/
+
+# local agent skill copies (optional)
+# .agents/

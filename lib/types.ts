@@ -1,0 +1,49 @@
+// Shared types across the paper -> video pipeline.
+
+/** A single narrated beat of the summary video. */
+export interface Scene {
+  /** 1-based order of the scene. */
+  index: number;
+  /** Short on-screen title/caption for this beat. */
+  title: string;
+  /** The narration text spoken for this scene. */
+  narration: string;
+  /** Optional cue describing what should appear visually (descriptive text, not used for rendering yet). */
+  visualCue?: string;
+  /** Icon key (from remotion/icons.ts's vocabulary) used for this scene's motion-graphics visual. */
+  icon: string;
+  /** Illustrated scene backdrop key (from remotion/scenes's vocabulary), e.g. "lab-bench". Used as fallback when AI image gen is unavailable. */
+  setting: string;
+  /** Concrete visual description of the ideal illustration for this scene, fed to the image model. */
+  imagePrompt: string;
+  /** A DIFFERENT shot/angle of the same beat, used for a mid-scene hard-cut (pattern interruption). */
+  imagePromptB: string;
+  /** Short subject noun this scene is "about" (e.g. "brain", "cell", "algorithm"). Labels the talking mascot. */
+  subject: string;
+  /** 3-6 concrete terms actually named in the paper for this beat (organism, molecule, technique, structure). Grounds the image prompt so illustrations aren't generic/invented. */
+  keyTerms: string[];
+}
+
+/** The structured script produced by Claude from the paper text. */
+export interface VideoScript {
+  paperTitle: string;
+  /** One-sentence hook / TL;DR spoken at the very start. */
+  hook: string;
+  /** 2-4 word curiosity-gap teaser flashed on screen in the first ~0.5s (not spoken). */
+  coldOpen: string;
+  scenes: Scene[];
+  /** Full narration concatenated, convenient for single-shot TTS/avatar calls. */
+  fullNarration: string;
+}
+
+/** Status of an in-flight video render job. */
+export type JobStatus = "pending" | "processing" | "done" | "error";
+
+export interface VideoJob {
+  id: string;
+  status: JobStatus;
+  /** Final video URL when done. */
+  videoUrl?: string;
+  error?: string;
+  createdAt: number;
+}

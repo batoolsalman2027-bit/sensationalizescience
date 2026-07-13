@@ -1,0 +1,60 @@
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { theme } from "./theme";
+
+export interface ColdOpenProps {
+  text: string;
+  /** How long the card stays before whipping away. */
+  durationInFrames?: number;
+}
+
+/**
+ * A 2-4 word curiosity-gap teaser that hard-cuts on screen for the first ~0.6s of
+ * the whole video, then whips away — the pattern-interrupt hook that stops the
+ * scroll before the narration even lands. Rendered as an overlay so scene 1's
+ * audio starts underneath immediately (no dead air).
+ */
+export function ColdOpen({ text, durationInFrames = 18 }: ColdOpenProps) {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  if (!text || frame > durationInFrames) return null;
+
+  // Snap in big, then whip up-and-out.
+  const pop = spring({ frame, fps, config: { damping: 9, mass: 0.5 }, durationInFrames: 8 });
+  const scale = interpolate(pop, [0, 1], [1.6, 1]);
+  const exit = interpolate(frame, [durationInFrames - 5, durationInFrames], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const y = interpolate(exit, [0, 1], [0, -140]);
+  const opacity = interpolate(exit, [0, 1], [1, 0]);
+
+  return (
+    <AbsoluteFill
+      style={{
+        alignItems: "center",
+        justifyContent: "center",
+        background: "rgba(6,10,14,0.82)",
+        opacity,
+      }}
+    >
+      <div
+        style={{
+          transform: `translateY(${y}px) scale(${scale})`,
+          fontFamily: theme.fontFamily,
+          color: "#ffffff",
+          fontSize: 108,
+          fontWeight: 900,
+          lineHeight: 1.02,
+          textAlign: "center",
+          textTransform: "uppercase",
+          letterSpacing: -1.5,
+          padding: "0 56px",
+          textShadow: "0 6px 30px rgba(0,0,0,0.8)",
+        }}
+      >
+        {text}
+      </div>
+    </AbsoluteFill>
+  );
+}
