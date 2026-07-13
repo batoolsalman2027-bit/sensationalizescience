@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.env
+.env.local
+data
+public/renders
+*.log
+.DS_Store
+.agents
+.claude
+*.tsbuildinfo
+README.md

@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Required for lean Railway / Docker deploys
+  output: "standalone",
   experimental: {
     serverComponentsExternalPackages: [
       "pdf-parse",

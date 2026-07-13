@@ -138,6 +138,9 @@ export async function renderVideo(
     codec: "h264",
     outputLocation,
     inputProps,
+    chromiumOptions: {
+      enableMultiProcessOnLinux: true,
+    },
   });
 
   return { videoUrl: `/renders/${jobId}/video.mp4` };
