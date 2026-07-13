@@ -28,7 +28,8 @@ RUN npm ci
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx remotion browser ensure
+# public/ may be empty / missing in git — ensure it exists for COPY later
+RUN mkdir -p public
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
@@ -52,10 +53,11 @@ COPY --from=builder /app/remotion ./remotion
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/tsconfig.json ./
 COPY --from=builder /app/scripts ./scripts
-# Remotion Chrome cache from builder
-COPY --from=builder /root/.cache /root/.cache
 
-RUN mkdir -p /data/db /data/renders public/renders data \
+# Install Chrome Headless Shell into this image (do not copy /root/.cache from builder —
+# Remotion may not create that path during build).
+RUN npx remotion browser ensure \
+  && mkdir -p /data/db /data/renders public/renders data \
   && chmod +x scripts/railway-start.sh
 
 EXPOSE 3000
