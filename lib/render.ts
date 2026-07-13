@@ -132,14 +132,36 @@ export async function renderVideo(
   });
 
   const outputLocation = path.join(renderDir, "video.mp4");
+
+  // Railway (and similar small VMs) often SIGKILL FFmpeg when Remotion uses
+  // default concurrency + 1080x1920 + parallel encode (OOM). Keep this lean.
+  const renderScale = Number(process.env.RENDER_SCALE ?? "0.5"); // 540×960 by default
+  const renderConcurrency = Number(process.env.RENDER_CONCURRENCY ?? "1");
+
   await renderMedia({
     composition,
     serveUrl: bundleLocation,
     codec: "h264",
     outputLocation,
     inputProps,
+    concurrency: renderConcurrency,
+    scale: Number.isFinite(renderScale) && renderScale > 0 ? renderScale : 0.5,
+    // Encode after frames — lower peak RAM than parallel stitch+encode.
+    disallowParallelEncoding: true,
+    // Keep Remotion's frame cache tiny on small instances.
+    offthreadVideoCacheSizeInBytes: 32 * 1024 * 1024,
+    x264Preset: "veryfast",
     chromiumOptions: {
-      enableMultiProcessOnLinux: true,
+      // Multi-process Chrome uses much more RAM on Linux containers.
+      enableMultiProcessOnLinux: false,
+    },
+    ffmpegOverride: ({ args }) => {
+      // libx264 was spawning ~60 threads from host CPU count → OOM on Railway.
+      const next = [...args];
+      if (!next.includes("-threads")) {
+        next.push("-threads", process.env.FFMPEG_THREADS ?? "2");
+      }
+      return next;
     },
   });
 
