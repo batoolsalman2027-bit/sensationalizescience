@@ -4,6 +4,7 @@ import path from "node:path";
 import { listDoneJobs } from "@/lib/jobs";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/library
