@@ -12,6 +12,15 @@ type Body = {
   interval?: "month" | "year";
 };
 
+/** Enable only after Tax head-office address is set in Stripe Dashboard. */
+function taxOptions() {
+  if (process.env.STRIPE_AUTOMATIC_TAX !== "true") return {};
+  return {
+    automatic_tax: { enabled: true as const },
+    customer_update: { address: "auto" as const },
+  };
+}
+
 /**
  * Start Stripe Checkout for a subscription plan or one-time credit pack.
  * Requires an authenticated user.
@@ -53,8 +62,7 @@ export async function POST(req: NextRequest) {
         mode: "payment",
         customer: customerId,
         line_items: [{ price: priceId, quantity: 1 }],
-        automatic_tax: { enabled: true },
-        customer_update: { address: "auto" },
+        ...taxOptions(),
         success_url: `${getAppUrl()}/create?checkout=success`,
         cancel_url: `${getAppUrl()}/create?checkout=cancel`,
         metadata: {
@@ -90,8 +98,7 @@ export async function POST(req: NextRequest) {
       mode: "subscription",
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
-      automatic_tax: { enabled: true },
-      customer_update: { address: "auto" },
+      ...taxOptions(),
       success_url: `${getAppUrl()}/create?checkout=success`,
       cancel_url: `${getAppUrl()}/create?checkout=cancel`,
       metadata: {
