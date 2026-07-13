@@ -13,8 +13,27 @@ export const CREDITS_PER_PACK = Number(process.env.STRIPE_CREDITS_PER_PACK ?? 5)
 export const CREDIT_PACK_LABEL =
   process.env.STRIPE_CREDIT_PACK_LABEL ?? "$9.99 for 5 videos";
 
+/** Comma-separated emails that can generate without spending credits (testers). */
+function unlimitedEmails(): Set<string> {
+  return new Set(
+    (process.env.UNLIMITED_TEST_EMAILS ?? "")
+      .split(",")
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean)
+  );
+}
+
+export function isUnlimitedUser(user: SessionUser | null | undefined): boolean {
+  return Boolean(user && unlimitedEmails().has(user.email.toLowerCase()));
+}
+
 export type Entitlement =
-  | { ok: true; mode: "free" | "credit"; user: SessionUser | null; visitorId: string }
+  | {
+      ok: true;
+      mode: "free" | "credit" | "unlimited";
+      user: SessionUser | null;
+      visitorId: string;
+    }
   | { ok: false; code: "PAYWALL"; message: string; visitorId: string; user: SessionUser | null };
 
 function visitorFreeUsed(visitorId: string): boolean {
@@ -34,6 +53,7 @@ export function markVisitorFreeUsed(visitorId: string) {
 
 /**
  * Can this requester start a paid render?
+ * - Unlimited test emails → never blocked
  * - Anonymous / logged-in with free unused → free mode
  * - Logged-in with credits → credit mode
  * - Otherwise paywall
@@ -41,6 +61,10 @@ export function markVisitorFreeUsed(visitorId: string) {
 export async function checkCanGenerate(): Promise<Entitlement> {
   const user = await getSessionUser();
   const visitorId = getOrCreateVisitorId();
+
+  if (isUnlimitedUser(user)) {
+    return { ok: true, mode: "unlimited", user, visitorId };
+  }
 
   if (user && user.credits >= 1) {
     return { ok: true, mode: "credit", user, visitorId };
@@ -72,6 +96,7 @@ export async function checkCanGenerate(): Promise<Entitlement> {
 
 /** Call after a render job is successfully started. */
 export function consumeEntitlement(ent: Extract<Entitlement, { ok: true }>) {
+  if (ent.mode === "unlimited") return;
   if (ent.mode === "free") {
     markVisitorFreeUsed(ent.visitorId);
     return;
@@ -85,12 +110,14 @@ export async function getBillingStatus() {
   const user = await getSessionUser();
   const visitorId = getOrCreateVisitorId();
   const freeUsed = visitorFreeUsed(visitorId);
+  const unlimited = isUnlimitedUser(user);
   return {
     authenticated: Boolean(user),
     email: user?.email ?? null,
-    credits: user?.credits ?? 0,
+    credits: unlimited ? 999999 : user?.credits ?? 0,
     freeUsed,
-    canGenerate: Boolean((user && user.credits >= 1) || !freeUsed),
+    unlimited,
+    canGenerate: Boolean(unlimited || (user && user.credits >= 1) || !freeUsed),
     packLabel: CREDIT_PACK_LABEL,
   };
 }
