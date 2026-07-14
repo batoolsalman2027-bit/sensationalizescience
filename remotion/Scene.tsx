@@ -15,8 +15,8 @@ export interface SceneProps {
   title: string;
   narration: string;
   icon: string;
-  /** Short subject noun for this beat; labels the talking mascot. */
-  subject?: string;
+  /** Exact paper terms for Remotion overlay labels. */
+  keyTerms?: string[];
   /** AI-generated illustration path (shot A). Preferred visual when present. */
   imageStaticPath?: string;
   /** Second illustration (shot B) for a mid-scene hard-cut. */
@@ -36,7 +36,7 @@ export function Scene({
   title,
   narration,
   icon,
-  subject,
+  keyTerms,
   imageStaticPath,
   imageStaticPathB,
   setting,
@@ -53,8 +53,7 @@ export function Scene({
         imageStaticPath={imageStaticPath}
         imageStaticPathB={imageStaticPathB}
         title={title}
-        subject={subject}
-        icon={icon}
+        keyTerms={keyTerms}
         narration={narration}
         captions={captions}
         badge={badge}

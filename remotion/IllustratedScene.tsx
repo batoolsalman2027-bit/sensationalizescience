@@ -7,7 +7,6 @@ import {
   useVideoConfig,
 } from "remotion";
 import { Captions, WordTiming } from "./Captions";
-import { Mascot } from "./Mascot";
 import { theme } from "./theme";
 
 export interface IllustratedSceneProps {
@@ -15,9 +14,8 @@ export interface IllustratedSceneProps {
   /** Second shot for a mid-scene hard-cut. Falls back to shot A when absent. */
   imageStaticPathB?: string;
   title: string;
-  /** Subject noun + icon drive the talking mascot. */
-  subject?: string;
-  icon?: string;
+  /** Exact paper terms drawn as Remotion labels (correct spelling). */
+  keyTerms?: string[];
   narration: string;
   captions?: WordTiming[];
   badge?: string;
@@ -29,14 +27,14 @@ export interface IllustratedSceneProps {
  * Vertical 9:16 TikTok-style scene:
  *  - two AI shots that swap at the midpoint (a clean "new picture" cut),
  *  - a slow, continuous Ken Burns move (no resets, no jolts),
- *  - a talking mascot in the center zone lip-syncing the narration,
+ *  - Remotion overlays for paper keyTerms (never baked into the AI image),
  *  - karaoke captions in the lower third.
  */
 export function IllustratedScene({
   imageStaticPath,
   imageStaticPathB,
   title,
-  subject,
+  keyTerms = [],
   narration,
   captions,
   badge,
@@ -77,6 +75,12 @@ export function IllustratedScene({
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const labelsOpacity = interpolate(frame, [10, 22], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const labels = keyTerms.slice(0, 4);
 
   return (
     <AbsoluteFill
@@ -152,27 +156,40 @@ export function IllustratedScene({
         </div>
       )}
 
-      {/* talking host mascot in the reserved center zone, lip-syncing narration */}
-      <Mascot captions={captions} seed={motionSeed} />
-
-      {/* subject label under the mascot */}
-      {subject && (
+      {/* Correct-spelling paper terms as Remotion overlays (not AI-baked text) */}
+      {labels.length > 0 && (
         <div
           style={{
             position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 388,
-            textAlign: "center",
-            color: "rgba(255,255,255,0.9)",
-            fontSize: 26,
-            fontWeight: 700,
-            letterSpacing: 0.5,
-            textTransform: "lowercase",
-            textShadow: "0 2px 8px rgba(0,0,0,0.7)",
+            left: 40,
+            right: 40,
+            top: 200,
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: 12,
+            opacity: labelsOpacity,
           }}
         >
-          {subject}
+          {labels.map((term) => (
+            <span
+              key={term}
+              style={{
+                background: "rgba(15,23,42,0.72)",
+                border: "1px solid rgba(148,163,184,0.45)",
+                color: "#e2e8f0",
+                fontSize: 26,
+                fontWeight: 600,
+                padding: "8px 16px",
+                borderRadius: 12,
+                letterSpacing: 0.2,
+                textShadow: "0 1px 6px rgba(0,0,0,0.55)",
+                maxWidth: "100%",
+              }}
+            >
+              {term}
+            </span>
+          ))}
         </div>
       )}
 

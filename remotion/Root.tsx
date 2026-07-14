@@ -9,6 +9,8 @@ export const HEIGHT = 1920;
 
 const defaultProps: ExplainerProps = {
   scenes: [],
+  paperTitle: "",
+  titleCardFrames: 60,
 };
 
 function RootComponent() {
@@ -26,10 +28,13 @@ function RootComponent() {
       }: {
         props: ExplainerProps;
       }) => {
-        const total = props.scenes.reduce(
-          (sum, s) => sum + s.durationInFrames,
-          0
-        );
+        const titleFrames =
+          props.paperTitle && (props.titleCardFrames ?? 60)
+            ? props.titleCardFrames ?? 60
+            : 0;
+        const total =
+          titleFrames +
+          props.scenes.reduce((sum, s) => sum + s.durationInFrames, 0);
         return { durationInFrames: Math.max(total, FPS) };
       }}
     />

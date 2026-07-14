@@ -18,21 +18,31 @@ export interface Scene {
   imagePrompt: string;
   /** A DIFFERENT shot/angle of the same beat, used for a mid-scene hard-cut (pattern interruption). */
   imagePromptB: string;
-  /** Short subject noun this scene is "about" (e.g. "brain", "cell", "algorithm"). Labels the talking mascot. */
+  /** Short subject noun this scene is "about" (e.g. "brain", "cell", "algorithm"). */
   subject: string;
-  /** 3-6 concrete terms actually named in the paper for this beat (organism, molecule, technique, structure). Grounds the image prompt so illustrations aren't generic/invented. */
+  /** 3-6 concrete terms actually named in the paper for this beat (organism, molecule, technique, structure). Grounds the image prompt so illustrations aren't generic/invented. Also drawn correctly as on-screen Remotion labels. */
   keyTerms: string[];
 }
 
 /** The structured script produced by Claude from the paper text. */
 export interface VideoScript {
   paperTitle: string;
-  /** One-sentence hook / TL;DR spoken at the very start. */
+  /** Authors as shown on the paper, e.g. "Smith et al." or a short author list. */
+  authors: string;
+  /** Journal or venue name when available. */
+  journal: string;
+  /** DOI string when available (with or without https://doi.org/). */
+  doi: string;
+  /** One-sentence hook / TL;DR used as a subtitle in the app UI. */
   hook: string;
-  /** 2-4 word curiosity-gap teaser flashed on screen in the first ~0.5s (not spoken). */
+  /** 2-4 word curiosity-gap teaser flashed on screen after the title card (not spoken). */
   coldOpen: string;
+  /** 2-4 sentence lay-audience primer about the field / disease / protein before the technical beats. */
+  background: string;
+  /** Illustration prompt for the background primer beat. */
+  backgroundImagePrompt: string;
   scenes: Scene[];
-  /** Full narration concatenated, convenient for single-shot TTS/avatar calls. */
+  /** Full narration concatenated (background + scenes). */
   fullNarration: string;
 }
 

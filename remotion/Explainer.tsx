@@ -1,6 +1,7 @@
 import { AbsoluteFill, Audio, Series, staticFile } from "remotion";
 import { Scene } from "./Scene";
 import { ColdOpen } from "./ColdOpen";
+import { TitleCard } from "./TitleCard";
 import { theme } from "./theme";
 
 export type WordTiming = { word: string; start: number; end: number };
@@ -10,8 +11,8 @@ export type ExplainerScene = {
   title: string;
   narration: string;
   icon: string;
-  /** Short subject noun for this beat; labels the talking mascot. */
-  subject?: string;
+  /** Exact paper terms for on-screen Remotion labels. */
+  keyTerms?: string[];
   /** Illustrated scene backdrop key (see remotion/scenes). Fallback when no image. */
   setting: string;
   /** AI-generated illustration path (shot A). Undefined -> fall back to setting. */
@@ -27,39 +28,73 @@ export type ExplainerScene = {
 
 export type ExplainerProps = {
   scenes: ExplainerScene[];
-  /** 2-4 word curiosity-gap teaser flashed over the first ~0.6s. */
+  /** 2-4 word curiosity-gap teaser flashed after the title card. */
   coldOpen?: string;
+  paperTitle?: string;
+  authors?: string;
+  journal?: string;
+  doi?: string;
+  /** Silent citation card length (default 2s @ 30fps). */
+  titleCardFrames?: number;
 };
 
-/** Root composition: one sequence per scene (fixed 4-act paper structure). */
-export function Explainer({ scenes, coldOpen }: ExplainerProps) {
+/** Root composition: title card, then narrated scenes (background + 4-act paper). */
+export function Explainer({
+  scenes,
+  coldOpen,
+  paperTitle,
+  authors,
+  journal,
+  doi,
+  titleCardFrames = 60,
+}: ExplainerProps) {
+  const showTitleCard = Boolean(paperTitle);
+
   return (
     <AbsoluteFill style={{ backgroundColor: theme.bg }}>
       <Series>
-        {scenes.map((scene) => (
+        {showTitleCard ? (
+          <Series.Sequence durationInFrames={titleCardFrames}>
+            <TitleCard
+              paperTitle={paperTitle as string}
+              authors={authors}
+              journal={journal}
+              doi={doi}
+            />
+          </Series.Sequence>
+        ) : null}
+        {scenes.map((scene, i) => (
           <Series.Sequence
-            key={scene.index}
+            key={`${scene.index}-${i}`}
             durationInFrames={scene.durationInFrames}
           >
             <Scene
               title={scene.title}
               narration={scene.narration}
               icon={scene.icon}
-              subject={scene.subject}
+              keyTerms={scene.keyTerms}
               setting={scene.setting}
               imageStaticPath={scene.imageStaticPath}
               imageStaticPathB={scene.imageStaticPathB}
               captions={scene.captions}
-              badge={`${scene.index} / ${scenes.length}`}
-              motionSeed={scene.index}
+              badge={
+                scene.index > 0
+                  ? `${scene.index} / 4`
+                  : undefined
+              }
+              motionSeed={scene.index || i + 1}
             />
             <Audio src={staticFile(scene.audioStaticPath)} />
           </Series.Sequence>
         ))}
       </Series>
 
-      {/* curiosity-gap flash card over the very start (narration plays underneath) */}
-      {coldOpen ? <ColdOpen text={coldOpen} /> : null}
+      {coldOpen ? (
+        <ColdOpen
+          text={coldOpen}
+          startFrame={showTitleCard ? titleCardFrames : 0}
+        />
+      ) : null}
     </AbsoluteFill>
   );
 }

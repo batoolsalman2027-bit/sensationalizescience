@@ -10,7 +10,7 @@
 const MODEL = process.env.GEMINI_IMAGE_MODEL ?? "gemini-2.5-flash-image";
 
 /** Locked art direction applied to every scene for a cohesive look. */
-export const STYLE_PROMPT = `Flat modern editorial vector illustration, clean geometric shapes, soft cinematic lighting, subtle grain, limited cohesive palette of deep navy background with teal and sky-blue accents and warm highlights. Tall vertical 9:16 portrait composition, full-bleed, the main subject centered in the upper-middle with clear negative space in the lower third for captions. ABSOLUTELY NO text, letters, numbers, words, labels, captions, charts with axis labels, graphs, logos, or watermarks anywhere in the image — depict ideas purely through imagery, shapes, and color. Sophisticated science-communication aesthetic, the visual language of a high-end explainer video.`;
+export const STYLE_PROMPT = `Flat modern editorial vector illustration, clean geometric shapes, soft cinematic lighting, subtle grain, limited cohesive palette of deep navy background with teal and sky-blue accents and warm highlights. Tall vertical 9:16 portrait composition, full-bleed, the main subject centered in the upper-middle with clear negative space in the lower third for captions. CRITICAL: do not draw ANY writing — no letters, numbers, words, labels, captions, equations, UI text, charts with axis labels, graphs, logos, watermarks, or paper-like figure panels. Image models misspell text, so every idea must be conveyed purely through imagery, shapes, and color. Sophisticated science-communication aesthetic, the visual language of a high-end explainer video.`;
 
 export interface GeneratedImage {
   buffer: Buffer;

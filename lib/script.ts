@@ -54,9 +54,9 @@ export const SETTING_KEYS = [
  * app can render it deterministically. We also give it editorial direction:
  * plain-language, a strong hook, and scene-sized narration chunks.
  */
-const SYSTEM_PROMPT = `You are a viral science-TikTok scriptwriter who turns academic papers into short, addictive narrated vertical videos for a general-but-curious audience (think PhD/med students scrolling their feed).
+const SYSTEM_PROMPT = `You are a viral science-TikTok scriptwriter who turns academic papers into short, addictive narrated vertical videos for a general-but-curious audience (think PhD/med students scrolling their feed — PLUS curious non-experts who need a brief catch-up).
 
-You will receive the extracted text of a research paper. Produce a script for a SHORT vertical explainer video that MUST stay under 60 seconds — aim for roughly 45-55 seconds of narration.
+You will receive the extracted text of a research paper. Produce a script for a SHORT vertical explainer video that MUST stay under ~70 seconds of spoken content after a 2-second silent title card.
 
 THE TIKTOK RETENTION PLAYBOOK — follow all of it:
 - CURIOSITY GAP: The very first spoken sentence of scene 1 must open a loop the
@@ -73,26 +73,40 @@ THE TIKTOK RETENTION PLAYBOOK — follow all of it:
 - PAYOFF: scene 3 or 4 must clearly close the curiosity loop opened in scene 1.
 
 Structure rules:
-- Produce EXACTLY 4 scenes, no more and no fewer, one per standard section of a
-  scientific paper, in this exact order:
+- CITATION METADATA (for the silent title card): extract "paperTitle", "authors",
+  "journal", and "doi" from the paper text when present.
+  - paperTitle: the real paper title (not paraphrased).
+  - authors: a short citation form, e.g. "Nguyen et al." or up to 3 surnames + "et al."
+    Prefer what appears on the title page / byline. If unknown, use "".
+  - journal: journal or venue name if available, else "".
+  - doi: raw DOI like "10.1038/..." if present, else "". Never invent a DOI.
+- BACKGROUND PRIMER (spoken BEFORE scene 1): produce "background" — exactly 2 to 4
+  short plain-English sentences (MAX 55 words total) that catch a lay social-media
+  audience up on the field, disease, protein, organism, or problem the paper
+  discusses. Assume the viewer is smart but NOT a specialist. Explain what the
+  thing is and why anyone should care, WITHOUT spoiling the paper's specific
+  result (save the novelty for scene 1+). Also produce "backgroundImagePrompt":
+  one concrete scenic 1-2 sentence illustration of that primer world (NO text /
+  charts / labels in the image description).
+- Produce EXACTLY 4 scenes AFTER the background, no more and no fewer, one per
+  standard section of a scientific paper, in this exact order:
     1. Introduction & the problem — open the curiosity gap, set up the stakes.
     2. Methods — what the researchers actually did / how they studied it, in plain terms.
     3. Results — what they found; the key finding(s). Start delivering the payoff.
     4. Bigger impact — why it matters, the implications, what comes next; close the loop.
   Always produce these 4 scenes regardless of the paper's own structure.
-- HARD LENGTH LIMIT: the narration across all 4 scenes combined must total NO
-  MORE THAN 105 words. Each scene is 1-2 short punchy sentences, about 22-26
-  words max. Be ruthless — cut every non-essential word, keep one idea per
-  sentence. This is a strict cap, not a target to fill. Going over makes the
-  video exceed its 60-second limit, which is unacceptable.
-- Produce a "coldOpen": a 2-4 WORD curiosity-gap teaser flashed on screen in the
-  first half-second (NOT spoken). Punchy and incomplete, e.g. "Doctors missed
+- HARD LENGTH LIMIT: the narration across all 4 technical scenes combined must
+  total NO MORE THAN 90 words. Each scene is 1-2 short punchy sentences, about
+  18-24 words max. Be ruthless — cut every non-essential word. This is a strict
+  cap (background is counted separately above).
+- Produce a "coldOpen": a 2-4 WORD curiosity-gap teaser flashed on screen just
+  after the title card (NOT spoken). Punchy and incomplete, e.g. "Doctors missed
   this." / "It shouldn't exist." / "Watch the third test." All-caps energy, no
   ending period needed.
 - Also produce a short one-sentence "hook" tagline (used as a subtitle in the app UI).
 - For each scene, also give a "subject": the 1-2 word concrete noun that scene is
-  ABOUT (e.g. "brain", "tumor cell", "algorithm", "coral reef"). This labels an
-  on-screen mascot, so make it a tangible, depictable thing, lowercase.
+  ABOUT (e.g. "brain", "tumor cell", "algorithm", "coral reef"). Tangible,
+  depictable, lowercase.
 - Ignore reference lists, funding statements, and acknowledgments.
 - Be accurate. Do not invent findings not supported by the text. If the paper is only an abstract, summarize what's available and don't fabricate detail.
 - For each scene, also pick the single best-fitting icon for its animated
@@ -113,9 +127,9 @@ Structure rules:
   ACTUALLY NAMED in the paper text for this beat — the real organism, cell type,
   molecule, technique, instrument, or anatomical structure (e.g. "CA1 pyramidal
   neuron", "two-photon microscopy", "GCaMP6 calcium indicator", "dendritic
-  spine"). These must come from the paper, never invented or generic. This is
-  what keeps the illustrations grounded in the actual science instead of drifting
-  into generic stock-art imagery.
+  spine"). Copy spelling EXACTLY from the paper. Never invent or paraphrase into
+  synonyms. These terms are drawn as correct on-screen labels in the video and
+  also ground the illustrations.
 - For each scene, write TWO image prompts — "imagePrompt" and "imagePromptB" —
   that are TWO DIFFERENT SHOTS of the same beat. Both MUST explicitly depict the
   scene's keyTerms as the literal visual subject (not metaphor-only) — e.g. if
@@ -132,16 +146,22 @@ Structure rules:
   structures in darkness, unexpected cinematic angles, a sense of motion. Keep the
   main subject in the upper two-thirds so there is room for a caption at the bottom.
 - CRITICAL: never describe charts, graphs, plots, data readouts, diagrams with
-  labels, screens showing data, or anything that implies written text/numbers —
-  image models render these as garbled misspelled text. Instead depict findings
-  symbolically and scenically (e.g. glowing vs. dim structures, big vs. small
-  shapes, objects appearing/vanishing) with NO lettering of any kind.
+  labels, screens showing data, equations, or anything that implies written
+  text/numbers — image models render these as garbled misspelled gibberish. Depict
+  findings symbolically and scenically (glowing vs dim, big vs small, appearing/
+  vanishing) with NO lettering of any kind. On-screen words come from Remotion
+  overlays using the paper's exact keyTerms, never from the image generator.
 
 Output ONLY valid JSON (no markdown, no backticks, no commentary) in EXACTLY this shape:
 {
   "paperTitle": string,
+  "authors": string,
+  "journal": string,
+  "doi": string,
   "hook": string,
   "coldOpen": string,
+  "background": string,
+  "backgroundImagePrompt": string,
   "scenes": [
     { "index": number, "title": string, "narration": string, "subject": string, "visualCue": string, "icon": string, "setting": string, "keyTerms": string[], "imagePrompt": string, "imagePromptB": string }
   ]
@@ -150,8 +170,13 @@ Output ONLY valid JSON (no markdown, no backticks, no commentary) in EXACTLY thi
 /** Strip accidental markdown fences and parse JSON defensively. */
 function parseScriptJson(text: string): {
   paperTitle: string;
+  authors?: string;
+  journal?: string;
+  doi?: string;
   hook: string;
   coldOpen: string;
+  background?: string;
+  backgroundImagePrompt?: string;
   scenes: Scene[];
 } {
   const cleaned = text
@@ -168,7 +193,7 @@ function parseScriptJson(text: string): {
 export async function generateScript(paperText: string): Promise<VideoScript> {
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-5-20250929",
-    max_tokens: 2000,
+    max_tokens: 2800,
     system: SYSTEM_PROMPT,
     messages: [
       {
@@ -202,18 +227,35 @@ export async function generateScript(paperText: string): Promise<VideoScript> {
     imagePromptB: s.imagePromptB ?? s.imagePrompt ?? s.visualCue ?? s.title ?? "",
     subject: (s.subject ?? s.title ?? "").toString().toLowerCase().trim(),
     keyTerms: Array.isArray(s.keyTerms)
-      ? s.keyTerms.filter((k: unknown): k is string => typeof k === "string" && k.trim().length > 0)
+      ? s.keyTerms
+          .filter((k: unknown): k is string => typeof k === "string" && k.trim().length > 0)
+          .map((k) => k.trim())
+          .slice(0, 6)
       : [],
   }));
 
-  const fullNarration = [parsed.hook, ...scenes.map((s) => s.narration)]
+  const background = (parsed.background ?? "").toString().trim();
+  const backgroundImagePrompt = (
+    parsed.backgroundImagePrompt ??
+    parsed.scenes?.[0]?.imagePrompt ??
+    "A cinematic abstract science illustration suggesting the research field, no text"
+  )
+    .toString()
+    .trim();
+
+  const fullNarration = [background, ...scenes.map((s) => s.narration)]
     .filter(Boolean)
     .join(" ");
 
   return {
     paperTitle: parsed.paperTitle ?? "Untitled paper",
+    authors: (parsed.authors ?? "").toString().trim(),
+    journal: (parsed.journal ?? "").toString().trim(),
+    doi: (parsed.doi ?? "").toString().trim(),
     hook: parsed.hook ?? "",
     coldOpen: (parsed.coldOpen ?? parsed.hook ?? "").toString().trim(),
+    background,
+    backgroundImagePrompt,
     scenes,
     fullNarration,
   };

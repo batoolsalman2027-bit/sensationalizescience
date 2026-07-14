@@ -10,10 +10,12 @@ import { renderVideoUrl } from "./renders";
 import type { VideoScript } from "./types";
 
 const FPS = 30;
-/** Final narration speed multiplier (applied via ffmpeg, pitch-preserved). */
-const NARRATION_SPEEDUP = Number(process.env.NARRATION_SPEED ?? "1.5");
-/** Breathing room after each scene's narration ends before the next cuts in.
- *  Kept short to help hold the whole video under the 60s cap. */
+/** Final narration speed multiplier (applied via ffmpeg, pitch-preserved).
+ *  Default 1.2 ≈ 20% slower than the previous 1.5× default. */
+const NARRATION_SPEEDUP = Number(process.env.NARRATION_SPEED ?? "1.2");
+/** Silent citation card at the start of every video. */
+const TITLE_CARD_FRAMES = 60; // 2 seconds @ 30fps
+/** Breathing room after each scene's narration ends before the next cuts in. */
 const PADDING_FRAMES = 8;
 
 async function mp3DurationInFrames(buffer: Buffer): Promise<number> {
@@ -30,8 +32,22 @@ async function mp3DurationInFrames(buffer: Buffer): Promise<number> {
  */
 function groundPrompt(prompt: string, keyTerms: string[]): string {
   if (keyTerms.length === 0) return prompt;
-  return `${prompt}\n\nThe image must literally depict these specific real elements from the paper (not generic substitutes): ${keyTerms.join(", ")}.`;
+  return `${prompt}\n\nThe image must literally depict these specific real elements from the paper (not generic substitutes): ${keyTerms.join(", ")}. Do not draw any text or letters.`;
 }
+
+type RenderScene = {
+  index: number;
+  title: string;
+  narration: string;
+  icon: string;
+  keyTerms: string[];
+  setting: string;
+  imageStaticPath?: string;
+  imageStaticPathB?: string;
+  audioStaticPath: string;
+  captions: Awaited<ReturnType<typeof speedUpAudio>>;
+  durationInFrames: number;
+};
 
 /**
  * Turns a VideoScript into a rendered motion-graphics mp4:
@@ -64,58 +80,99 @@ export async function renderVideo(
     }
   };
 
-  // Two shots per scene (A + B) for a mid-scene hard-cut. Scene 1's shot A is the
-  // style anchor generated first; all other shots reference it so the whole video
-  // stays visually consistent. If image gen is unavailable, scenes fall back to
-  // the code-drawn setting.
-  const sceneImages: { a?: string; b?: string }[] = new Array(script.scenes.length);
-  const [first, ...rest] = script.scenes;
+  const buildSpokenBeat = async (opts: {
+    index: number;
+    title: string;
+    narration: string;
+    icon: string;
+    keyTerms: string[];
+    setting: string;
+    imagePrompt: string;
+    imagePromptB?: string;
+    fileStem: string;
+    styleRef?: string;
+  }): Promise<{ scene: RenderScene; styleRef?: string }> => {
+    const groundedA = groundPrompt(opts.imagePrompt, opts.keyTerms);
+    const shotA = await genImage(groundedA, `${opts.fileStem}-a.png`, opts.styleRef);
+    const styleRef = opts.styleRef ?? shotA.base64;
+    const shotB = opts.imagePromptB
+      ? await genImage(
+          groundPrompt(opts.imagePromptB, opts.keyTerms),
+          `${opts.fileStem}-b.png`,
+          styleRef
+        )
+      : { path: undefined };
 
-  const firstA = await genImage(groundPrompt(first.imagePrompt, first.keyTerms), `scene-${first.index}-a.png`);
-  const ref = firstA.base64;
-
-  // Everything else generates in parallel against the anchor reference.
-  const firstBPromise = genImage(groundPrompt(first.imagePromptB, first.keyTerms), `scene-${first.index}-b.png`, ref);
-  const restPromises = rest.map(async (s) => ({
-    index: s.index,
-    a: await genImage(groundPrompt(s.imagePrompt, s.keyTerms), `scene-${s.index}-a.png`, ref),
-    b: await genImage(groundPrompt(s.imagePromptB, s.keyTerms), `scene-${s.index}-b.png`, ref),
-  }));
-
-  const firstB = await firstBPromise;
-  sceneImages[0] = { a: firstA.path, b: firstB.path };
-  const restResolved = await Promise.all(restPromises);
-  restResolved.forEach((r) => {
-    sceneImages[r.index - 1] = { a: r.a.path, b: r.b.path };
-  });
-
-  const scenes = [];
-  for (const scene of script.scenes) {
-    const { buffer, words } = await synthesizeWithTimestamps(scene.narration);
-    const fileName = `scene-${scene.index}.mp3`;
+    const { buffer, words } = await synthesizeWithTimestamps(opts.narration);
+    const fileName = `${opts.fileStem}.mp3`;
     const filePath = path.join(audioDir, fileName);
     await writeFile(filePath, buffer);
-    // Speed up the narration (pitch-preserved) and rescale caption timings.
     const captions = await speedUpAudio(filePath, NARRATION_SPEEDUP, words);
     const durationInFrames = await mp3DurationInFrames(await readFile(filePath));
-    scenes.push({
+
+    return {
+      styleRef,
+      scene: {
+        index: opts.index,
+        title: opts.title,
+        narration: opts.narration,
+        icon: opts.icon,
+        keyTerms: opts.keyTerms,
+        setting: opts.setting,
+        imageStaticPath: shotA.path,
+        imageStaticPathB: shotB.path,
+        audioStaticPath: `audio/${fileName}`,
+        captions,
+        durationInFrames,
+      },
+    };
+  };
+
+  const scenes: RenderScene[] = [];
+  let styleRef: string | undefined;
+
+  // Lay-audience primer beat (spoken after the silent title card).
+  if (script.background?.trim()) {
+    const bg = await buildSpokenBeat({
+      index: 0,
+      title: "Context",
+      narration: script.background.trim(),
+      icon: "book-open",
+      keyTerms: [],
+      setting: "lecture-hall",
+      imagePrompt: script.backgroundImagePrompt || script.scenes[0]?.imagePrompt || "",
+      fileStem: "background",
+    });
+    styleRef = bg.styleRef;
+    scenes.push(bg.scene);
+  }
+
+  // Fixed 4-act paper scenes. Style-chain off the primer (or first technical shot).
+  for (const scene of script.scenes) {
+    const built = await buildSpokenBeat({
       index: scene.index,
       title: scene.title,
       narration: scene.narration,
       icon: scene.icon,
-      subject: scene.subject,
+      keyTerms: scene.keyTerms,
       setting: scene.setting,
-      imageStaticPath: sceneImages[scene.index - 1]?.a,
-      imageStaticPathB: sceneImages[scene.index - 1]?.b,
-      audioStaticPath: `audio/${fileName}`,
-      captions,
-      durationInFrames,
+      imagePrompt: scene.imagePrompt,
+      imagePromptB: scene.imagePromptB,
+      fileStem: `scene-${scene.index}`,
+      styleRef,
     });
+    if (!styleRef) styleRef = built.styleRef;
+    scenes.push(built.scene);
   }
 
   const inputProps = {
     scenes,
     coldOpen: script.coldOpen,
+    paperTitle: script.paperTitle,
+    authors: script.authors,
+    journal: script.journal,
+    doi: script.doi,
+    titleCardFrames: TITLE_CARD_FRAMES,
   };
 
   // The per-job audio dir doubles as the Remotion bundle's public dir, so

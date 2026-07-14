@@ -14,7 +14,11 @@ interface Scene {
 }
 interface VideoScript {
   paperTitle: string;
+  authors?: string;
+  journal?: string;
+  doi?: string;
   hook: string;
+  background?: string;
   scenes: Scene[];
   fullNarration: string;
 }
@@ -376,7 +380,25 @@ export default function Uploader() {
       {script && (stage === "script-ready" || stage === "rendering") && !showPaywall && (
         <section className="fade-up" style={{ marginTop: 40 }}>
           <h2 className="script-title">{script.paperTitle}</h2>
+          {(script.authors || script.journal || script.doi) && (
+            <p className="script-hook" style={{ marginTop: 6, fontSize: 14, opacity: 0.85 }}>
+              {[script.authors, script.journal, script.doi].filter(Boolean).join(" · ")}
+            </p>
+          )}
           <p className="script-hook">{script.hook}</p>
+          {script.background && (
+            <div className="scene-card" style={{ marginTop: 18 }}>
+              <div className="scene-num">
+                <SceneIcon icon="book-open" />
+              </div>
+              <div>
+                <strong style={{ fontSize: 15.5 }}>Background</strong>
+                <div style={{ color: "var(--ink-soft)", marginTop: 4, fontSize: 14, lineHeight: 1.5 }}>
+                  {script.background}
+                </div>
+              </div>
+            </div>
+          )}
           <div className="scene-grid" style={{ marginTop: 22 }}>
             {script.scenes.map((s) => (
               <div key={s.index} className="scene-card">

@@ -3,26 +3,38 @@ import { theme } from "./theme";
 
 export interface ColdOpenProps {
   text: string;
+  /** Global composition frame when this teaser should appear. */
+  startFrame?: number;
   /** How long the card stays before whipping away. */
   durationInFrames?: number;
 }
 
 /**
- * A 2-4 word curiosity-gap teaser that hard-cuts on screen for the first ~0.6s of
- * the whole video, then whips away — the pattern-interrupt hook that stops the
- * scroll before the narration even lands. Rendered as an overlay so scene 1's
- * audio starts underneath immediately (no dead air).
+ * A 2-4 word curiosity-gap teaser that hard-cuts on screen for ~0.6s after the
+ * title card, then whips away — the pattern-interrupt hook that stops the
+ * scroll before the narration lands. Rendered as an overlay so first spoken
+ * audio can start underneath.
  */
-export function ColdOpen({ text, durationInFrames = 18 }: ColdOpenProps) {
+export function ColdOpen({
+  text,
+  startFrame = 0,
+  durationInFrames = 18,
+}: ColdOpenProps) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const local = frame - startFrame;
 
-  if (!text || frame > durationInFrames) return null;
+  if (!text || local < 0 || local > durationInFrames) return null;
 
   // Snap in big, then whip up-and-out.
-  const pop = spring({ frame, fps, config: { damping: 9, mass: 0.5 }, durationInFrames: 8 });
+  const pop = spring({
+    frame: local,
+    fps,
+    config: { damping: 9, mass: 0.5 },
+    durationInFrames: 8,
+  });
   const scale = interpolate(pop, [0, 1], [1.6, 1]);
-  const exit = interpolate(frame, [durationInFrames - 5, durationInFrames], [0, 1], {
+  const exit = interpolate(local, [durationInFrames - 5, durationInFrames], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
