@@ -411,7 +411,7 @@ export default function Uploader() {
                   <strong style={{ fontSize: 15.5 }}>{s.title}</strong>
                   {s.figureId && (
                     <div style={{ color: "var(--blue)", marginTop: 2, fontSize: 12, fontWeight: 600 }}>
-                      Paper figure {s.figureId}
+                      AI remake of {s.figureId}
                       {script.figures?.find((f) => f.id === s.figureId)?.caption
                         ? ` — ${script.figures.find((f) => f.id === s.figureId)!.caption.slice(0, 80)}`
                         : ""}

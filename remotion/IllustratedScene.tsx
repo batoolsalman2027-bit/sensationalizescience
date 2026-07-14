@@ -232,7 +232,7 @@ export function IllustratedScene({
               textTransform: "uppercase",
             }}
           >
-            From the paper
+            AI remake
           </div>
           {shortCaption ? (
             <div

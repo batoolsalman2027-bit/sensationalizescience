@@ -152,12 +152,14 @@ Structure rules:
   findings symbolically and scenically (glowing vs dim, big vs small, appearing/
   vanishing) with NO lettering of any kind. On-screen words come from Remotion
   overlays using the paper's exact keyTerms, never from the image generator.
-- PAPER FIGURES: you may receive a catalog of real figures extracted from the PDF.
+- PAPER FIGURES: you may receive a catalog of figures extracted from the PDF.
   For each scene, optionally set "figureId" to one catalog id (e.g. "fig-1") when
   that figure genuinely supports the beat — prefer scene 2 (methods) and scene 3
   (results). Use each figureId at most once. If nothing fits, set figureId to null.
-  Also set "figurePlacement": "inset" (framed over AI backdrop; default for charts)
-  or "fullbleed" (figure fills the frame; for photos/microscopy). Never invent ids.
+  Also set "figurePlacement": "inset" (framed remake over AI backdrop; default for
+  charts) or "fullbleed" (remake fills the frame; for photos/microscopy).
+  IMPORTANT: the video never shows the original PDF pixels — the app generates an
+  AI remake that closely matches the figure's layout and data story. Never invent ids.
 
 Output ONLY valid JSON (no markdown, no backticks, no commentary) in EXACTLY this shape:
 {
@@ -204,7 +206,7 @@ export async function generateScript(
 ): Promise<VideoScript> {
   const figureBlock =
     figures.length > 0
-      ? `\n\nPAPER FIGURE CATALOG (assign with figureId when a scene needs the real figure):\n${formatFigureCatalog(figures)}\n`
+      ? `\n\nPAPER FIGURE CATALOG (assign with figureId; the app will AI-remake these, not paste the originals):\n${formatFigureCatalog(figures)}\n`
       : "\n\nPAPER FIGURE CATALOG: none available. Set every scene's figureId to null.\n";
 
   const response = await anthropic.messages.create({

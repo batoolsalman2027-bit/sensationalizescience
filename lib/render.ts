@@ -1,11 +1,11 @@
 import path from "node:path";
-import { mkdir, writeFile, readFile, copyFile, access } from "node:fs/promises";
+import { mkdir, writeFile, readFile, access } from "node:fs/promises";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
 import { parseBuffer } from "music-metadata";
 import { synthesizeWithTimestamps } from "./tts";
 import { speedUpAudio } from "./audio";
-import { generateSceneImage } from "./image";
+import { generateFigureRemake, generateSceneImage } from "./image";
 import { renderVideoUrl } from "./renders";
 import { figuresStagingRoot } from "./pdf-figures";
 import type { FigurePlacement, VideoScript } from "./types";
@@ -53,24 +53,21 @@ type RenderScene = {
   durationInFrames: number;
 };
 
-async function stageFiguresForJob(
-  script: VideoScript,
-  jobFiguresDir: string
-): Promise<Map<string, { staticPath: string; caption: string }>> {
-  const map = new Map<string, { staticPath: string; caption: string }>();
+/** Load staged PDF figures as Gemini references only (never shown in the final video). */
+async function loadFigureSources(
+  script: VideoScript
+): Promise<Map<string, { base64: string; caption: string }>> {
+  const map = new Map<string, { base64: string; caption: string }>();
   if (!script.figureAssetId || !script.figures?.length) return map;
 
   const srcRoot = figuresStagingRoot(script.figureAssetId);
-  await mkdir(jobFiguresDir, { recursive: true });
-
   for (const fig of script.figures) {
     const src = path.join(srcRoot, fig.fileName);
-    const dest = path.join(jobFiguresDir, fig.fileName);
     try {
       await access(src);
-      await copyFile(src, dest);
+      const buf = await readFile(src);
       map.set(fig.id, {
-        staticPath: `figures/${fig.fileName}`,
+        base64: buf.toString("base64"),
         caption: fig.caption,
       });
     } catch {
@@ -92,11 +89,10 @@ export async function renderVideo(
   const renderDir = path.join(process.cwd(), "public", "renders", jobId);
   const audioDir = path.join(renderDir, "audio");
   const imagesDir = path.join(renderDir, "images");
-  const figuresDir = path.join(renderDir, "figures");
   await mkdir(audioDir, { recursive: true });
   await mkdir(imagesDir, { recursive: true });
 
-  const figureMap = await stageFiguresForJob(script, figuresDir);
+  const figureSources = await loadFigureSources(script);
 
   // Generate one illustration for a given prompt, style-chained off a reference.
   const genImage = async (
@@ -114,6 +110,28 @@ export async function renderVideo(
     }
   };
 
+  const remakeFigure = async (
+    figureId: string,
+    fileStem: string,
+    keyTerms: string[]
+  ): Promise<{ path?: string; caption?: string }> => {
+    const source = figureSources.get(figureId);
+    if (!source) return {};
+    try {
+      const remake = await generateFigureRemake({
+        sourceBase64: source.base64,
+        caption: source.caption,
+        keyTerms,
+      });
+      const fileName = `${fileStem}-figure-remake.png`;
+      await writeFile(path.join(imagesDir, fileName), remake.buffer);
+      return { path: `images/${fileName}`, caption: source.caption };
+    } catch (err) {
+      console.warn(`[render] figure remake failed for ${figureId}:`, err);
+      return {};
+    }
+  };
+
   const buildSpokenBeat = async (opts: {
     index: number;
     title: string;
@@ -128,15 +146,18 @@ export async function renderVideo(
     figureId?: string | null;
     figurePlacement?: FigurePlacement;
   }): Promise<{ scene: RenderScene; styleRef?: string }> => {
-    const figure = opts.figureId ? figureMap.get(opts.figureId) : undefined;
     const placement = opts.figurePlacement ?? "inset";
-    const skipAi = Boolean(figure && placement === "fullbleed");
+    const remake = opts.figureId
+      ? await remakeFigure(opts.figureId, opts.fileStem, opts.keyTerms)
+      : {};
+    // Full-bleed remakes can stand alone; insets keep an AI backdrop underneath.
+    const skipBackdrop = Boolean(remake.path && placement === "fullbleed");
 
     let shotA: { path?: string; base64?: string } = { path: undefined };
     let shotB: { path?: string } = { path: undefined };
     let styleRef = opts.styleRef;
 
-    if (!skipAi) {
+    if (!skipBackdrop) {
       const groundedA = groundPrompt(opts.imagePrompt, opts.keyTerms);
       shotA = await genImage(groundedA, `${opts.fileStem}-a.png`, opts.styleRef);
       styleRef = opts.styleRef ?? shotA.base64;
@@ -167,9 +188,9 @@ export async function renderVideo(
         setting: opts.setting,
         imageStaticPath: shotA.path,
         imageStaticPathB: shotB.path,
-        figureStaticPath: figure?.staticPath,
-        figurePlacement: figure ? placement : undefined,
-        figureCaption: figure?.caption,
+        figureStaticPath: remake.path,
+        figurePlacement: remake.path ? placement : undefined,
+        figureCaption: remake.caption,
         audioStaticPath: `audio/${fileName}`,
         captions,
         durationInFrames,
