@@ -38,7 +38,9 @@ export default function RenderOptionsPicker({
                 onClick={() => onVoiceChange(voice.id)}
               >
                 <span className="render-option-title">{voice.label}</span>
-                <span className="render-option-hint">{voice.description}</span>
+                {voice.description ? (
+                  <span className="render-option-hint">{voice.description}</span>
+                ) : null}
               </button>
             );
           })}

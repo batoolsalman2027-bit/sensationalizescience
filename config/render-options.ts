@@ -40,47 +40,37 @@ export const ASPECT_RATIOS: AspectRatioOption[] = [
   },
 ];
 
-/** Curated ElevenLabs voices (premade). IDs are stable public voice IDs. */
+/** Curated ElevenLabs voices. UI shows demographic labels only. */
 export const VOICES: VoiceOption[] = [
   {
     id: "21m00Tcm4TlvDq8ikWAM",
-    label: "Rachel",
-    description: "Calm · clear · narrative",
-  },
-  {
-    id: "EXAVITQu4vr4xnSDxMaL",
-    label: "Bella",
-    description: "Soft · warm · conversational",
-  },
-  {
-    id: "XB0fDUnXU5powFXDhCwa",
-    label: "Charlotte",
-    description: "Elegant · measured",
+    label: "Female (American)",
+    description: "",
   },
   {
     id: "pNInz6obpgDQGcFmaJgB",
-    label: "Adam",
-    description: "Deep · authoritative",
+    label: "Male (American)",
+    description: "",
   },
   {
-    id: "VR6AewLTigWG4xSOukaG",
-    label: "Arnold",
-    description: "Crisp · documentary",
+    id: "XB0fDUnXU5powFXDhCwa",
+    label: "Female (British)",
+    description: "",
   },
   {
-    id: "TxGEqnHWrfWFTfGW9XjX",
-    label: "Josh",
-    description: "Young · energetic",
+    id: "JBFqnCBsd6RMkjVDRZzb",
+    label: "Male (British)",
+    description: "",
   },
   {
-    id: "ErXwobaYiN019PkySvjV",
-    label: "Antoni",
-    description: "Friendly · bright",
+    id: "XrExE9yKIg1WjnnlVkGX",
+    label: "Female (Australian)",
+    description: "",
   },
   {
-    id: "yoZ06aMxZJJ28mfd3POQ",
-    label: "Sam",
-    description: "Raspy · distinctive",
+    id: "onwK4e9ZLuTAKqWW03F9",
+    label: "Male (Australian)",
+    description: "",
   },
 ];
 
