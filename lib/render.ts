@@ -6,6 +6,7 @@ import { parseBuffer } from "music-metadata";
 import { synthesizeWithTimestamps } from "./tts";
 import { speedUpAudio } from "./audio";
 import { generateSceneImage } from "./image";
+import { renderVideoUrl } from "./renders";
 import type { VideoScript } from "./types";
 
 const FPS = 30;
@@ -165,5 +166,5 @@ export async function renderVideo(
     },
   });
 
-  return { videoUrl: `/api/renders/${jobId}/video.mp4` };
+  return { videoUrl: renderVideoUrl(jobId) };
 }

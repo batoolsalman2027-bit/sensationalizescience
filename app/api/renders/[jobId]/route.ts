@@ -50,6 +50,7 @@ export async function GET(
         "Accept-Ranges": "bytes",
         "Content-Length": String(chunkSize),
         "Content-Type": "video/mp4",
+        "Content-Disposition": `inline; filename="video.mp4"`,
         "Cache-Control": "private, max-age=3600",
       },
     });
@@ -61,6 +62,7 @@ export async function GET(
     headers: {
       "Content-Length": String(size),
       "Content-Type": "video/mp4",
+      "Content-Disposition": `inline; filename="video.mp4"`,
       "Accept-Ranges": "bytes",
       "Cache-Control": "private, max-age=3600",
     },
