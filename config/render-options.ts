@@ -62,16 +62,6 @@ export const VOICES: VoiceOption[] = [
     label: "Male (British)",
     description: "",
   },
-  {
-    id: "XrExE9yKIg1WjnnlVkGX",
-    label: "Female (Australian)",
-    description: "",
-  },
-  {
-    id: "onwK4e9ZLuTAKqWW03F9",
-    label: "Male (Australian)",
-    description: "",
-  },
 ];
 
 export type RenderOptions = {
