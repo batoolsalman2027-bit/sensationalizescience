@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractPdfText, trimPaperText } from "@/lib/pdf";
+import { extractPdfFigures } from "@/lib/pdf-figures";
 import { generateScript } from "@/lib/script";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 /**
  * POST /api/script
  * Body: multipart/form-data with a "pdf" file field.
- * Returns: the structured VideoScript (title, hook, scenes, fullNarration).
+ * Returns: the structured VideoScript (title, hook, scenes, figures, …).
  *
- * This is the "paper -> script" half of the pipeline. Kept separate from video
- * generation so you can preview / edit the script before spending an avatar
- * render credit.
+ * Extracts embedded paper figures while the PDF is in hand, so later video
+ * renders can composite real figure insets without re-uploading the file.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
     }
 
     const trimmed = trimPaperText(rawText);
-    const script = await generateScript(trimmed);
+    const { assetId, figures } = await extractPdfFigures(buffer, trimmed);
+    const script = await generateScript(trimmed, figures, assetId);
 
     return NextResponse.json({ script });
   } catch (err: any) {

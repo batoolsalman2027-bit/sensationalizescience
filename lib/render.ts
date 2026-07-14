@@ -1,5 +1,5 @@
 import path from "node:path";
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile, copyFile, access } from "node:fs/promises";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
 import { parseBuffer } from "music-metadata";
@@ -7,7 +7,8 @@ import { synthesizeWithTimestamps } from "./tts";
 import { speedUpAudio } from "./audio";
 import { generateSceneImage } from "./image";
 import { renderVideoUrl } from "./renders";
-import type { VideoScript } from "./types";
+import { figuresStagingRoot } from "./pdf-figures";
+import type { FigurePlacement, VideoScript } from "./types";
 
 const FPS = 30;
 /** Final narration speed multiplier (applied via ffmpeg, pitch-preserved).
@@ -44,10 +45,40 @@ type RenderScene = {
   setting: string;
   imageStaticPath?: string;
   imageStaticPathB?: string;
+  figureStaticPath?: string;
+  figurePlacement?: FigurePlacement;
+  figureCaption?: string;
   audioStaticPath: string;
   captions: Awaited<ReturnType<typeof speedUpAudio>>;
   durationInFrames: number;
 };
+
+async function stageFiguresForJob(
+  script: VideoScript,
+  jobFiguresDir: string
+): Promise<Map<string, { staticPath: string; caption: string }>> {
+  const map = new Map<string, { staticPath: string; caption: string }>();
+  if (!script.figureAssetId || !script.figures?.length) return map;
+
+  const srcRoot = figuresStagingRoot(script.figureAssetId);
+  await mkdir(jobFiguresDir, { recursive: true });
+
+  for (const fig of script.figures) {
+    const src = path.join(srcRoot, fig.fileName);
+    const dest = path.join(jobFiguresDir, fig.fileName);
+    try {
+      await access(src);
+      await copyFile(src, dest);
+      map.set(fig.id, {
+        staticPath: `figures/${fig.fileName}`,
+        caption: fig.caption,
+      });
+    } catch {
+      console.warn(`[render] missing staged figure ${fig.id} at ${src}`);
+    }
+  }
+  return map;
+}
 
 /**
  * Turns a VideoScript into a rendered motion-graphics mp4:
@@ -61,8 +92,11 @@ export async function renderVideo(
   const renderDir = path.join(process.cwd(), "public", "renders", jobId);
   const audioDir = path.join(renderDir, "audio");
   const imagesDir = path.join(renderDir, "images");
+  const figuresDir = path.join(renderDir, "figures");
   await mkdir(audioDir, { recursive: true });
   await mkdir(imagesDir, { recursive: true });
+
+  const figureMap = await stageFiguresForJob(script, figuresDir);
 
   // Generate one illustration for a given prompt, style-chained off a reference.
   const genImage = async (
@@ -91,17 +125,29 @@ export async function renderVideo(
     imagePromptB?: string;
     fileStem: string;
     styleRef?: string;
+    figureId?: string | null;
+    figurePlacement?: FigurePlacement;
   }): Promise<{ scene: RenderScene; styleRef?: string }> => {
-    const groundedA = groundPrompt(opts.imagePrompt, opts.keyTerms);
-    const shotA = await genImage(groundedA, `${opts.fileStem}-a.png`, opts.styleRef);
-    const styleRef = opts.styleRef ?? shotA.base64;
-    const shotB = opts.imagePromptB
-      ? await genImage(
-          groundPrompt(opts.imagePromptB, opts.keyTerms),
-          `${opts.fileStem}-b.png`,
-          styleRef
-        )
-      : { path: undefined };
+    const figure = opts.figureId ? figureMap.get(opts.figureId) : undefined;
+    const placement = opts.figurePlacement ?? "inset";
+    const skipAi = Boolean(figure && placement === "fullbleed");
+
+    let shotA: { path?: string; base64?: string } = { path: undefined };
+    let shotB: { path?: string } = { path: undefined };
+    let styleRef = opts.styleRef;
+
+    if (!skipAi) {
+      const groundedA = groundPrompt(opts.imagePrompt, opts.keyTerms);
+      shotA = await genImage(groundedA, `${opts.fileStem}-a.png`, opts.styleRef);
+      styleRef = opts.styleRef ?? shotA.base64;
+      shotB = opts.imagePromptB
+        ? await genImage(
+            groundPrompt(opts.imagePromptB, opts.keyTerms),
+            `${opts.fileStem}-b.png`,
+            styleRef
+          )
+        : { path: undefined };
+    }
 
     const { buffer, words } = await synthesizeWithTimestamps(opts.narration);
     const fileName = `${opts.fileStem}.mp3`;
@@ -121,6 +167,9 @@ export async function renderVideo(
         setting: opts.setting,
         imageStaticPath: shotA.path,
         imageStaticPathB: shotB.path,
+        figureStaticPath: figure?.staticPath,
+        figurePlacement: figure ? placement : undefined,
+        figureCaption: figure?.caption,
         audioStaticPath: `audio/${fileName}`,
         captions,
         durationInFrames,
@@ -160,6 +209,8 @@ export async function renderVideo(
       imagePromptB: scene.imagePromptB,
       fileStem: `scene-${scene.index}`,
       styleRef,
+      figureId: scene.figureId,
+      figurePlacement: scene.figurePlacement,
     });
     if (!styleRef) styleRef = built.styleRef;
     scenes.push(built.scene);

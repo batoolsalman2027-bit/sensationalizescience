@@ -10,9 +10,14 @@ import { Captions, WordTiming } from "./Captions";
 import { theme } from "./theme";
 
 export interface IllustratedSceneProps {
-  imageStaticPath: string;
+  /** AI backdrop or null when showing a full-bleed paper figure alone. */
+  imageStaticPath?: string;
   /** Second shot for a mid-scene hard-cut. Falls back to shot A when absent. */
   imageStaticPathB?: string;
+  /** Real paper figure raster path (e.g. figures/fig-1.png). */
+  figureStaticPath?: string;
+  figurePlacement?: "inset" | "fullbleed";
+  figureCaption?: string;
   title: string;
   /** Exact paper terms drawn as Remotion labels (correct spelling). */
   keyTerms?: string[];
@@ -24,15 +29,14 @@ export interface IllustratedSceneProps {
 }
 
 /**
- * Vertical 9:16 TikTok-style scene:
- *  - two AI shots that swap at the midpoint (a clean "new picture" cut),
- *  - a slow, continuous Ken Burns move (no resets, no jolts),
- *  - Remotion overlays for paper keyTerms (never baked into the AI image),
- *  - karaoke captions in the lower third.
+ * Vertical 9:16 TikTok-style scene with optional real paper figure overlays.
  */
 export function IllustratedScene({
   imageStaticPath,
   imageStaticPathB,
+  figureStaticPath,
+  figurePlacement = "inset",
+  figureCaption,
   title,
   keyTerms = [],
   narration,
@@ -43,22 +47,31 @@ export function IllustratedScene({
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
-  // Two shots that swap at the midpoint. The zoom/pan below runs continuously
-  // across the WHOLE scene, so the swap is a clean change of picture with no
-  // jump in the camera move — only the image changes, not the motion.
-  const half = Math.floor(durationInFrames * 0.5);
-  const hasCut = !!imageStaticPathB && imageStaticPathB !== imageStaticPath;
-  const inSecondHalf = hasCut && frame >= half;
-  const activeImage = inSecondHalf ? (imageStaticPathB as string) : imageStaticPath;
+  const hasAi = Boolean(imageStaticPath);
+  const hasFigure = Boolean(figureStaticPath);
+  const fullbleedFigure = hasFigure && figurePlacement === "fullbleed";
 
-  // Slow, continuous Ken Burns over the full scene (no per-half reset, no jolts).
+  const half = Math.floor(durationInFrames * 0.5);
+  const hasCut =
+    hasAi && !!imageStaticPathB && imageStaticPathB !== imageStaticPath;
+  const inSecondHalf = hasCut && frame >= half;
+  const activeImage = inSecondHalf
+    ? (imageStaticPathB as string)
+    : imageStaticPath;
+
+  // Mild or no Ken Burns when a real figure is on screen (charts shouldn't zoom).
   const progress = interpolate(frame, [0, durationInFrames], [0, 1], {
     extrapolateRight: "clamp",
   });
-  const scale = interpolate(progress, [0, 1], [1.12, 1.24]);
+  const useKenBurns = hasAi && !hasFigure;
+  const scale = useKenBurns ? interpolate(progress, [0, 1], [1.12, 1.24]) : 1;
   const dir = motionSeed % 4;
-  const panX = interpolate(progress, [0, 1], [0, dir === 0 ? -50 : dir === 2 ? 50 : 0]);
-  const panY = interpolate(progress, [0, 1], [0, dir === 1 ? -45 : dir === 3 ? 45 : -25]);
+  const panX = useKenBurns
+    ? interpolate(progress, [0, 1], [0, dir === 0 ? -50 : dir === 2 ? 50 : 0])
+    : 0;
+  const panY = useKenBurns
+    ? interpolate(progress, [0, 1], [0, dir === 1 ? -45 : dir === 3 ? 45 : -25])
+    : 0;
 
   const enter = interpolate(frame, [0, 10], [0, 1], {
     extrapolateLeft: "clamp",
@@ -79,8 +92,17 @@ export function IllustratedScene({
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const figureOpacity = interpolate(frame, [6, 18], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
-  const labels = keyTerms.slice(0, 4);
+  const labels = hasFigure ? [] : keyTerms.slice(0, 4);
+  const shortCaption = figureCaption
+    ? figureCaption.length > 90
+      ? `${figureCaption.slice(0, 87)}…`
+      : figureCaption
+    : null;
 
   return (
     <AbsoluteFill
@@ -91,23 +113,28 @@ export function IllustratedScene({
         opacity: Math.min(enter, exit),
       }}
     >
-      <AbsoluteFill
-        style={{
-          transform: `scale(${scale}) translate(${panX}px, ${panY}px)`,
-        }}
-      >
-        <Img
-          key={activeImage}
-          src={staticFile(activeImage)}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      </AbsoluteFill>
+      {hasAi && activeImage ? (
+        <AbsoluteFill
+          style={{
+            transform: `scale(${scale}) translate(${panX}px, ${panY}px)`,
+            // Dim AI backdrop slightly under an inset figure for readability.
+            filter: hasFigure && !fullbleedFigure ? "brightness(0.55) blur(1px)" : undefined,
+          }}
+        >
+          <Img
+            key={activeImage}
+            src={staticFile(activeImage)}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </AbsoluteFill>
+      ) : null}
 
-      {/* legibility scrims: darken top and bottom */}
+      {/* legibility scrims */}
       <AbsoluteFill
         style={{
-          background:
-            "linear-gradient(180deg, rgba(9,12,16,0.55) 0%, transparent 22%, transparent 50%, rgba(9,12,16,0.9) 100%)",
+          background: fullbleedFigure
+            ? "linear-gradient(180deg, rgba(9,12,16,0.7) 0%, rgba(9,12,16,0.25) 28%, rgba(9,12,16,0.25) 55%, rgba(9,12,16,0.92) 100%)"
+            : "linear-gradient(180deg, rgba(9,12,16,0.55) 0%, transparent 22%, transparent 50%, rgba(9,12,16,0.9) 100%)",
         }}
       />
 
@@ -156,7 +183,76 @@ export function IllustratedScene({
         </div>
       )}
 
-      {/* Correct-spelling paper terms as Remotion overlays (not AI-baked text) */}
+      {/* Real paper figure */}
+      {hasFigure && figureStaticPath && (
+        <div
+          style={{
+            position: "absolute",
+            left: fullbleedFigure ? 36 : 56,
+            right: fullbleedFigure ? 36 : 56,
+            top: fullbleedFigure ? 200 : 250,
+            bottom: fullbleedFigure ? 360 : 460,
+            opacity: figureOpacity,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: 28,
+              overflow: "hidden",
+              border: "3px solid rgba(255,255,255,0.22)",
+              boxShadow: "0 18px 50px rgba(0,0,0,0.45)",
+              background: "#0f172a",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Img
+              src={staticFile(figureStaticPath)}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              color: "rgba(226,232,240,0.9)",
+              fontSize: 22,
+              fontWeight: 600,
+              letterSpacing: 0.4,
+              textTransform: "uppercase",
+            }}
+          >
+            From the paper
+          </div>
+          {shortCaption ? (
+            <div
+              style={{
+                marginTop: 8,
+                color: "rgba(148,163,184,0.95)",
+                fontSize: 22,
+                textAlign: "center",
+                lineHeight: 1.3,
+                maxWidth: 900,
+                padding: "0 12px",
+              }}
+            >
+              {shortCaption}
+            </div>
+          ) : null}
+        </div>
+      )}
+
+      {/* Correct-spelling paper terms (hidden when a figure is already filling the mid frame) */}
       {labels.length > 0 && (
         <div
           style={{
@@ -193,7 +289,7 @@ export function IllustratedScene({
         </div>
       )}
 
-      {/* karaoke captions in the lower third (falls back to static narration) */}
+      {/* karaoke captions in the lower third */}
       <div
         style={{
           position: "absolute",

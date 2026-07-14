@@ -5,6 +5,8 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: [
       "pdf-parse",
+      "pdfjs-dist",
+      "sharp",
       "@remotion/renderer",
       "@remotion/bundler",
       "ffmpeg-static",

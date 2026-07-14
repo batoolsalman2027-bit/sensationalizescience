@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
-import type { VideoScript, Scene } from "./types";
+import type { VideoScript, Scene, PaperFigure, FigurePlacement } from "./types";
+import { formatFigureCatalog } from "./pdf-figures";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -151,6 +152,12 @@ Structure rules:
   findings symbolically and scenically (glowing vs dim, big vs small, appearing/
   vanishing) with NO lettering of any kind. On-screen words come from Remotion
   overlays using the paper's exact keyTerms, never from the image generator.
+- PAPER FIGURES: you may receive a catalog of real figures extracted from the PDF.
+  For each scene, optionally set "figureId" to one catalog id (e.g. "fig-1") when
+  that figure genuinely supports the beat — prefer scene 2 (methods) and scene 3
+  (results). Use each figureId at most once. If nothing fits, set figureId to null.
+  Also set "figurePlacement": "inset" (framed over AI backdrop; default for charts)
+  or "fullbleed" (figure fills the frame; for photos/microscopy). Never invent ids.
 
 Output ONLY valid JSON (no markdown, no backticks, no commentary) in EXACTLY this shape:
 {
@@ -163,7 +170,7 @@ Output ONLY valid JSON (no markdown, no backticks, no commentary) in EXACTLY thi
   "background": string,
   "backgroundImagePrompt": string,
   "scenes": [
-    { "index": number, "title": string, "narration": string, "subject": string, "visualCue": string, "icon": string, "setting": string, "keyTerms": string[], "imagePrompt": string, "imagePromptB": string }
+    { "index": number, "title": string, "narration": string, "subject": string, "visualCue": string, "icon": string, "setting": string, "keyTerms": string[], "imagePrompt": string, "imagePromptB": string, "figureId": string | null, "figurePlacement": "inset" | "fullbleed" }
   ]
 }`;
 
@@ -190,7 +197,16 @@ function parseScriptJson(text: string): {
   return parsed;
 }
 
-export async function generateScript(paperText: string): Promise<VideoScript> {
+export async function generateScript(
+  paperText: string,
+  figures: PaperFigure[] = [],
+  figureAssetId?: string
+): Promise<VideoScript> {
+  const figureBlock =
+    figures.length > 0
+      ? `\n\nPAPER FIGURE CATALOG (assign with figureId when a scene needs the real figure):\n${formatFigureCatalog(figures)}\n`
+      : "\n\nPAPER FIGURE CATALOG: none available. Set every scene's figureId to null.\n";
+
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-5-20250929",
     max_tokens: 2800,
@@ -198,7 +214,7 @@ export async function generateScript(paperText: string): Promise<VideoScript> {
     messages: [
       {
         role: "user",
-        content: `Here is the paper text:\n\n${paperText}`,
+        content: `Here is the paper text:\n\n${paperText}${figureBlock}`,
       },
     ],
   });
@@ -209,30 +225,45 @@ export async function generateScript(paperText: string): Promise<VideoScript> {
   }
 
   const parsed = parseScriptJson(textBlock.text);
+  const knownIds = new Set(figures.map((f) => f.id));
+  const usedFigureIds = new Set<string>();
 
   // Enforce the fixed 4-act structure regardless of what the model returned.
-  const scenes: Scene[] = parsed.scenes.slice(0, 4).map((s, i) => ({
-    index: i + 1,
-    title: s.title ?? `Scene ${i + 1}`,
-    narration: s.narration ?? "",
-    visualCue: s.visualCue,
-    icon: (ICON_KEYS as readonly string[]).includes(s.icon)
-      ? s.icon
-      : "file-text",
-    setting: (SETTING_KEYS as readonly string[]).includes(s.setting)
-      ? s.setting
-      : "lecture-hall",
-    imagePrompt: s.imagePrompt ?? s.visualCue ?? s.title ?? "",
-    // Fall back to shot A if the model omitted a distinct second shot.
-    imagePromptB: s.imagePromptB ?? s.imagePrompt ?? s.visualCue ?? s.title ?? "",
-    subject: (s.subject ?? s.title ?? "").toString().toLowerCase().trim(),
-    keyTerms: Array.isArray(s.keyTerms)
-      ? s.keyTerms
-          .filter((k: unknown): k is string => typeof k === "string" && k.trim().length > 0)
-          .map((k) => k.trim())
-          .slice(0, 6)
-      : [],
-  }));
+  const scenes: Scene[] = parsed.scenes.slice(0, 4).map((s, i) => {
+    const rawId = s.figureId ? String(s.figureId).trim() : null;
+    const figureId =
+      rawId && knownIds.has(rawId) && !usedFigureIds.has(rawId) ? rawId : null;
+    if (figureId) usedFigureIds.add(figureId);
+
+    const placementRaw = (s.figurePlacement ?? "inset").toString().toLowerCase();
+    const figurePlacement: FigurePlacement =
+      placementRaw === "fullbleed" ? "fullbleed" : "inset";
+
+    return {
+      index: i + 1,
+      title: s.title ?? `Scene ${i + 1}`,
+      narration: s.narration ?? "",
+      visualCue: s.visualCue,
+      icon: (ICON_KEYS as readonly string[]).includes(s.icon)
+        ? s.icon
+        : "file-text",
+      setting: (SETTING_KEYS as readonly string[]).includes(s.setting)
+        ? s.setting
+        : "lecture-hall",
+      imagePrompt: s.imagePrompt ?? s.visualCue ?? s.title ?? "",
+      // Fall back to shot A if the model omitted a distinct second shot.
+      imagePromptB: s.imagePromptB ?? s.imagePrompt ?? s.visualCue ?? s.title ?? "",
+      subject: (s.subject ?? s.title ?? "").toString().toLowerCase().trim(),
+      keyTerms: Array.isArray(s.keyTerms)
+        ? s.keyTerms
+            .filter((k: unknown): k is string => typeof k === "string" && k.trim().length > 0)
+            .map((k) => k.trim())
+            .slice(0, 6)
+        : [],
+      figureId,
+      figurePlacement: figureId ? figurePlacement : undefined,
+    };
+  });
 
   const background = (parsed.background ?? "").toString().trim();
   const backgroundImagePrompt = (
@@ -258,5 +289,7 @@ export async function generateScript(paperText: string): Promise<VideoScript> {
     backgroundImagePrompt,
     scenes,
     fullNarration,
+    figureAssetId,
+    figures,
   };
 }

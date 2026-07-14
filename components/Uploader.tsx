@@ -11,6 +11,7 @@ interface Scene {
   title: string;
   narration: string;
   icon: string;
+  figureId?: string | null;
 }
 interface VideoScript {
   paperTitle: string;
@@ -21,6 +22,7 @@ interface VideoScript {
   background?: string;
   scenes: Scene[];
   fullNarration: string;
+  figures?: { id: string; caption: string; page: number }[];
 }
 
 type Stage = "idle" | "scripting" | "script-ready" | "rendering" | "done" | "error";
@@ -407,6 +409,14 @@ export default function Uploader() {
                 </div>
                 <div>
                   <strong style={{ fontSize: 15.5 }}>{s.title}</strong>
+                  {s.figureId && (
+                    <div style={{ color: "var(--blue)", marginTop: 2, fontSize: 12, fontWeight: 600 }}>
+                      Paper figure {s.figureId}
+                      {script.figures?.find((f) => f.id === s.figureId)?.caption
+                        ? ` — ${script.figures.find((f) => f.id === s.figureId)!.caption.slice(0, 80)}`
+                        : ""}
+                    </div>
+                  )}
                   <div style={{ color: "var(--ink-soft)", marginTop: 4, fontSize: 14, lineHeight: 1.5 }}>
                     {s.narration}
                   </div>

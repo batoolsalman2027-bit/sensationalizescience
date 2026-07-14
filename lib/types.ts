@@ -1,5 +1,18 @@
 // Shared types across the paper -> video pipeline.
 
+/** How a paper figure is composited into a scene. */
+export type FigurePlacement = "inset" | "fullbleed";
+
+/** An embedded raster extracted from the uploaded PDF. */
+export interface PaperFigure {
+  id: string;
+  fileName: string;
+  page: number;
+  width: number;
+  height: number;
+  caption: string;
+}
+
 /** A single narrated beat of the summary video. */
 export interface Scene {
   /** 1-based order of the scene. */
@@ -22,6 +35,10 @@ export interface Scene {
   subject: string;
   /** 3-6 concrete terms actually named in the paper for this beat (organism, molecule, technique, structure). Grounds the image prompt so illustrations aren't generic/invented. Also drawn correctly as on-screen Remotion labels. */
   keyTerms: string[];
+  /** Optional id into VideoScript.figures (e.g. "fig-1"). */
+  figureId?: string | null;
+  /** How to place the paper figure in the frame. */
+  figurePlacement?: FigurePlacement;
 }
 
 /** The structured script produced by Claude from the paper text. */
@@ -44,6 +61,10 @@ export interface VideoScript {
   scenes: Scene[];
   /** Full narration concatenated (background + scenes). */
   fullNarration: string;
+  /** Staging folder id under public/renders/_figures/<id>/ */
+  figureAssetId?: string;
+  /** Catalog of extracted paper figures (metadata only; files live on disk). */
+  figures?: PaperFigure[];
 }
 
 /** Status of an in-flight video render job. */

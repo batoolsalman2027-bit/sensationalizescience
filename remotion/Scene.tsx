@@ -21,6 +21,9 @@ export interface SceneProps {
   imageStaticPath?: string;
   /** Second illustration (shot B) for a mid-scene hard-cut. */
   imageStaticPathB?: string;
+  figureStaticPath?: string;
+  figurePlacement?: "inset" | "fullbleed";
+  figureCaption?: string;
   /** Illustrated scene backdrop key (see remotion/scenes). Fallback when no image. Omit for the plain intro-card layout. */
   setting?: string;
   /** Per-word narration timing for synced captions. */
@@ -39,6 +42,9 @@ export function Scene({
   keyTerms,
   imageStaticPath,
   imageStaticPathB,
+  figureStaticPath,
+  figurePlacement,
+  figureCaption,
   setting,
   captions,
   badge,
@@ -47,11 +53,14 @@ export function Scene({
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
 
-  if (imageStaticPath) {
+  if (imageStaticPath || figureStaticPath) {
     return (
       <IllustratedScene
         imageStaticPath={imageStaticPath}
         imageStaticPathB={imageStaticPathB}
+        figureStaticPath={figureStaticPath}
+        figurePlacement={figurePlacement}
+        figureCaption={figureCaption}
         title={title}
         keyTerms={keyTerms}
         narration={narration}

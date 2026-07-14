@@ -19,6 +19,9 @@ export type ExplainerScene = {
   imageStaticPath?: string;
   /** Second illustration (shot B) for a mid-scene hard-cut. */
   imageStaticPathB?: string;
+  figureStaticPath?: string;
+  figurePlacement?: "inset" | "fullbleed";
+  figureCaption?: string;
   /** Path relative to the bundle's public dir, e.g. "audio/scene-1.mp3". */
   audioStaticPath: string;
   /** Per-word narration timing (seconds) for synced captions. */
@@ -76,6 +79,9 @@ export function Explainer({
               setting={scene.setting}
               imageStaticPath={scene.imageStaticPath}
               imageStaticPathB={scene.imageStaticPathB}
+              figureStaticPath={scene.figureStaticPath}
+              figurePlacement={scene.figurePlacement}
+              figureCaption={scene.figureCaption}
               captions={scene.captions}
               badge={
                 scene.index > 0
