@@ -165,5 +165,5 @@ export async function renderVideo(
     },
   });
 
-  return { videoUrl: `/renders/${jobId}/video.mp4` };
+  return { videoUrl: `/api/renders/${jobId}/video.mp4` };
 }
