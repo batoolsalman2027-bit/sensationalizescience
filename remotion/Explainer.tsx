@@ -39,6 +39,8 @@ export type ExplainerProps = {
   doi?: string;
   /** Silent citation card length (default 2s @ 30fps). */
   titleCardFrames?: number;
+  /** Output canvas aspect (drives Remotion metadata width/height). */
+  aspectRatio?: "9:16" | "16:9" | "1:1";
 };
 
 /** Root composition: title card, then narrated scenes (background + 4-act paper). */

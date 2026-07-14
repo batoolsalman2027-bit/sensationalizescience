@@ -5,6 +5,12 @@ import Link from "next/link";
 import { ICONS } from "@/remotion/icons";
 import { FlaskConical, UploadCloud, Download } from "lucide-react";
 import PricingSection from "@/components/PricingSection";
+import RenderOptionsPicker from "@/components/RenderOptionsPicker";
+import {
+  ASPECT_RATIOS,
+  VOICES,
+  type AspectRatioId,
+} from "@/config/render-options";
 
 interface Scene {
   index: number;
@@ -52,6 +58,8 @@ export default function Uploader() {
   const [showPaywall, setShowPaywall] = useState(false);
   const [busyPlanId, setBusyPlanId] = useState<string | null>(null);
   const [checkoutNote, setCheckoutNote] = useState<string | null>(null);
+  const [voiceId, setVoiceId] = useState(VOICES[0].id);
+  const [aspectRatio, setAspectRatio] = useState<AspectRatioId>(ASPECT_RATIOS[0].id);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pendingCheckoutRef = useRef(false);
 
@@ -169,7 +177,10 @@ export default function Uploader() {
       const res = await fetch("/api/video", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ script }),
+        body: JSON.stringify({
+          script,
+          options: { voiceId, aspectRatio },
+        }),
       });
       const data = await res.json();
 
@@ -205,7 +216,7 @@ export default function Uploader() {
       setError(err.message);
       setStage("error");
     }
-  }, [script, billing, refreshBilling]);
+  }, [script, billing, refreshBilling, voiceId, aspectRatio]);
 
   const busy = stage === "scripting" || stage === "rendering";
 
@@ -424,6 +435,13 @@ export default function Uploader() {
               </div>
             ))}
           </div>
+          <RenderOptionsPicker
+            voiceId={voiceId}
+            aspectRatio={aspectRatio}
+            disabled={stage === "rendering"}
+            onVoiceChange={setVoiceId}
+            onAspectChange={setAspectRatio}
+          />
           <div style={{ textAlign: "center", marginTop: 30 }}>
             <button className="btn-generate" onClick={generateVideo} disabled={stage === "rendering"}>
               {stage === "rendering" && (

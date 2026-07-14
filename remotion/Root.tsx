@@ -1,9 +1,10 @@
 import { Composition, registerRoot } from "remotion";
 import type { AnyZodObject } from "remotion";
 import { Explainer, ExplainerProps } from "./Explainer";
+import { resolveAspectRatio } from "../config/render-options";
 
 export const FPS = 30;
-// Vertical 9:16 for TikTok / Reels / Shorts.
+// Default Vertical 9:16 for TikTok / Reels / Shorts (overridden by calculateMetadata).
 export const WIDTH = 1080;
 export const HEIGHT = 1920;
 
@@ -11,6 +12,7 @@ const defaultProps: ExplainerProps = {
   scenes: [],
   paperTitle: "",
   titleCardFrames: 60,
+  aspectRatio: "9:16",
 };
 
 function RootComponent() {
@@ -28,6 +30,7 @@ function RootComponent() {
       }: {
         props: ExplainerProps;
       }) => {
+        const dims = resolveAspectRatio(props.aspectRatio);
         const titleFrames =
           props.paperTitle && (props.titleCardFrames ?? 60)
             ? props.titleCardFrames ?? 60
@@ -35,7 +38,11 @@ function RootComponent() {
         const total =
           titleFrames +
           props.scenes.reduce((sum, s) => sum + s.durationInFrames, 0);
-        return { durationInFrames: Math.max(total, FPS) };
+        return {
+          durationInFrames: Math.max(total, FPS),
+          width: dims.width,
+          height: dims.height,
+        };
       }}
     />
   );

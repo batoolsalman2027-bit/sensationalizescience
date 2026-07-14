@@ -3,20 +3,33 @@
  * video. Called once per scene (plus the hook) by lib/render.ts.
  */
 
+import { VOICES } from "@/config/render-options";
+
 const ELEVENLABS_BASE = "https://api.elevenlabs.io/v1";
 
 // Generate at natural speed with clean word timestamps; the final speed-up
 // (beyond ElevenLabs' 1.2 ceiling) is applied via ffmpeg in lib/audio.ts.
 const NARRATION_SPEED = Number(process.env.ELEVENLABS_SPEED ?? "1.0");
 
-export async function synthesizeElevenLabs(text: string): Promise<Buffer> {
+/** Prefer an explicit curated voice, else the env default, else Rachel. */
+function resolveVoice(voiceId?: string): string {
+  if (voiceId && VOICES.some((v) => v.id === voiceId)) return voiceId;
+  const env = process.env.ELEVENLABS_VOICE_ID?.trim();
+  if (env) return env;
+  return VOICES[0].id;
+}
+
+export async function synthesizeElevenLabs(
+  text: string,
+  voiceId?: string
+): Promise<Buffer> {
   const apiKey = process.env.ELEVENLABS_API_KEY;
-  const voiceId = process.env.ELEVENLABS_VOICE_ID;
-  if (!apiKey || !voiceId) {
-    throw new Error("ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID are required");
+  const voice = resolveVoice(voiceId || process.env.ELEVENLABS_VOICE_ID);
+  if (!apiKey || !voice) {
+    throw new Error("ELEVENLABS_API_KEY and a voice id are required");
   }
 
-  const res = await fetch(`${ELEVENLABS_BASE}/text-to-speech/${voiceId}`, {
+  const res = await fetch(`${ELEVENLABS_BASE}/text-to-speech/${voice}`, {
     method: "POST",
     headers: {
       "xi-api-key": apiKey,
@@ -55,15 +68,18 @@ export interface TimedSpeech {
  * alignment — which we fold into word-level timings to drive synced ("karaoke")
  * captions. Falls back to an empty word list if alignment is missing.
  */
-export async function synthesizeWithTimestamps(text: string): Promise<TimedSpeech> {
+export async function synthesizeWithTimestamps(
+  text: string,
+  voiceId?: string
+): Promise<TimedSpeech> {
   const apiKey = process.env.ELEVENLABS_API_KEY;
-  const voiceId = process.env.ELEVENLABS_VOICE_ID;
-  if (!apiKey || !voiceId) {
-    throw new Error("ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID are required");
+  const voice = resolveVoice(voiceId || process.env.ELEVENLABS_VOICE_ID);
+  if (!apiKey || !voice) {
+    throw new Error("ELEVENLABS_API_KEY and a voice id are required");
   }
 
   const res = await fetch(
-    `${ELEVENLABS_BASE}/text-to-speech/${voiceId}/with-timestamps`,
+    `${ELEVENLABS_BASE}/text-to-speech/${voice}/with-timestamps`,
     {
       method: "POST",
       headers: {

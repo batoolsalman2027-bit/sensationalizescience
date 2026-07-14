@@ -8,6 +8,10 @@ import { speedUpAudio } from "./audio";
 import { generateFigureRemake, generateSceneImage } from "./image";
 import { renderVideoUrl } from "./renders";
 import { figuresStagingRoot } from "./pdf-figures";
+import {
+  sanitizeRenderOptions,
+  type RenderOptions,
+} from "@/config/render-options";
 import type { FigurePlacement, VideoScript } from "./types";
 
 const FPS = 30;
@@ -84,8 +88,10 @@ async function loadFigureSources(
  */
 export async function renderVideo(
   script: VideoScript,
-  jobId: string
+  jobId: string,
+  renderOptions?: Partial<RenderOptions>
 ): Promise<{ videoUrl: string }> {
+  const options = sanitizeRenderOptions(renderOptions);
   const renderDir = path.join(process.cwd(), "public", "renders", jobId);
   const audioDir = path.join(renderDir, "audio");
   const imagesDir = path.join(renderDir, "images");
@@ -101,7 +107,7 @@ export async function renderVideo(
     ref?: string
   ): Promise<{ path?: string; base64?: string }> => {
     try {
-      const img = await generateSceneImage(prompt, ref);
+      const img = await generateSceneImage(prompt, ref, options.aspectRatio);
       await writeFile(path.join(imagesDir, fileName), img.buffer);
       return { path: `images/${fileName}`, base64: img.base64 };
     } catch (err) {
@@ -122,6 +128,7 @@ export async function renderVideo(
         sourceBase64: source.base64,
         caption: source.caption,
         keyTerms,
+        aspect: options.aspectRatio,
       });
       const fileName = `${fileStem}-figure-remake.png`;
       await writeFile(path.join(imagesDir, fileName), remake.buffer);
@@ -170,7 +177,10 @@ export async function renderVideo(
         : { path: undefined };
     }
 
-    const { buffer, words } = await synthesizeWithTimestamps(opts.narration);
+    const { buffer, words } = await synthesizeWithTimestamps(
+      opts.narration,
+      options.voiceId
+    );
     const fileName = `${opts.fileStem}.mp3`;
     const filePath = path.join(audioDir, fileName);
     await writeFile(filePath, buffer);
@@ -245,6 +255,7 @@ export async function renderVideo(
     journal: script.journal,
     doi: script.doi,
     titleCardFrames: TITLE_CARD_FRAMES,
+    aspectRatio: options.aspectRatio,
   };
 
   // The per-job audio dir doubles as the Remotion bundle's public dir, so

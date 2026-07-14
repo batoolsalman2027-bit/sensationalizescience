@@ -4,16 +4,18 @@ import { renderVideo } from "@/lib/render";
 import { createJob, updateJob } from "@/lib/jobs";
 import type { VideoScript } from "@/lib/types";
 import { checkCanGenerate, consumeEntitlement } from "@/lib/billing";
+import {
+  sanitizeRenderOptions,
+  type RenderOptions,
+} from "@/config/render-options";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
 /**
  * POST /api/video
- * Body: JSON { script: VideoScript }
+ * Body: JSON { script: VideoScript, options?: { voiceId, aspectRatio } }
  * Returns: { jobId } immediately. Poll /api/status?jobId=... for progress.
- *
- * Enforces free-video / credit entitlements before kicking off a render.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -29,10 +31,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { script } = (await req.json()) as { script?: VideoScript };
+    const body = (await req.json()) as {
+      script?: VideoScript;
+      options?: Partial<RenderOptions>;
+    };
+    const { script } = body;
     if (!script || !Array.isArray(script.scenes) || script.scenes.length === 0) {
       return NextResponse.json({ error: "script required" }, { status: 400 });
     }
+
+    const options = sanitizeRenderOptions(body.options);
 
     // Consume free/credit immediately so refresh abuse can't double-spend.
     consumeEntitlement(entitlement);
@@ -41,7 +49,7 @@ export async function POST(req: NextRequest) {
     createJob(jobId);
     updateJob(jobId, { status: "processing" });
 
-    renderVideo(script, jobId)
+    renderVideo(script, jobId, options)
       .then(({ videoUrl }) => {
         updateJob(jobId, { status: "done", videoUrl });
       })
@@ -55,6 +63,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       jobId,
       billedAs: entitlement.mode,
+      options,
     });
   } catch (err: any) {
     console.error("[/api/video] error:", err);

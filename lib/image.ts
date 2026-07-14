@@ -7,10 +7,27 @@
  * visually consistent with scene 1 — the thing that makes it feel like one film.
  */
 
+import type { AspectRatioId } from "@/config/render-options";
+
 const MODEL = process.env.GEMINI_IMAGE_MODEL ?? "gemini-2.5-flash-image";
 
+function framingLine(aspect: AspectRatioId): string {
+  if (aspect === "16:9") {
+    return "Wide landscape 16:9 composition, full-bleed, main subject centered with clear negative space along the bottom for captions.";
+  }
+  if (aspect === "1:1") {
+    return "Square 1:1 composition, full-bleed, main subject centered with clear negative space in the lower portion for captions.";
+  }
+  return "Tall vertical 9:16 portrait composition, full-bleed, the main subject centered in the upper-middle with clear negative space in the lower third for captions.";
+}
+
 /** Locked art direction applied to every scene for a cohesive look. */
-export const STYLE_PROMPT = `Flat modern editorial vector illustration, clean geometric shapes, soft cinematic lighting, subtle grain, limited cohesive palette of deep navy background with teal and sky-blue accents and warm highlights. Tall vertical 9:16 portrait composition, full-bleed, the main subject centered in the upper-middle with clear negative space in the lower third for captions. CRITICAL: do not draw ANY writing — no letters, numbers, words, labels, captions, equations, UI text, charts with axis labels, graphs, logos, or watermarks anywhere in the image — depict ideas purely through imagery, shapes, and color. Sophisticated science-communication aesthetic, the visual language of a high-end explainer video.`;
+export function stylePrompt(aspect: AspectRatioId = "9:16"): string {
+  return `Flat modern editorial vector illustration, clean geometric shapes, soft cinematic lighting, subtle grain, limited cohesive palette of deep navy background with teal and sky-blue accents and warm highlights. ${framingLine(aspect)} CRITICAL: do not draw ANY writing — no letters, numbers, words, labels, captions, equations, UI text, charts with axis labels, graphs, logos, or watermarks anywhere in the image — depict ideas purely through imagery, shapes, and color. Sophisticated science-communication aesthetic, the visual language of a high-end explainer video.`;
+}
+
+/** @deprecated use stylePrompt(aspect) */
+export const STYLE_PROMPT = stylePrompt("9:16");
 
 /**
  * Remake a paper figure as an original illustrated reinterpretation.
@@ -27,7 +44,7 @@ BUT this must be a fresh remake, not a pixel copy:
 - Restyle into flat modern editorial vector illustration with deep navy background, teal and sky-blue accents, soft cinematic lighting, subtle grain
 - Remove publisher logos, watermarks, and journal chrome
 - CRITICAL: draw NO readable text, letters, numbers, axis tick labels, legends with words, or captions — image models misspell these. Replace labels with simple geometric markers, color coding, or blank axes
-- Center the figure with clean margins so it reads well as an inset panel on a vertical video
+- Center the figure with clean margins so it reads well as an inset panel
 
 Output one remade figure image only.`;
 
@@ -38,7 +55,10 @@ export interface GeneratedImage {
   mimeType: string;
 }
 
-async function callGeminiImage(parts: unknown[]): Promise<GeneratedImage> {
+async function callGeminiImage(
+  parts: unknown[],
+  aspect: AspectRatioId = "9:16"
+): Promise<GeneratedImage> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     throw new Error("GEMINI_API_KEY not set");
@@ -57,9 +77,7 @@ async function callGeminiImage(parts: unknown[]): Promise<GeneratedImage> {
           contents: [{ parts }],
           generationConfig: {
             responseModalities: ["IMAGE"],
-            // Ask for vertical 9:16 when the model supports it; older image
-            // models ignore/reject imageConfig, so we retry without it below.
-            ...(withAspect ? { imageConfig: { aspectRatio: "9:16" } } : {}),
+            ...(withAspect ? { imageConfig: { aspectRatio: aspect } } : {}),
           },
         }),
       }
@@ -67,7 +85,6 @@ async function callGeminiImage(parts: unknown[]): Promise<GeneratedImage> {
 
   let res = await call(true);
   if (!res.ok) {
-    // Retry without the aspect-ratio hint in case this model rejects the field.
     res = await call(false);
   }
 
@@ -103,13 +120,13 @@ async function callGeminiImage(parts: unknown[]): Promise<GeneratedImage> {
  */
 export async function generateSceneImage(
   sceneDescription: string,
-  referenceBase64?: string
+  referenceBase64?: string,
+  aspect: AspectRatioId = "9:16"
 ): Promise<GeneratedImage> {
   const parts: unknown[] = [
-    { text: `${STYLE_PROMPT}\n\nScene to illustrate: ${sceneDescription}` },
+    { text: `${stylePrompt(aspect)}\n\nScene to illustrate: ${sceneDescription}` },
   ];
   if (referenceBase64) {
-    // Give the model the first scene's image so it matches the established style.
     parts.unshift({
       inlineData: { mimeType: "image/png", data: referenceBase64 },
     });
@@ -118,7 +135,7 @@ export async function generateSceneImage(
     });
   }
 
-  return callGeminiImage(parts);
+  return callGeminiImage(parts, aspect);
 }
 
 /**
@@ -130,12 +147,15 @@ export async function generateFigureRemake(opts: {
   sourceMimeType?: string;
   caption?: string;
   keyTerms?: string[];
+  aspect?: AspectRatioId;
 }): Promise<GeneratedImage> {
+  const aspect = opts.aspect ?? "9:16";
   const contextBits = [
     opts.caption ? `Paper caption / context: ${opts.caption}` : null,
     opts.keyTerms?.length
       ? `Key paper terms to keep visually grounded: ${opts.keyTerms.join(", ")}`
       : null,
+    `Output canvas framing: ${framingLine(aspect)}`,
   ]
     .filter(Boolean)
     .join("\n");
@@ -152,5 +172,5 @@ export async function generateFigureRemake(opts: {
     },
   ];
 
-  return callGeminiImage(parts);
+  return callGeminiImage(parts, aspect);
 }

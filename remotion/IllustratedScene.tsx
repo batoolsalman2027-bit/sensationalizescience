@@ -7,6 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { Captions, WordTiming } from "./Captions";
+import { useFrameOrientation } from "./layout";
 import { theme } from "./theme";
 
 export interface IllustratedSceneProps {
@@ -46,6 +47,9 @@ export function IllustratedScene({
 }: IllustratedSceneProps) {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
+  const orientation = useFrameOrientation();
+  const isLandscape = orientation === "landscape";
+  const isSquare = orientation === "square";
 
   const hasAi = Boolean(imageStaticPath);
   const hasFigure = Boolean(figureStaticPath);
@@ -104,6 +108,36 @@ export function IllustratedScene({
       : figureCaption
     : null;
 
+  const titleTop = isLandscape ? 36 : isSquare ? 48 : 90;
+  const badgeTop = isLandscape ? 40 : isSquare ? 52 : 96;
+  const labelsTop = isLandscape ? 96 : isSquare ? 120 : 200;
+  const captionBottom = isLandscape ? 48 : isSquare ? 90 : 200;
+  const figureTop = fullbleedFigure
+    ? isLandscape
+      ? 88
+      : isSquare
+        ? 120
+        : 200
+    : isLandscape
+      ? 100
+      : isSquare
+        ? 140
+        : 250;
+  const figureBottom = fullbleedFigure
+    ? isLandscape
+      ? 140
+      : isSquare
+        ? 200
+        : 360
+    : isLandscape
+      ? 160
+      : isSquare
+        ? 240
+        : 460;
+  const figureSide = isLandscape ? 80 : 56;
+  const titleSize = isLandscape ? 28 : 34;
+  const captionPadX = isLandscape ? 80 : 56;
+
   return (
     <AbsoluteFill
       style={{
@@ -142,7 +176,7 @@ export function IllustratedScene({
       <div
         style={{
           position: "absolute",
-          top: 90,
+          top: titleTop,
           left: 0,
           right: 0,
           textAlign: "center",
@@ -155,7 +189,7 @@ export function IllustratedScene({
             background: "rgba(45,212,191,0.18)",
             border: "2px solid rgba(45,212,191,0.5)",
             color: "#5eead4",
-            fontSize: 34,
+            fontSize: titleSize,
             fontWeight: 700,
             padding: "10px 26px",
             borderRadius: 999,
@@ -171,10 +205,10 @@ export function IllustratedScene({
         <div
           style={{
             position: "absolute",
-            top: 96,
-            right: 40,
+            top: badgeTop,
+            right: isLandscape ? 56 : 40,
             color: "rgba(255,255,255,0.85)",
-            fontSize: 30,
+            fontSize: isLandscape ? 24 : 30,
             fontWeight: 600,
             textShadow: "0 1px 6px rgba(0,0,0,0.6)",
           }}
@@ -183,15 +217,15 @@ export function IllustratedScene({
         </div>
       )}
 
-      {/* Real paper figure */}
+      {/* AI remake of paper figure */}
       {hasFigure && figureStaticPath && (
         <div
           style={{
             position: "absolute",
-            left: fullbleedFigure ? 36 : 56,
-            right: fullbleedFigure ? 36 : 56,
-            top: fullbleedFigure ? 200 : 250,
-            bottom: fullbleedFigure ? 360 : 460,
+            left: figureSide,
+            right: figureSide,
+            top: figureTop,
+            bottom: figureBottom,
             opacity: figureOpacity,
             display: "flex",
             flexDirection: "column",
@@ -203,7 +237,7 @@ export function IllustratedScene({
             style={{
               width: "100%",
               height: "100%",
-              borderRadius: 28,
+              borderRadius: isLandscape ? 18 : 28,
               overflow: "hidden",
               border: "3px solid rgba(255,255,255,0.22)",
               boxShadow: "0 18px 50px rgba(0,0,0,0.45)",
@@ -226,7 +260,7 @@ export function IllustratedScene({
             style={{
               marginTop: 14,
               color: "rgba(226,232,240,0.9)",
-              fontSize: 22,
+              fontSize: isLandscape ? 18 : 22,
               fontWeight: 600,
               letterSpacing: 0.4,
               textTransform: "uppercase",
@@ -239,10 +273,10 @@ export function IllustratedScene({
               style={{
                 marginTop: 8,
                 color: "rgba(148,163,184,0.95)",
-                fontSize: 22,
+                fontSize: isLandscape ? 18 : 22,
                 textAlign: "center",
                 lineHeight: 1.3,
-                maxWidth: 900,
+                maxWidth: isLandscape ? 1400 : 900,
                 padding: "0 12px",
               }}
             >
@@ -259,7 +293,7 @@ export function IllustratedScene({
             position: "absolute",
             left: 40,
             right: 40,
-            top: 200,
+            top: labelsTop,
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
@@ -274,7 +308,7 @@ export function IllustratedScene({
                 background: "rgba(15,23,42,0.72)",
                 border: "1px solid rgba(148,163,184,0.45)",
                 color: "#e2e8f0",
-                fontSize: 26,
+                fontSize: isLandscape ? 22 : 26,
                 fontWeight: 600,
                 padding: "8px 16px",
                 borderRadius: 12,
@@ -295,10 +329,10 @@ export function IllustratedScene({
           position: "absolute",
           left: 0,
           right: 0,
-          bottom: 200,
+          bottom: captionBottom,
           display: "flex",
           justifyContent: "center",
-          padding: "0 56px",
+          padding: `0 ${captionPadX}px`,
         }}
       >
         {captions && captions.length > 0 ? (
@@ -306,7 +340,7 @@ export function IllustratedScene({
         ) : (
           <div
             style={{
-              fontSize: 52,
+              fontSize: isLandscape ? 40 : 52,
               fontWeight: 800,
               textAlign: "center",
               lineHeight: 1.2,

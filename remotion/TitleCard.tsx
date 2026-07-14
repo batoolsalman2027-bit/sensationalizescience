@@ -1,4 +1,5 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { useFrameOrientation } from "./layout";
 import { theme } from "./theme";
 
 export type TitleCardProps = {
@@ -15,6 +16,8 @@ export type TitleCardProps = {
 export function TitleCard({ paperTitle, authors, journal, doi }: TitleCardProps) {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
+  const orientation = useFrameOrientation();
+  const isLandscape = orientation === "landscape";
 
   const enter = interpolate(frame, [0, 12], [0, 1], {
     extrapolateLeft: "clamp",
@@ -30,6 +33,18 @@ export function TitleCard({ paperTitle, authors, journal, doi }: TitleCardProps)
   const y = interpolate(enter, [0, 1], [18, 0]);
 
   const meta = [journal, doi].filter(Boolean).join("  ·  ");
+  const titleSize =
+    paperTitle.length > 90
+      ? isLandscape
+        ? 36
+        : 42
+      : paperTitle.length > 60
+        ? isLandscape
+          ? 42
+          : 48
+        : isLandscape
+          ? 48
+          : 56;
 
   return (
     <AbsoluteFill
@@ -41,35 +56,35 @@ export function TitleCard({ paperTitle, authors, journal, doi }: TitleCardProps)
         opacity,
         alignItems: "center",
         justifyContent: "center",
-        padding: "80px 72px",
+        padding: isLandscape ? "48px 120px" : "80px 72px",
       }}
     >
       <div
         style={{
           transform: `translateY(${y}px)`,
-          maxWidth: 920,
+          maxWidth: isLandscape ? 1500 : 920,
           textAlign: "center",
         }}
       >
         <div
           style={{
             color: "#5eead4",
-            fontSize: 22,
+            fontSize: isLandscape ? 18 : 22,
             fontWeight: 700,
             letterSpacing: 3,
             textTransform: "uppercase",
-            marginBottom: 28,
+            marginBottom: isLandscape ? 18 : 28,
           }}
         >
           Research brief
         </div>
         <div
           style={{
-            fontSize: paperTitle.length > 90 ? 42 : paperTitle.length > 60 ? 48 : 56,
+            fontSize: titleSize,
             fontWeight: 800,
             letterSpacing: -0.8,
             lineHeight: 1.15,
-            marginBottom: 28,
+            marginBottom: isLandscape ? 18 : 28,
           }}
         >
           {paperTitle}
@@ -77,7 +92,7 @@ export function TitleCard({ paperTitle, authors, journal, doi }: TitleCardProps)
         {authors ? (
           <div
             style={{
-              fontSize: 28,
+              fontSize: isLandscape ? 24 : 28,
               color: theme.muted,
               lineHeight: 1.35,
               marginBottom: 18,
@@ -89,7 +104,7 @@ export function TitleCard({ paperTitle, authors, journal, doi }: TitleCardProps)
         {meta ? (
           <div
             style={{
-              fontSize: 24,
+              fontSize: isLandscape ? 20 : 24,
               color: "rgba(148,163,184,0.95)",
               lineHeight: 1.4,
               wordBreak: "break-word",
