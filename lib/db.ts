@@ -88,7 +88,18 @@ function openDb(): Database.Database {
 
 function getDb(): Database.Database {
   if (!globalForDb.__paper2videoDb) {
-    globalForDb.__paper2videoDb = openDb();
+    const opened = openDb();
+    globalForDb.__paper2videoDb = opened;
+    // Lazy import avoids pulling bcrypt into the build-phase path unnecessarily.
+    if (process.env.NEXT_PHASE !== "phase-production-build") {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { ensureUnlimitedTesterAccounts } = require("./seed-testers") as typeof import("./seed-testers");
+      try {
+        ensureUnlimitedTesterAccounts(opened);
+      } catch (err) {
+        console.warn("[db] failed to seed unlimited testers:", err);
+      }
+    }
   }
   return globalForDb.__paper2videoDb;
 }

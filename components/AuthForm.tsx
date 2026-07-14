@@ -54,7 +54,9 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       <label style={{ fontSize: 13.5, fontWeight: 600 }}>
         Email
         <input
-          type="email"
+          type="text"
+          inputMode="email"
+          autoComplete="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
