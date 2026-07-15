@@ -46,9 +46,9 @@ export default function Footer() {
       <div className="container">
         <div className="footer-top">
           <div className="footer-brand">
-            <Link href="/" className="nav-brand" aria-label="Synapse home">
+            <Link href="/" className="nav-brand" aria-label={`${SITE.name} home`}>
               <Logo size={32} />
-              <span className="wordmark">synapse</span>
+              <span className="wordmark">{SITE.name}</span>
             </Link>
             <p>{SITE.tagline}</p>
           </div>
@@ -66,7 +66,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Synapse. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} {SITE.name}. All rights reserved.</span>
           <span style={{ display: "flex", gap: 18 }}>
             <Link href="/resources/privacy">Privacy</Link>
             <Link href="/resources/terms">Terms</Link>

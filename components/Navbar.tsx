@@ -7,6 +7,7 @@ import { ChevronDown, Menu } from "lucide-react";
 import Logo from "./Logo";
 import MobileMenu from "./MobileMenu";
 import { MAIN_NAV, AUTH_NAV, type NavItem } from "@/config/navigation";
+import { SITE } from "@/config/site";
 
 function DropdownPanel({ item }: { item: NavItem }) {
   const sections = item.sections ?? [];
@@ -107,9 +108,9 @@ export default function Navbar() {
     <header className={`site-header${scrolled ? " scrolled" : ""}`}>
       <div className="container">
         <nav className="nav-inner" ref={navRef} aria-label="Primary">
-          <Link href="/" className="nav-brand" aria-label="Synapse home">
+          <Link href="/" className="nav-brand" aria-label={`${SITE.name} home`}>
             <Logo size={34} />
-            <span className="wordmark">synapse</span>
+            <span className="wordmark">{SITE.name}</span>
           </Link>
 
           <div className="nav-primary">

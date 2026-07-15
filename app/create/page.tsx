@@ -3,7 +3,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import Uploader from "@/components/Uploader";
 
-export const metadata: Metadata = { title: "Create — Synapse" };
+export const metadata: Metadata = { title: "Create — Sensationalize Medicine" };
 
 export default function CreatePage() {
   return (

@@ -1,5 +1,5 @@
 /* =========================================================================
-   Synapse — design system
+   Sensationalize Medicine — design system
    A calm, editorial, scientific aesthetic: warm white, lime green accent,
    restrained mustard, hairline borders, soft elevation, generous whitespace.
    Token NAMES are stable so every component restyles from here.
@@ -166,11 +166,12 @@ button { font-family: inherit; }
   font-size: 18px;
   font-weight: 700;
   font-style: normal;
-  line-height: 1;
+  line-height: 1.15;
   color: var(--ink);
-  white-space: nowrap;
-  letter-spacing: 0.04em;
+  white-space: normal;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
+  max-width: 11.5rem;
 }
 
 /* ---------- scientific background ---------- */
@@ -344,7 +345,7 @@ body > main {
   padding-top: 72px;
 }
 .nav-brand { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.nav-brand .wordmark { font-size: 24px; }
+.nav-brand .wordmark { font-size: 13px; }
 
 .nav-primary { display: flex; align-items: center; gap: 2px; margin-left: 10px; }
 .nav-item { position: relative; }

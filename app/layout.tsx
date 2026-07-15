@@ -3,9 +3,10 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScienceBackground from "@/components/ScienceBackground";
+import { SITE } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Synapse — Research, Reimagined as Video",
+  title: `${SITE.name} — ${SITE.tagline}`,
   description:
     "Turn scientific papers into short-form animated videos with clear AI voiceovers for TikTok, Reels, Shorts, LinkedIn, and more.",
 };

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { X, ChevronRight, ArrowLeft } from "lucide-react";
 import Logo from "./Logo";
 import { MAIN_NAV, AUTH_NAV, type NavItem } from "@/config/navigation";
+import { SITE } from "@/config/site";
 
 export default function MobileMenu({ onClose }: { onClose: () => void }) {
   const [sub, setSub] = useState<NavItem | null>(null);
@@ -31,9 +32,9 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
             <ArrowLeft size={18} /> Back
           </button>
         ) : (
-          <Link href="/" className="nav-brand" onClick={onClose} aria-label="Synapse home">
+          <Link href="/" className="nav-brand" onClick={onClose} aria-label={`${SITE.name} home`}>
             <Logo size={30} />
-            <span className="wordmark">synapse</span>
+            <span className="wordmark">{SITE.name}</span>
           </Link>
         )}
         <button className="icon-btn" onClick={onClose} aria-label="Close menu">

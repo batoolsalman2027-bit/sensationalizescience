@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import Container from "@/components/Container";
 import AuthForm from "@/components/AuthForm";
 
-export const metadata: Metadata = { title: "Log in — Synapse" };
+export const metadata: Metadata = { title: "Log in — Sensationalize Medicine" };
 
 export default function LoginPage() {
   return (

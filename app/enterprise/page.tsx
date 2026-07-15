@@ -4,7 +4,7 @@ import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { MAIN_NAV } from "@/config/navigation";
 
-export const metadata: Metadata = { title: "Enterprise — Synapse" };
+export const metadata: Metadata = { title: "Enterprise — Sensationalize Medicine" };
 
 export default function EnterprisePage() {
   const enterprise = MAIN_NAV.find((i) => i.label === "Enterprise");

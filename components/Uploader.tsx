@@ -367,7 +367,7 @@ export default function Uploader() {
             }}
           >
             You&apos;ve used your free video. Pick Creator or Lab to unlock more generations —
-            payment goes to Synapse and covers API costs.
+            payment goes to Sensationalize Medicine and covers API costs.
           </p>
           {error && (
             <p style={{ color: "var(--error)", textAlign: "center", marginBottom: 16 }}>{error}</p>

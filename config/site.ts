@@ -4,7 +4,7 @@
  */
 
 export const SITE = {
-  name: "Synapse",
+  name: "Sensationalize Medicine",
   tagline: "Research, Reimagined as Video",
 };
 
@@ -120,7 +120,7 @@ export const ABOUT = {
     "A world where every important finding has a clear, accurate, platform-ready video — created in minutes by the people who did the work.",
   // PLACEHOLDER founding story — replace with the real story.
   story:
-    "Synapse started when a group of researchers and builders kept watching great papers disappear into obscurity. This is placeholder founding-story copy to be replaced.",
+    "Sensationalize Medicine started when a group of researchers and builders kept watching great papers disappear into obscurity. This is placeholder founding-story copy to be replaced.",
   // PLACEHOLDER team — replace with real team members.
   team: [
     { name: "Placeholder Founder", role: "Co-founder & CEO" },

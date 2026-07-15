@@ -6,7 +6,7 @@ import ComparisonTable from "@/components/ComparisonTable";
 import FaqAccordion from "@/components/FaqAccordion";
 import { PRICING_FAQ } from "@/config/pricing";
 
-export const metadata: Metadata = { title: "Pricing — Synapse" };
+export const metadata: Metadata = { title: "Pricing — Sensationalize Medicine" };
 
 export default function PricingPage() {
   return (
