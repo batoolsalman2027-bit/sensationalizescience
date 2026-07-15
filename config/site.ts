@@ -13,7 +13,7 @@ export const HERO = {
   subheadline:
     "Upload a research paper and create a clear, animated, narrated short-form video in minutes.",
   primaryCta: { label: "Create Your First Video", href: "/create" },
-  secondaryCta: { label: "Watch Examples", href: "/gallery" },
+  secondaryCta: { label: "Watch Demos", href: "/gallery" },
 };
 
 export const TRUSTED_BY = [
