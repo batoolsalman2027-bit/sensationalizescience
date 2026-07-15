@@ -3,7 +3,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import { MAIN_NAV } from "@/config/navigation";
 
-export const metadata: Metadata = { title: "Resources — Sensationalize Medicine" };
+export const metadata: Metadata = { title: "Resources — Sensationalize Science" };
 
 export default function ResourcesPage() {
   const resources = MAIN_NAV.find((i) => i.label === "Resources");

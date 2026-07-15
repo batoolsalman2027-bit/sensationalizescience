@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Container from "@/components/Container";
 import Library from "@/components/Library";
 
-export const metadata: Metadata = { title: "Your library — Sensationalize Medicine" };
+export const metadata: Metadata = { title: "Your library — Sensationalize Science" };
 
 export default function LibraryPage() {
   return (

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import Container from "@/components/Container";
 import AuthForm from "@/components/AuthForm";
 
-export const metadata: Metadata = { title: "Sign up — Sensationalize Medicine" };
+export const metadata: Metadata = { title: "Sign up — Sensationalize Science" };
 
 export default function SignupPage() {
   return (
@@ -15,7 +15,7 @@ export default function SignupPage() {
           </h1>
           <p style={{ color: "var(--ink-soft)", textAlign: "center", fontSize: 14, margin: "0 0 22px" }}>
             Your first video is free. Upgrade to Creator or Lab when you&apos;re ready — payment goes
-            to Sensationalize Medicine and covers generation costs.
+            to Sensationalize Science and covers generation costs.
           </p>
           <Suspense fallback={null}>
             <AuthForm mode="signup" />

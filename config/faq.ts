@@ -12,7 +12,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
   {
     category: "General",
     questions: [
-      { q: "What is Sensationalize Medicine?", a: "A tool that turns scientific papers into short, animated, narrated videos ready for TikTok, Reels, Shorts, LinkedIn, and more." },
+      { q: "What is Sensationalize Science?", a: "A tool that turns scientific papers into short, animated, narrated videos ready for TikTok, Reels, Shorts, LinkedIn, and more." },
       { q: "Who is it for?", a: "Researchers, labs, universities, journals, biotech companies, and science creators who want their work seen beyond academia." },
       { q: "Do I need any video editing skills?", a: "No. Upload a paper and you get a finished video. You can optionally fine-tune everything before export." },
     ],

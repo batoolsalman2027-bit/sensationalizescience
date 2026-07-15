@@ -4,7 +4,7 @@ import SectionHeader from "@/components/SectionHeader";
 import Button from "@/components/Button";
 import { ABOUT } from "@/config/site";
 
-export const metadata: Metadata = { title: "About — Sensationalize Medicine" };
+export const metadata: Metadata = { title: "About — Sensationalize Science" };
 
 export default function AboutPage() {
   return (
@@ -42,7 +42,7 @@ export default function AboutPage() {
 
       <section className="section">
         <Container>
-          <SectionHeader eyebrow="Team" title="The people behind Sensationalize Medicine" desc="Placeholder team — replace with real members." />
+          <SectionHeader eyebrow="Team" title="The people behind Sensationalize Science" desc="Placeholder team — replace with real members." />
           <div className="grid grid-4">
             {ABOUT.team.map((m, i) => (
               <div key={i} className="card" style={{ textAlign: "center" }}>

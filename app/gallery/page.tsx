@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PlaceholderPage from "@/components/PlaceholderPage";
 
-export const metadata: Metadata = { title: "Gallery — Sensationalize Medicine" };
+export const metadata: Metadata = { title: "Gallery — Sensationalize Science" };
 
 export default function GalleryPage() {
   return (

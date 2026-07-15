@@ -80,7 +80,7 @@ export default function HeroWorkflow() {
   return (
     <div
       className={`hero-mock phase-${phase}`}
-      aria-label="Example: Sensationalize Medicine generating a research video from a paper"
+      aria-label="Example: Sensationalize Science generating a research video from a paper"
       aria-live="polite"
     >
       <div className={`hm-pane${showVideo ? " on" : ""}${showProcess ? " status" : ""}`}>
