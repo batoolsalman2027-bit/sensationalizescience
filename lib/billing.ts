@@ -13,14 +13,12 @@ export const CREDITS_PER_PACK = Number(process.env.STRIPE_CREDITS_PER_PACK ?? 5)
 export const CREDIT_PACK_LABEL =
   process.env.STRIPE_CREDIT_PACK_LABEL ?? "$9.99 for 5 videos";
 
-/** Comma-separated emails that can generate without spending credits (testers). */
+/** Emails that can generate without spending credits (testers / owner). */
 function unlimitedEmails(): Set<string> {
-  return new Set(
-    (process.env.UNLIMITED_TEST_EMAILS ?? "")
-      .split(",")
-      .map((e) => e.trim().toLowerCase())
-      .filter(Boolean)
-  );
+  // Lazy require avoids a hard cycle at module load (seed-testers is pure).
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { unlimitedTesterEmails } = require("./seed-testers") as typeof import("./seed-testers");
+  return new Set(unlimitedTesterEmails());
 }
 
 export function isUnlimitedUser(user: SessionUser | null | undefined): boolean {
