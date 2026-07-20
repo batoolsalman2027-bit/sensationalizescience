@@ -28,8 +28,9 @@ export function parseUnlimitedTesterAccounts(): TesterAccount[] {
     accounts.push({ email, password });
   }
 
-  const legacyPassword =
-    process.env.UNLIMITED_TEST_PASSWORD?.trim() || "SynapseTest2026!";
+  // No hardcoded default: a shared password must be provided explicitly via
+  // UNLIMITED_TEST_PASSWORD, otherwise the legacy emails are skipped.
+  const legacyPassword = process.env.UNLIMITED_TEST_PASSWORD?.trim() ?? "";
   for (const email of (process.env.UNLIMITED_TEST_EMAILS ?? "")
     .split(",")
     .map((e) => e.trim().toLowerCase())

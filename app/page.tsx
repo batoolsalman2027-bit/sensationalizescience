@@ -3,12 +3,11 @@ import Container from "@/components/Container";
 import Button from "@/components/Button";
 import SectionHeader from "@/components/SectionHeader";
 import FeatureCard from "@/components/FeatureCard";
-import HeroWorkflow from "@/components/HeroWorkflow";
+import ProductionWorkflow from "@/components/ProductionWorkflow";
 import HeroHeadline from "@/components/HeroHeadline";
 import Reveal from "@/components/Reveal";
 import {
   HERO,
-  HOW_IT_WORKS,
   CORE_FEATURES,
   ACCURACY_POINTS,
   FINAL_CTA,
@@ -43,30 +42,22 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* ---------- How it works ---------- */}
-      <section className="section how-it-works">
+      {/* ---------- Production workflow ---------- */}
+      <section className="section how-it-works" aria-labelledby="workflow-heading">
         <Container>
           <Reveal>
-            <div className="hero-demo">
-              <div className="hero-demo-intro">
-                <span className="eyebrow">How it works</span>
-                <h2 className="section-title">From paper to published in four steps</h2>
-                <p className="section-desc">
-                  A guided workflow that keeps you in control the whole way through.
-                </p>
-              </div>
-              <div className="grid grid-4">
-                {HOW_IT_WORKS.map((s) => (
-                  <div key={s.step} className="card">
-                    <div className="step-num">{String(s.step).padStart(2, "0")}</div>
-                    <h3>{s.title}</h3>
-                    <p>{s.body}</p>
-                  </div>
-                ))}
-              </div>
-              <HeroWorkflow />
+            <div className="wf-intro">
+              <span className="eyebrow">The production process</span>
+              <h2 className="section-title" id="workflow-heading">
+                How a paper becomes a publication-quality video
+              </h2>
+              <p className="section-desc">
+                Six stages, with AI-assisted scientific editors and video-production
+                tools at every step — and your lab&apos;s approval before anything ships.
+              </p>
             </div>
           </Reveal>
+          <ProductionWorkflow />
         </Container>
       </section>
 
@@ -97,12 +88,12 @@ export default function Home() {
           <div className="split">
             <Reveal>
               <span className="eyebrow">Accuracy & control</span>
-              <h2 className="section-title">You stay the scientist. AI does the production.</h2>
+              <h2 className="section-title">You stay the scientist. We handle the production.</h2>
               <p className="section-desc" style={{ marginLeft: 0 }}>
-                Nothing publishes without your sign-off. Edit the script, visuals, citations, terminology, and narration until it&apos;s exactly right.
+                Nothing is delivered without your lab&apos;s sign-off. Review the script, visuals, citations, terminology, and narration until it&apos;s exactly right.
               </p>
               <div className="hero-ctas" style={{ justifyContent: "flex-start", marginTop: 24 }}>
-                <Button href="/create" variant="blue">Try it on your paper</Button>
+                <Button href="/create" variant="blue">Start a project</Button>
               </div>
             </Reveal>
             <Reveal>

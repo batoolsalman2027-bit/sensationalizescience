@@ -8,11 +8,20 @@ export const SITE = {
   tagline: "Research, Reimagined as Video",
 };
 
+/**
+ * Standard production turnaround. Single source of truth — reference this
+ * anywhere delivery time is quoted so the promise can be changed in one place.
+ */
+export const TURNAROUND = {
+  businessDays: "3–5",
+  label: "3–5 business days",
+};
+
 export const HERO = {
   headline: ["scientific papers,", "Reimagined as Video"],
   subheadline:
-    "Upload a research paper and create a clear, animated, narrated short-form video in minutes.",
-  primaryCta: { label: "Create Your First Video", href: "/create" },
+    "Turn your lab's research into publication-quality video. Upload your paper, identify the findings that matter most, and collaborate with our AI-assisted scientific production workflow.",
+  primaryCta: { label: "Start a Project", href: "/create" },
   secondaryCta: { label: "Watch Demos", href: "/gallery" },
 };
 
@@ -33,8 +42,8 @@ export const WHY_IT_MATTERS = [
   },
   {
     icon: "Clock",
-    title: "Save hours of scripting and editing",
-    body: "Go from PDF to a finished, narrated video in minutes, not days.",
+    title: "Save weeks of production work",
+    body: `Hand off scripting, visuals, and editing. Your video lands in ${TURNAROUND.label}.`,
   },
   {
     icon: "Lightbulb",
@@ -48,11 +57,79 @@ export const WHY_IT_MATTERS = [
   },
 ];
 
-export const HOW_IT_WORKS = [
-  { step: 1, title: "Upload your paper", body: "Drop in a PDF or paste an abstract." },
-  { step: 2, title: "Review the AI-generated script", body: "Check the narration for accuracy and tone." },
-  { step: 3, title: "Customize the storyboard and voice", body: "Adjust scenes, visuals, and the voiceover." },
-  { step: 4, title: "Export and publish", body: "Download or send straight to your platforms." },
+/**
+ * The six stages of the production workflow, rendered as the homepage process
+ * diagram (components/ProductionWorkflow.tsx). `icon` keys are lucide-react
+ * component names resolved in that component's ICONS map.
+ */
+export interface WorkflowStage {
+  step: number;
+  icon: string;
+  title: string;
+  points: string[];
+}
+
+export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
+  {
+    step: 1,
+    icon: "FileUp",
+    title: "Upload your research",
+    points: [
+      "Submit the full paper as a PDF",
+      "Add supporting files, figures, and supplementary materials",
+      "Include lab branding if you have it",
+    ],
+  },
+  {
+    step: 2,
+    icon: "SlidersHorizontal",
+    title: "Set your preferences",
+    points: [
+      "Choose the intended audience and video length",
+      "Flag which findings deserve the most emphasis",
+      "Pick tone, visual style, format, and distribution channel",
+    ],
+  },
+  {
+    step: 3,
+    icon: "Microscope",
+    title: "Scientific content review",
+    points: [
+      "The paper is analyzed and shaped into a proposed narrative",
+      "The most relevant findings and figures are selected",
+      "Terminology, claims, and citations are checked",
+    ],
+  },
+  {
+    step: 4,
+    icon: "Clapperboard",
+    title: "AI-assisted video production",
+    points: [
+      "Figures become original, video-appropriate visuals",
+      "Scenes, animations, and captions are produced",
+      "Narration is voiced with ElevenLabs",
+    ],
+  },
+  {
+    step: 5,
+    icon: "MessagesSquare",
+    title: "Lab review and approval",
+    points: [
+      "Your draft arrives inside the platform",
+      "Request edits and correct terminology in place",
+      "Nothing ships until your lab approves it",
+    ],
+  },
+  {
+    step: 6,
+    icon: "PackageCheck",
+    title: `Delivery in ${TURNAROUND.businessDays} business days`,
+    points: [
+      "Formats for websites, conferences, and social media",
+      "Versions suited to journals and institutional comms",
+      "Source files delivered alongside the final cut",
+    ],
+  },
 ];
 
 export const CORE_FEATURES = [
@@ -108,7 +185,7 @@ export const TESTIMONIALS = [
 
 export const FINAL_CTA = {
   headline: "Your Research Deserves a Larger Audience",
-  cta: { label: "Create a Video", href: "/create" },
+  cta: { label: "Start a Project", href: "/create" },
 };
 
 export const ABOUT = {
@@ -117,7 +194,7 @@ export const ABOUT = {
   problem:
     "Most research never reaches beyond a small circle of specialists. Findings that could inform, inspire, or help people stay locked inside PDFs. Turning a paper into engaging video today takes skills and hours most scientists don't have.",
   vision:
-    "A world where every important finding has a clear, accurate, platform-ready video — created in minutes by the people who did the work.",
+    "A world where every important finding has a clear, accurate, publication-quality video — produced with the people who did the work, and approved by them before it ships.",
   // PLACEHOLDER founding story — replace with the real story.
   story:
     "Sensationalize Science started when a group of researchers and builders kept watching great papers disappear into obscurity. This is placeholder founding-story copy to be replaced.",

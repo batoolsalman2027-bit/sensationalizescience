@@ -1,13 +1,40 @@
+# dependencies
 node_modules
+
+# next.js build output
 .next
+out
+*.tsbuildinfo
+next-env.d.ts
+
+# environment variables / secrets (never commit real values)
 .env
 .env.local
-*.log
-.DS_Store
-public/renders/
-data/
-*.tsbuildinfo
-.claude/
+.env.*.local
+.env.development
+.env.production
+*.pem
+*.key
 
-# local agent skill copies (optional)
+# runtime data (SQLite DB + generated projects/figures)
+data/
+
+# generated media (rendered audio + video, can be hundreds of MB)
+public/renders/
+
+# logs
+*.log
+npm-debug.log*
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+.idea/
+
+# local agent tooling
+.claude/
+# local agent skill copies (optional — uncomment to keep them out of Git)
 # .agents/
+
+# keep the example env template tracked
+!.env.example

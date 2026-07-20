@@ -7,41 +7,128 @@ import fs from "fs";
 // more than once per process.
 const globalForDb = globalThis as unknown as { __paper2videoDb?: Database.Database };
 
+/**
+ * One schema definition for both the on-disk and in-memory databases. These
+ * were previously duplicated, which meant any new table had to be added twice
+ * or the build-phase database would silently diverge from the real one.
+ */
+const SCHEMA = `
+  CREATE TABLE IF NOT EXISTS jobs (
+    id TEXT PRIMARY KEY,
+    status TEXT NOT NULL,
+    videoUrl TEXT,
+    error TEXT,
+    createdAt INTEGER NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    passwordHash TEXT NOT NULL,
+    credits INTEGER NOT NULL DEFAULT 0,
+    stripeCustomerId TEXT,
+    createdAt INTEGER NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS visitors (
+    id TEXT PRIMARY KEY,
+    freeUsed INTEGER NOT NULL DEFAULT 0,
+    createdAt INTEGER NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS credit_ledger (
+    id TEXT PRIMARY KEY,
+    userId TEXT,
+    visitorId TEXT,
+    delta INTEGER NOT NULL,
+    reason TEXT NOT NULL,
+    createdAt INTEGER NOT NULL
+  );
+
+  -- ---- scientific figure pipeline ----
+
+  -- A production project: one paper moving through the workflow.
+  CREATE TABLE IF NOT EXISTS projects (
+    id TEXT PRIMARY KEY,
+    userId TEXT,
+    status TEXT NOT NULL,
+    paperTitle TEXT,
+    paperDoi TEXT,
+    paperAuthors TEXT,
+    paperJournal TEXT,
+    sourceFileName TEXT,
+    narrative TEXT,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  );
+
+  -- Figures extracted from the paper, with analysis, scores, and decision.
+  -- analysisJson / dataJson / scoresJson hold the typed structures from
+  -- lib/figures/types.ts; they are read back through typed accessors.
+  CREATE TABLE IF NOT EXISTS figures (
+    id TEXT NOT NULL,
+    projectId TEXT NOT NULL,
+    figureNumber TEXT,
+    caption TEXT NOT NULL,
+    section TEXT,
+    referenceContext TEXT,
+    boundsJson TEXT NOT NULL,
+    assetPath TEXT NOT NULL,
+    width INTEGER NOT NULL,
+    height INTEGER NOT NULL,
+    analysisJson TEXT,
+    dataJson TEXT,
+    scoresJson TEXT,
+    recreationMethod TEXT,
+    exclusionReason TEXT,
+    recommended INTEGER NOT NULL DEFAULT 0,
+    decision TEXT NOT NULL DEFAULT 'pending',
+    createdAt INTEGER NOT NULL,
+    PRIMARY KEY (projectId, id)
+  );
+
+  -- Provenance for every visual produced from a figure.
+  CREATE TABLE IF NOT EXISTS visual_provenance (
+    id TEXT PRIMARY KEY,
+    projectId TEXT NOT NULL,
+    figureId TEXT,
+    paperTitle TEXT,
+    paperDoi TEXT,
+    originalFigureNumber TEXT,
+    originalCaption TEXT,
+    paperSection TEXT,
+    method TEXT NOT NULL,
+    dataSource TEXT,
+    generatorModel TEXT,
+    generatorPrompt TEXT,
+    approvalStatus TEXT NOT NULL DEFAULT 'pending',
+    approvedBy TEXT,
+    approvedAt INTEGER,
+    createdAt INTEGER NOT NULL
+  );
+
+  -- Append-only audit trail. Never updated or deleted.
+  CREATE TABLE IF NOT EXISTS review_events (
+    id TEXT PRIMARY KEY,
+    projectId TEXT NOT NULL,
+    figureId TEXT,
+    action TEXT NOT NULL,
+    actor TEXT NOT NULL,
+    detail TEXT,
+    createdAt INTEGER NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_figures_project ON figures (projectId);
+  CREATE INDEX IF NOT EXISTS idx_provenance_project ON visual_provenance (projectId);
+  CREATE INDEX IF NOT EXISTS idx_review_project ON review_events (projectId, createdAt);
+`;
+
 function openDb(): Database.Database {
   // During `next build`, Next may evaluate routes in parallel. Use an
   // in-memory DB so we never hit a locked on-disk file (SQLITE_BUSY).
   if (process.env.NEXT_PHASE === "phase-production-build") {
     const mem = new Database(":memory:");
-    mem.exec(`
-      CREATE TABLE IF NOT EXISTS jobs (
-        id TEXT PRIMARY KEY,
-        status TEXT NOT NULL,
-        videoUrl TEXT,
-        error TEXT,
-        createdAt INTEGER NOT NULL
-      );
-      CREATE TABLE IF NOT EXISTS users (
-        id TEXT PRIMARY KEY,
-        email TEXT NOT NULL UNIQUE,
-        passwordHash TEXT NOT NULL,
-        credits INTEGER NOT NULL DEFAULT 0,
-        stripeCustomerId TEXT,
-        createdAt INTEGER NOT NULL
-      );
-      CREATE TABLE IF NOT EXISTS visitors (
-        id TEXT PRIMARY KEY,
-        freeUsed INTEGER NOT NULL DEFAULT 0,
-        createdAt INTEGER NOT NULL
-      );
-      CREATE TABLE IF NOT EXISTS credit_ledger (
-        id TEXT PRIMARY KEY,
-        userId TEXT,
-        visitorId TEXT,
-        delta INTEGER NOT NULL,
-        reason TEXT NOT NULL,
-        createdAt INTEGER NOT NULL
-      );
-    `);
+    mem.exec(SCHEMA);
     return mem;
   }
 
@@ -50,39 +137,7 @@ function openDb(): Database.Database {
   const db = new Database(path.join(dataDir, "jobs.db"));
   db.pragma("journal_mode = WAL");
   db.pragma("busy_timeout = 5000");
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS jobs (
-      id TEXT PRIMARY KEY,
-      status TEXT NOT NULL,
-      videoUrl TEXT,
-      error TEXT,
-      createdAt INTEGER NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      email TEXT NOT NULL UNIQUE,
-      passwordHash TEXT NOT NULL,
-      credits INTEGER NOT NULL DEFAULT 0,
-      stripeCustomerId TEXT,
-      createdAt INTEGER NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS visitors (
-      id TEXT PRIMARY KEY,
-      freeUsed INTEGER NOT NULL DEFAULT 0,
-      createdAt INTEGER NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS credit_ledger (
-      id TEXT PRIMARY KEY,
-      userId TEXT,
-      visitorId TEXT,
-      delta INTEGER NOT NULL,
-      reason TEXT NOT NULL,
-      createdAt INTEGER NOT NULL
-    );
-  `);
+  db.exec(SCHEMA);
   return db;
 }
 

@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
+    "@napi-rs/canvas": "^1.0.2",
     "@remotion/bundler": "^4.0.487",
     "@remotion/renderer": "^4.0.487",
     "bcryptjs": "^3.0.3",

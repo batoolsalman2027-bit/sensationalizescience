@@ -6,6 +6,8 @@ const nextConfig = {
     serverComponentsExternalPackages: [
       "pdf-parse",
       "pdfjs-dist",
+      // Ships a native skia .node binary that webpack cannot parse.
+      "@napi-rs/canvas",
       "sharp",
       "@remotion/renderer",
       "@remotion/bundler",
