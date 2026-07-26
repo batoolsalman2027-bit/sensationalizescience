@@ -2,9 +2,8 @@ import path from "node:path";
 import { mkdir, writeFile, readFile, access } from "node:fs/promises";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
-import { parseBuffer } from "music-metadata";
 import { synthesizeWithTimestamps } from "./tts";
-import { speedUpAudio } from "./audio";
+import { speedUpAudio, probeAudioDurationSeconds } from "./audio";
 import { generateFigureRemake, generateSceneImage } from "./image";
 import { renderVideoUrl } from "./renders";
 import { figuresStagingRoot } from "./pdf-figures";
@@ -23,9 +22,8 @@ const TITLE_CARD_FRAMES = 60; // 2 seconds @ 30fps
 /** Breathing room after each scene's narration ends before the next cuts in. */
 const PADDING_FRAMES = 8;
 
-async function mp3DurationInFrames(buffer: Buffer): Promise<number> {
-  const metadata = await parseBuffer(buffer, "audio/mpeg");
-  const seconds = metadata.format.duration ?? 3;
+async function mp3DurationInFrames(filePath: string): Promise<number> {
+  const seconds = await probeAudioDurationSeconds(filePath);
   return Math.round(seconds * FPS) + PADDING_FRAMES;
 }
 
@@ -185,7 +183,7 @@ export async function renderVideo(
     const filePath = path.join(audioDir, fileName);
     await writeFile(filePath, buffer);
     const captions = await speedUpAudio(filePath, NARRATION_SPEEDUP, words);
-    const durationInFrames = await mp3DurationInFrames(await readFile(filePath));
+    const durationInFrames = await mp3DurationInFrames(filePath);
 
     return {
       styleRef,
