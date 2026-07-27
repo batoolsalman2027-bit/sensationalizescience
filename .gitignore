@@ -40,3 +40,6 @@ npm-debug.log*
 !.env.example
 .manim-venv/
 poc/out/
+
+# manim render output
+media/

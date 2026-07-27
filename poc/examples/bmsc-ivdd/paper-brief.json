@@ -1,0 +1,116 @@
+{
+  "title": "Bone mesenchymal stem cells based on matric hydrogels attenuate intervertebral disc degeneration by suppressing oxidative stress-induced ferroptosis",
+  "firstAuthor": "Song Fu",
+  "correspondingAuthor": "Yanan Wang",
+  "journal": "Scientific Reports",
+  "year": "2025",
+  "entities": [
+    {
+      "name": "Intervertebral Disc",
+      "visual": "Cross-section of vertebral column showing a spinal disc sandwich between two vertebrae, with a gel-like nucleus pulposus center surrounded by concentric fibrous rings of the annulus fibrosus"
+    },
+    {
+      "name": "BMSCs",
+      "visual": "Spindle-shaped mesenchymal stem cells with prominent nuclei, growing in adherent monolayers, labeled with surface marker CD105 (green fluorescence)"
+    },
+    {
+      "name": "Matrix Hydrogel",
+      "visual": "Translucent, jelly-like chitosan gel scaffold shown as a 3D transparent matrix encapsulating dispersed stem cells visible as dark spheres within the gel network"
+    },
+    {
+      "name": "Annulus Fibrosus Cells (AFCs)",
+      "visual": "Elongated, fibroblast-like cells arranged in parallel orientation, representing the fibrocartilaginous cell population of the outer disc ring"
+    },
+    {
+      "name": "Nucleus Pulposus",
+      "visual": "The gelatinous, water-rich central core of the intervertebral disc, appearing as a bright signal on MRI T2-weighted imaging when healthy"
+    },
+    {
+      "name": "Ferroptosis Markers",
+      "visual": "Molecular diagram showing GPX4 protein (blue ribbon structure) alongside lipid peroxide molecules (red spheres with peroxide groups), iron ions (Fe2+, orange), and damaged cell membrane with lipid peroxidation"
+    },
+    {
+      "name": "GPX4",
+      "visual": "Glutathione peroxidase 4 enzyme depicted as a compact globular protein with active site pocket, protecting cell membranes from lipid peroxidation"
+    },
+    {
+      "name": "SLC7A11",
+      "visual": "Transmembrane cystine-glutamate antiporter shown as a channel protein spanning the cell membrane, exchanging amino acids to maintain glutathione synthesis"
+    },
+    {
+      "name": "ACSL4",
+      "visual": "Acyl-CoA synthetase long-chain family member 4 enzyme shown as a protein complex bound to polyunsaturated fatty acids, promoting lipid peroxidation"
+    },
+    {
+      "name": "STAT3 Pathway",
+      "visual": "Signaling cascade diagram showing JAK2 kinase phosphorylating STAT3 transcription factor, which then dimerizes and translocates to the nucleus (depicted with phosphorylation sites highlighted in yellow)"
+    },
+    {
+      "name": "Oxidative Stress (TBHP)",
+      "visual": "Tert-butyl hydroperoxide molecules (chemical structure shown) attacking a cell, generating reactive oxygen species (ROS) depicted as red starburst radicals causing lipid membrane damage"
+    }
+  ],
+  "sections": {
+    "cover": "This study investigates how bone marrow mesenchymal stem cells delivered in injectable hydrogels can slow intervertebral disc degeneration. The work identifies ferroptosis—an iron-dependent form of cell death driven by oxidative stress—as a key therapeutic target.",
+    "intro": "Intervertebral disc degeneration (IVDD) is the primary cause of chronic lower back pain, affecting over 80% of the global population and imposing substantial socioeconomic burden. Current surgical and conservative treatments only alleviate symptoms without preventing or reversing disc degeneration. Ferroptosis, a distinct form of regulated cell death characterized by iron accumulation and lipid peroxidation, has emerged as a novel pathogenic mechanism in IVDD. Bone marrow mesenchymal stem cells (BMSCs) show promise for disc regeneration due to their differentiation capacity and anti-inflammatory properties, but their survival and retention at diseased sites remain challenging. This study hypothesizes that BMSCs delivered via injectable matrix hydrogels can attenuate IVDD by suppressing oxidative stress-induced ferroptosis in annulus fibrosus cells through modulation of the STAT3 signaling pathway.",
+    "methods": "BMSCs were isolated from rat bone marrow, characterized by flow cytometry for surface markers (CD105+/CD34-), and confirmed for adipogenic and osteogenic differentiation capacity. An in vitro oxidative stress model was established by treating rat annulus fibrosus cells (AFCs) with tert-butyl hydroperoxide (TBHP, 100 µM for 3 hours), followed by co-culture with BMSCs to assess protective effects. Ferroptosis was quantified through lactate dehydrogenase release, intracellular Fe2+ levels, glutathione depletion, lipid reactive oxygen species, and malondialdehyde accumulation, with protein expression of GPX4, SLC7A11, and ACSL4 measured by western blot. A rat needle-puncture IVDD model was created at the Co7/Co8 caudal vertebrae, and BMSCs were delivered either alone or encapsulated in temperature-sensitive chitosan/β-glycerophosphate hydrogels (1% chitosan, 1×10⁶ cells), with disc degeneration assessed after 4 weeks by MRI T2-weighted imaging and histological grading. Signaling pathway involvement was investigated using a phospho-kinase array and validated with the STAT3 agonist colivelin both in vitro and in vivo.",
+    "results": "BMSCs significantly protected AFCs from TBHP-induced oxidative damage, restoring cell viability from 30% (TBHP alone) to 78% (TBHP+BMSCs), a highly significant recovery (P<0.001). TBHP treatment induced clear ferroptotic signatures—elevated LDH release (64% vs. 24% control, P<0.001), increased intracellular Fe2+ (1.65 nM vs. 0.55 nM, P<0.001), 2.8-fold increase in lipid peroxidation ROS (P<0.001), elevated malondialdehyde (2.9 µM vs. 1.6 µM, P<0.001), and depleted glutathione (18.5 µM/mg vs. 29.5 µM/mg, P<0.01)—all of which were significantly reversed by BMSC co-culture (all comparisons P<0.01 or P<0.001). Western blot analysis confirmed BMSCs restored expression of anti-ferroptotic proteins GPX4 (from 0.28-fold to 0.67-fold, P<0.001) and SLC7A11 (from 0.35-fold to 0.75-fold, P<0.001), while reducing pro-ferroptotic ACSL4 (from 3.2-fold to 1.9-fold, P<0.01). Phospho-kinase array screening revealed that BMSCs specifically suppressed STAT3 phosphorylation, with western blot confirming reduced phosphorylation of both JAK2 and STAT3 in TBHP-treated AFCs. When STAT3 was reactivated using the agonist colivelin, the protective effects of BMSCs on ferroptosis markers were completely abolished. In vivo, BMSC-hydrogel combination therapy significantly improved MRI T2-weighted signal intensity and histological grading of puncture-induced disc degeneration compared to BMSCs alone or hydrogel alone, but these protective effects were eliminated when rats received intra-discal colivelin injections, confirming STAT3 inhibition as the critical mechanism.",
+    "discussion": "This study demonstrates that BMSCs attenuate IVDD progression by inhibiting oxidative stress-induced ferroptosis in annulus fibrosus cells, mediated through suppression of the JAK2/STAT3 signaling pathway. The findings establish ferroptosis as a therapeutically targetable mechanism in disc degeneration and position the STAT3 pathway as a key regulatory node. Matrix hydrogels significantly enhanced the therapeutic efficacy of BMSCs, likely by improving cell retention, survival, and paracrine function within the harsh degenerative disc microenvironment. This work provides mechanistic insight into stem cell-mediated disc repair and suggests that combination strategies—regenerative cell therapy with biomaterial carriers targeting specific death pathways—may offer more effective clinical interventions for IVDD than current symptomatic treatments. Future studies should investigate long-term efficacy, optimal dosing regimens, and potential translation to larger animal models and human clinical trials."
+  },
+  "resultsSignificance": [
+    {
+      "finding": "BMSCs rescued annulus fibrosus cell viability from severe oxidative stress injury, increasing survival from 30% to 78%",
+      "evidence": "Figure 3A: Control vs. TBHP (P<0.001) and TBHP vs. TBHP+BMSCs (P<0.001)",
+      "significant": true,
+      "pMeaning": "The restoration of cell viability by BMSCs is statistically robust with less than 0.1% probability of occurring by chance, indicating strong protective effects against oxidative damage"
+    },
+    {
+      "finding": "TBHP-induced oxidative stress dramatically increased lactate dehydrogenase release (a cytotoxicity marker), which BMSCs significantly reduced",
+      "evidence": "Figure 3B: Control vs. TBHP (P<0.001) showing LDH increase from 24% to 64%, and TBHP vs. TBHP+BMSCs (P<0.01) reducing it to 38%",
+      "significant": true,
+      "pMeaning": "Both the oxidative injury and the BMSC rescue effect are statistically significant, with the rescue reaching P<0.01 (less than 1% chance of random occurrence)"
+    },
+    {
+      "finding": "Intracellular iron accumulation, a hallmark of ferroptosis, tripled under oxidative stress and was substantially lowered by BMSC treatment",
+      "evidence": "Figure 3C: Control vs. TBHP (P<0.001) showing Fe2+ increase from 0.55 nM to 1.65 nM, and TBHP vs. TBHP+BMSCs (P<0.01) reducing it to 0.7 nM",
+      "significant": true,
+      "pMeaning": "The reduction in toxic iron levels by BMSCs is highly significant, demonstrating effective suppression of a key ferroptosis driver"
+    },
+    {
+      "finding": "Lipid peroxidation, the central biochemical event in ferroptosis, increased 2.8-fold with oxidative stress and was cut nearly in half by BMSCs",
+      "evidence": "Figure 3D: Control vs. TBHP (P<0.001) and TBHP vs. TBHP+BMSCs (P<0.01), reducing lipid ROS from 2.8-fold to 1.6-fold",
+      "significant": true,
+      "pMeaning": "The ability of BMSCs to reduce lipid peroxidation is statistically significant, directly targeting the mechanism of ferroptotic cell death"
+    },
+    {
+      "finding": "Glutathione depletion caused by oxidative stress was significantly reversed by BMSC co-culture",
+      "evidence": "Figure 3E: Control vs. TBHP (P<0.01) showing GSH drop from 29.5 to 18.5 µM/mg, and TBHP vs. TBHP+BMSCs (P<0.01) restoring it to 26 µM/mg",
+      "significant": true,
+      "pMeaning": "BMSCs restore the cellular antioxidant capacity with P<0.01, indicating a reliable therapeutic effect on glutathione homeostasis"
+    },
+    {
+      "finding": "Malondialdehyde, a toxic byproduct of lipid peroxidation, accumulated under oxidative stress and was significantly reduced by BMSCs",
+      "evidence": "Figure 3F: Control vs. TBHP (P<0.001) showing MDA increase from 1.6 to 2.9 µM, and TBHP vs. TBHP+BMSCs (P<0.01) reducing it to 1.9 µM",
+      "significant": true,
+      "pMeaning": "The reduction in lipid peroxidation products is statistically significant, confirming BMSCs protect membrane integrity during oxidative injury"
+    },
+    {
+      "finding": "GPX4, the master anti-ferroptotic enzyme, was depleted to 28% of normal by oxidative stress and significantly restored to 67% by BMSCs",
+      "evidence": "Figure 3H: Control vs. TBHP (P<0.001) and TBHP vs. TBHP+BMSCs (P<0.001)",
+      "significant": true,
+      "pMeaning": "The highly significant restoration of GPX4 protein levels demonstrates that BMSCs reverse a critical deficiency in the cellular defense against ferroptosis"
+    },
+    {
+      "finding": "SLC7A11, the cystine transporter essential for glutathione synthesis, was suppressed to 35% by oxidative stress and significantly recovered to 75% with BMSC treatment",
+      "evidence": "Figure 3I: Control vs. TBHP (P<0.001) and TBHP vs. TBHP+BMSCs (P<0.001)",
+      "significant": true,
+      "pMeaning": "The highly significant recovery of SLC7A11 indicates BMSCs restore the cellular machinery needed to synthesize protective antioxidants"
+    },
+    {
+      "finding": "ACSL4, a pro-ferroptotic enzyme that sensitizes membranes to lipid peroxidation, was elevated 3.2-fold by oxidative stress and significantly reduced by BMSCs",
+      "evidence": "Figure 3J: Control vs. TBHP (P<0.001) showing ACSL4 increase to 3.2-fold, and TBHP vs. TBHP+BMSCs (P<0.01) reducing it to 1.9-fold",
+      "significant": true,
+      "pMeaning": "The significant reduction in ACSL4 demonstrates that BMSCs actively suppress the enzymatic machinery that drives ferroptotic membrane damage"
+    }
+  ]
+}

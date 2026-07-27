@@ -1,0 +1,151 @@
+{
+  "figure": "Fig 2",
+  "panels": [
+    {
+      "id": "B",
+      "yAxis": {
+        "title": "MRI Grade",
+        "unit": "Thompson score",
+        "min": 0,
+        "max": 5,
+        "perGridline": 1
+      },
+      "groups": [
+        {
+          "label": "CON",
+          "mean": 1,
+          "errorHalf": 0.05,
+          "confidence": 0.95
+        },
+        {
+          "label": "Model",
+          "mean": 3.5,
+          "errorHalf": 0.3,
+          "confidence": 0.85
+        },
+        {
+          "label": "Model+Gelmatrix",
+          "mean": 3,
+          "errorHalf": 0.7,
+          "confidence": 0.8
+        },
+        {
+          "label": "Model+BMSCs",
+          "mean": 2.5,
+          "errorHalf": 0.5,
+          "confidence": 0.85
+        },
+        {
+          "label": "Model+BMSCs+Gelmatrix",
+          "mean": 1,
+          "errorHalf": 0.1,
+          "confidence": 0.95
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "NS"
+        },
+        {
+          "between": [
+            1,
+            4
+          ],
+          "label": "P<0.01"
+        },
+        {
+          "between": [
+            3,
+            4
+          ],
+          "label": "P<0.01"
+        }
+      ],
+      "readingNotes": "Y-axis ranges 0-5. CON bar at 1.0, Model bar at 3.5 (between 3 and 4), Model+Gelmatrix at 3.0, Model+BMSCs at 2.5 (between 2 and 3), Model+BMSCs+Gelmatrix at 1.0. Error bars are relatively small except for Model+Gelmatrix group."
+    },
+    {
+      "id": "D",
+      "yAxis": {
+        "title": "H&E histological score",
+        "unit": "score",
+        "min": 0,
+        "max": 15,
+        "perGridline": 5
+      },
+      "groups": [
+        {
+          "label": "CON",
+          "mean": 5,
+          "errorHalf": 0.5,
+          "confidence": 0.95
+        },
+        {
+          "label": "Model",
+          "mean": 10.5,
+          "errorHalf": 1,
+          "confidence": 0.85
+        },
+        {
+          "label": "Model+Gelmatrix",
+          "mean": 10,
+          "errorHalf": 1.5,
+          "confidence": 0.8
+        },
+        {
+          "label": "Model+BMSCs",
+          "mean": 9,
+          "errorHalf": 1,
+          "confidence": 0.85
+        },
+        {
+          "label": "Model+BMSCs+Gelmatrix",
+          "mean": 6,
+          "errorHalf": 1,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "NS"
+        },
+        {
+          "between": [
+            1,
+            4
+          ],
+          "label": "P<0.01"
+        },
+        {
+          "between": [
+            3,
+            4
+          ],
+          "label": "P<0.001"
+        }
+      ],
+      "readingNotes": "Y-axis ranges 0-15 with gridlines at 5, 10, 15. CON bar at 5.0, Model bar at 10.5 (slightly above 10), Model+Gelmatrix at 10.0, Model+BMSCs at 9.0 (slightly below 10), Model+BMSCs+Gelmatrix at 6.0 (slightly above 5)."
+    }
+  ]
+}

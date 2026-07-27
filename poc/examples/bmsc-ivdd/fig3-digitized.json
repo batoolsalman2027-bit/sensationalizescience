@@ -1,0 +1,428 @@
+{
+  "figure": "Fig3",
+  "panels": [
+    {
+      "id": "A",
+      "yAxis": {
+        "title": "Cell viability",
+        "unit": "%",
+        "min": 0,
+        "max": 150,
+        "perGridline": 50
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 100,
+          "errorHalf": 10,
+          "confidence": 0.95
+        },
+        {
+          "label": "TBHP",
+          "mean": 30,
+          "errorHalf": 8,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 78,
+          "errorHalf": 8,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.001"
+        }
+      ],
+      "readingNotes": "Control bar at 100%, TBHP at ~30% (between 0-50), TBHP+BMSCs at ~78% (between 50-100)"
+    },
+    {
+      "id": "B",
+      "yAxis": {
+        "title": "LDH Content",
+        "unit": "%",
+        "min": 0,
+        "max": 80,
+        "perGridline": 20
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 24,
+          "errorHalf": 2,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP",
+          "mean": 64,
+          "errorHalf": 3,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 38,
+          "errorHalf": 3,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.01"
+        }
+      ],
+      "readingNotes": "Control ~24% (between 20-40), TBHP ~64% (between 60-80), TBHP+BMSCs ~38% (between 20-40)"
+    },
+    {
+      "id": "C",
+      "yAxis": {
+        "title": "Fe2+ concentrations",
+        "unit": "nM",
+        "min": 0,
+        "max": 2,
+        "perGridline": 0.5
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 0.55,
+          "errorHalf": 0.1,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP",
+          "mean": 1.65,
+          "errorHalf": 0.1,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 0.7,
+          "errorHalf": 0.1,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.01"
+        }
+      ],
+      "readingNotes": "Control ~0.55 nM (between 0.5-1.0), TBHP ~1.65 nM (between 1.5-2.0), TBHP+BMSCs ~0.7 nM (between 0.5-1.0)"
+    },
+    {
+      "id": "D",
+      "yAxis": {
+        "title": "Lipid peroxidation ROS",
+        "unit": "fold",
+        "min": 0,
+        "max": 4,
+        "perGridline": 1
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 1,
+          "errorHalf": 0.1,
+          "confidence": 0.95
+        },
+        {
+          "label": "TBHP",
+          "mean": 2.8,
+          "errorHalf": 0.2,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 1.6,
+          "errorHalf": 0.15,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.01"
+        }
+      ],
+      "readingNotes": "Control at 1.0 fold, TBHP ~2.8 fold (between 2-3), TBHP+BMSCs ~1.6 fold (between 1-2)"
+    },
+    {
+      "id": "E",
+      "yAxis": {
+        "title": "GSH",
+        "unit": "uM/mg cell",
+        "min": 15,
+        "max": 35,
+        "perGridline": 5
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 29.5,
+          "errorHalf": 1,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP",
+          "mean": 18.5,
+          "errorHalf": 1.5,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 26,
+          "errorHalf": 1.5,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.01"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.01"
+        }
+      ],
+      "readingNotes": "Axis starts at 15. Control ~29.5 (between 25-30), TBHP ~18.5 (between 15-20), TBHP+BMSCs ~26 (between 25-30)"
+    },
+    {
+      "id": "F",
+      "yAxis": {
+        "title": "MDA concentration",
+        "unit": "uM",
+        "min": 0,
+        "max": 4,
+        "perGridline": 1
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 1.6,
+          "errorHalf": 0.1,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP",
+          "mean": 2.9,
+          "errorHalf": 0.15,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 1.9,
+          "errorHalf": 0.15,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.01"
+        }
+      ],
+      "readingNotes": "Control ~1.6 uM (between 1-2), TBHP ~2.9 uM (between 2-3), TBHP+BMSCs ~1.9 uM (between 1-2)"
+    },
+    {
+      "id": "H",
+      "yAxis": {
+        "title": "Relative protein expression of GPX4",
+        "unit": "Fold",
+        "min": 0,
+        "max": 1.5,
+        "perGridline": 0.5
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 1,
+          "errorHalf": 0.08,
+          "confidence": 0.95
+        },
+        {
+          "label": "TBHP",
+          "mean": 0.28,
+          "errorHalf": 0.05,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 0.67,
+          "errorHalf": 0.08,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.001"
+        }
+      ],
+      "readingNotes": "Control at 1.0 fold, TBHP ~0.28 (between 0-0.5), TBHP+BMSCs ~0.67 (between 0.5-1.0)"
+    },
+    {
+      "id": "I",
+      "yAxis": {
+        "title": "Relative protein expression of SLC7A11",
+        "unit": "Fold",
+        "min": 0,
+        "max": 1.5,
+        "perGridline": 0.5
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 1,
+          "errorHalf": 0.05,
+          "confidence": 0.95
+        },
+        {
+          "label": "TBHP",
+          "mean": 0.35,
+          "errorHalf": 0.08,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 0.75,
+          "errorHalf": 0.08,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.001"
+        }
+      ],
+      "readingNotes": "Control at 1.0 fold, TBHP ~0.35 (between 0-0.5), TBHP+BMSCs ~0.75 (between 0.5-1.0)"
+    },
+    {
+      "id": "J",
+      "yAxis": {
+        "title": "Relative protein expression of ACSL4",
+        "unit": "Fold",
+        "min": 0,
+        "max": 5,
+        "perGridline": 1
+      },
+      "groups": [
+        {
+          "label": "Control",
+          "mean": 1,
+          "errorHalf": 0.1,
+          "confidence": 0.95
+        },
+        {
+          "label": "TBHP",
+          "mean": 3.2,
+          "errorHalf": 0.2,
+          "confidence": 0.9
+        },
+        {
+          "label": "TBHP+BMSCs",
+          "mean": 1.9,
+          "errorHalf": 0.15,
+          "confidence": 0.9
+        }
+      ],
+      "significance": [
+        {
+          "between": [
+            0,
+            1
+          ],
+          "label": "P<0.001"
+        },
+        {
+          "between": [
+            1,
+            2
+          ],
+          "label": "P<0.01"
+        }
+      ],
+      "readingNotes": "Control at 1.0 fold, TBHP ~3.2 (between 3-4), TBHP+BMSCs ~1.9 (between 1-2)"
+    }
+  ]
+}

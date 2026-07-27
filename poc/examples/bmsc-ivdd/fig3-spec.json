@@ -1,0 +1,15 @@
+{
+  "figure": "Fig3",
+  "panels": [
+    { "id": "A", "axisTitle": "Cell viability", "unit": "%", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "B", "axisTitle": "LDH Content", "unit": "%", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "C", "axisTitle": "Fe2+ concentrations", "unit": "nM", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "D", "axisTitle": "Lipid peroxidation ROS", "unit": "fold", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "E", "axisTitle": "GSH", "unit": "uM/mg cell", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "F", "axisTitle": "MDA concentration", "unit": "uM", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "H", "axisTitle": "Relative protein expression of GPX4", "unit": "Fold", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "I", "axisTitle": "Relative protein expression of SLC7A11", "unit": "Fold", "groups": ["Control", "TBHP", "TBHP+BMSCs"] },
+    { "id": "J", "axisTitle": "Relative protein expression of ACSL4", "unit": "Fold", "groups": ["Control", "TBHP", "TBHP+BMSCs"] }
+  ],
+  "note": "Panel G is a western blot image (GPX4/SLC7A11/ACSL4/beta-actin), not a bar chart, so it has no digitizable values; H/I/J are its quantifications."
+}

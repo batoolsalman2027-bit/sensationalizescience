@@ -1,0 +1,17 @@
+{
+  "figure": "Fig 2",
+  "panels": [
+    {
+      "id": "B",
+      "title": "MRI Grade",
+      "unit": "Thompson score",
+      "groups": ["CON", "Model", "Model+Gelmatrix", "Model+BMSCs", "Model+BMSCs+Gelmatrix"]
+    },
+    {
+      "id": "D",
+      "title": "H&E histological score",
+      "unit": "score",
+      "groups": ["CON", "Model", "Model+Gelmatrix", "Model+BMSCs", "Model+BMSCs+Gelmatrix"]
+    }
+  ]
+}
