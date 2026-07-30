@@ -31,7 +31,7 @@ live data now show static placeholder content.
 1. Go to https://replit.com and log in.
 2. **Create Repl → Import from GitHub.**
 3. Paste the repo URL:
-   `https://github.com/batoolsalman2027-bit/sensationalizescience`
+   `https://github.com/batoolsalman2027-bit/synapse.git`
 4. After it imports, open the **Shell** tab and switch to this branch:
 
 ```bash
