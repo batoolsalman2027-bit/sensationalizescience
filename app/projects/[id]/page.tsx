@@ -1,21 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import Container from "@/components/Container";
-import FigureReviewBoard from "@/components/figures/FigureReviewBoard";
-import {
-  getProject,
-  listFigures,
-  listReviewEvents,
-} from "@/lib/figures/store";
-import { getSessionUser } from "@/lib/auth";
+import FigureReviewBoard, {
+  type RankedFigure,
+} from "@/components/figures/FigureReviewBoard";
 
 export const metadata: Metadata = {
   title: "Figure review — Sensationalize Science",
 };
-
-// Review state changes as operators work; never serve a cached snapshot.
-export const dynamic = "force-dynamic";
 
 const STATUS_LABELS: Record<string, string> = {
   materials_received: "Materials received",
@@ -30,19 +22,138 @@ const STATUS_LABELS: Record<string, string> = {
   failed: "Failed",
 };
 
-export default async function ProjectReviewPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const project = getProject(params.id);
-  if (!project) notFound();
+// Frontend-only preview: static placeholder project + figures (no database).
+const PROJECT = {
+  paperTitle: "Activity-dependent stabilization of dendritic spines",
+  status: "draft_ready",
+};
 
-  const user = await getSessionUser();
-  if (project.userId && project.userId !== user?.id) notFound();
+const FIGURES: RankedFigure[] = [
+  {
+    id: "fig-1",
+    figureNumber: 2,
+    recommended: true,
+    section: "Results",
+    caption:
+      "Figure 2. Spine survival over 14 days for stimulated versus control synapses.",
+    assetPath: "fig-2.png",
+    bounds: { page: 5 },
+    recreationMethod: "data_reconstruction",
+    exclusionReason: null,
+    decision: "pending",
+    analysis: {
+      kind: "line chart",
+      panelCount: 2,
+      summary:
+        "Stimulated spines persist markedly longer than unstimulated controls across the imaging window.",
+      resultDirection: "Stimulation increases spine survival",
+    },
+    scores: {
+      composite: 8.6,
+      scientificImportance: 9,
+      narrativeRelevance: 9,
+      shortFormSuitability: 8,
+      visualClarity: 8,
+      animatability: 9,
+      rationale:
+        "Clean two-series comparison with a clear, animatable trend that carries the paper's central claim.",
+    },
+    data: {
+      estimated: false,
+      estimateConfidence: null,
+      evidence: "Values quoted from Table S2.",
+      series: [
+        {
+          label: "Stimulated",
+          xLabel: "Day",
+          yLabel: "Surviving spines",
+          yUnit: "%",
+          points: [
+            { x: 0, y: 100 },
+            { x: 7, y: 82 },
+            { x: 14, y: 71 },
+          ],
+        },
+        {
+          label: "Control",
+          xLabel: "Day",
+          yLabel: "Surviving spines",
+          yUnit: "%",
+          points: [
+            { x: 0, y: 100 },
+            { x: 7, y: 58 },
+            { x: 14, y: 39 },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: "fig-2",
+    figureNumber: 3,
+    recommended: false,
+    section: "Results",
+    caption: "Figure 3. Representative two-photon micrographs of dendritic segments.",
+    assetPath: "fig-3.png",
+    bounds: { page: 6 },
+    recreationMethod: "estimated_chart",
+    exclusionReason: null,
+    decision: "pending",
+    analysis: {
+      kind: "micrograph",
+      panelCount: 4,
+      summary: "Qualitative imaging panels supporting the survival quantification.",
+      resultDirection: null,
+    },
+    scores: {
+      composite: 5.4,
+      scientificImportance: 6,
+      narrativeRelevance: 5,
+      shortFormSuitability: 4,
+      visualClarity: 6,
+      animatability: 5,
+      rationale: "Illustrative but hard to read at short-form scale.",
+    },
+    data: {
+      estimated: true,
+      estimateConfidence: 0.62,
+      evidence: "Spine counts read off the micrograph panels by a model.",
+      series: [
+        {
+          label: "Spine density",
+          xLabel: "Condition",
+          yLabel: "Spines / 10µm",
+          yUnit: null,
+          points: [
+            { x: "Stimulated", y: 7.2 },
+            { x: "Control", y: 4.1 },
+          ],
+        },
+      ],
+    },
+  },
+];
 
-  const figures = listFigures(params.id);
-  const events = listReviewEvents(params.id);
+const EVENTS = [
+  {
+    id: "e1",
+    createdAt: Date.now() - 1000 * 60 * 60 * 20,
+    action: "materials_received",
+    figureId: null as string | null,
+    actor: "system",
+  },
+  {
+    id: "e2",
+    createdAt: Date.now() - 1000 * 60 * 60 * 4,
+    action: "figures_ranked",
+    figureId: null as string | null,
+    actor: "pipeline",
+  },
+];
+
+export default function ProjectReviewPage() {
+  const figures = FIGURES;
+  const events = EVENTS;
   const usable = figures.filter((f) => f.recreationMethod);
 
   return (
@@ -57,11 +168,11 @@ export default async function ProjectReviewPage({
         <header className="qc-header">
           <div>
             <h1 className="section-title" style={{ fontSize: "clamp(26px, 4vw, 40px)" }}>
-              {project.paperTitle ?? project.sourceFileName ?? "Untitled project"}
+              {PROJECT.paperTitle}
             </h1>
             <p className="qc-meta">
               <span className="qc-status">
-                {STATUS_LABELS[project.status] ?? project.status}
+                {STATUS_LABELS[PROJECT.status] ?? PROJECT.status}
               </span>
               {figures.length} figure{figures.length === 1 ? "" : "s"} extracted ·{" "}
               {usable.length} usable · {figures.filter((f) => f.recommended).length}{" "}
@@ -76,7 +187,7 @@ export default async function ProjectReviewPage({
           is recorded in the audit trail below.
         </p>
 
-        <FigureReviewBoard projectId={params.id} initialFigures={figures} />
+        <FigureReviewBoard projectId="demo" initialFigures={figures} />
 
         <section className="qc-audit" aria-labelledby="audit-heading">
           <h2 id="audit-heading">Audit trail</h2>

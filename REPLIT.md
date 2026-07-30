@@ -1,175 +1,106 @@
-# Running "Sensationalize Science" on Replit (for collaboration)
+# Running "Sensationalize Science" on Replit (frontend-only)
 
-This repo is a **full-stack Next.js 14 app** (package name `paper2video`), not a
-pure frontend. It has heavy native/server dependencies. This guide gets it onto
-Replit so you can invite collaborators and edit together in real time
-(multiplayer).
+This is the **`replit-frontend` branch** — a stripped-down, **frontend-only**
+build of the app (package name `paper2video`) meant for collaborative,
+page-to-page **website/UI design** work on Replit.
 
-> These files are **additive**. Local `npm run dev` on your Mac is unchanged.
+There is **no backend** on this branch: no API routes, no auth, no Stripe, no
+AI/video pipeline, no database, and no native server dependencies. Every route
+still renders and you can click from page to page — pages that used to pull
+live data now show static placeholder content.
 
----
-
-## TL;DR recommendation
-
-**Import the whole repo from GitHub into Replit (Option A).** It's the simplest
-setup for collaboration and the UI/marketing pages, auth, billing, and API
-routes all run in Replit's dev server. The one thing that may *not* work
-reliably on Replit is **server-side video rendering** (Remotion + headless
-Chromium + ffmpeg) — that's the only feature at risk, and it doesn't block
-collaborative UI/frontend work. If video export misbehaves on Replit, just do
-those renders locally.
+> ⚠️ Do **not** merge this branch into `main`. `main` is the live full-stack
+> Railway production app. This branch exists purely for lightweight design
+> collaboration.
 
 ---
 
-## Native-dependency risk table
+## What's on this branch
 
-| Dependency | Used for | Replit (Nix) status |
-| --- | --- | --- |
-| `better-sqlite3` | app database | Compiles via node-gyp; toolchain provided in `replit.nix`. Should work. |
-| `sharp` | image processing | Prebuilt libvips binaries; `pkgs.vips` provided. Should work. |
-| `@napi-rs/canvas` | figure/canvas rendering | Prebuilt skia `.node`; cairo/pango stack provided. Usually works. |
-| `ffmpeg-static` | audio/video muxing | Static binary may not run on NixOS; `pkgs.ffmpeg` provided as fallback. Medium risk. |
-| `@remotion/renderer` + `@remotion/bundler` | video export | Needs headless Chromium; `pkgs.chromium` provided via `REMOTION_CHROME_EXECUTABLE`. **Highest risk** — may need tuning or be done locally. |
-| `pdf-parse` / `pdfjs-dist` | PDF ingestion | Pure JS. Fine. |
-| `stripe`, `jose`, `bcryptjs` | billing/auth | Pure JS. Fine. |
-
-**Bottom line:** everything except reliable in-Replit *video rendering* should
-run. Collaboration and frontend/UI work are fully supported.
+- Only frontend deps: `next`, `react`, `react-dom`, `framer-motion`,
+  `lucide-react`, plus `tailwindcss` / `postcss` / `autoprefixer` and
+  TypeScript types. No native builds, so install is fast (a couple of seconds).
+- `app/api/**`, `lib/**`, and `remotion/**` are removed.
+- `next.config.js` keeps only `images.remotePatterns` (no `output: standalone`,
+  no `serverComponentsExternalPackages`).
 
 ---
 
-## Option A — Import the whole repo (recommended)
+## Import THIS branch into Replit
 
-Your repo already has a GitHub remote:
-`https://github.com/batoolsalman2027-bit/synapse.git`
-
-### 1. Push your latest work to GitHub (from your Mac)
+1. Go to https://replit.com and log in.
+2. **Create Repl → Import from GitHub.**
+3. Paste the repo URL:
+   `https://github.com/batoolsalman2027-bit/sensationalizescience`
+4. After it imports, open the **Shell** tab and switch to this branch:
 
 ```bash
-# from the project root
-git status                 # review what will be committed
-git add -A
-git commit -m "Add Replit config for collaboration"
-git push origin main
+git checkout replit-frontend
 ```
 
-> Your `.env` is gitignored and will **not** be pushed — that's correct. Never
-> commit real secrets.
+   (Alternatively, when importing you can pick the branch directly if Replit
+   offers a branch selector.)
 
-### 2. Create the Repl from GitHub
-
-1. Go to https://replit.com and log in (create a free account if needed).
-2. Click **Create Repl** → **Import from GitHub**.
-3. Paste: `https://github.com/batoolsalman2027-bit/synapse`
-4. If the repo is private, connect/authorize your GitHub account when prompted.
-5. Replit reads the committed `.replit` and `replit.nix` automatically.
-
-### 3. Install dependencies (first boot)
-
-Open the **Shell** tab in Replit and run:
+5. Install dependencies:
 
 ```bash
 npm install
 ```
 
-This compiles the native modules against the Nix libs. Give it a few minutes the
-first time.
+   This is a pure-JS install — no native compilation — so it finishes quickly.
 
-### 4. Add secrets (do NOT commit `.env`)
+6. Click **Run**. The `.replit` file already starts Next.js bound to
+   `0.0.0.0:3000` (`npm run dev -- -H 0.0.0.0 -p 3000`) so the Replit webview
+   can reach it. First startup can take ~60–100s.
 
-In Replit, open **Tools → Secrets** (padlock icon) and add each key from the
-list in the next section. Replit injects these as environment variables at
-runtime — the equivalent of your local `.env`.
+   If the webview stays blank, open the Shell and run the same command
+   manually, then click the forwarded port:
 
-Set at minimum:
-- `NEXT_PUBLIC_APP_URL` → your Repl's public URL, e.g.
-  `https://<repl-name>.<username>.repl.co` (grab it after first run).
-- `AUTH_SECRET` → a long random string.
+```bash
+npm run dev -- -H 0.0.0.0 -p 3000
+```
 
-### 5. Run
+7. **Invite collaborators** via the **Invite** button (multiplayer editing +
+   shared live preview).
 
-Click **Run** (uses `npm run dev -- -H 0.0.0.0 -p 3000` from `.replit`). The
-webview opens the app. If it doesn't appear, open the Shell and run
-`npm run dev -- -H 0.0.0.0 -p 3000` manually and click the forwarded port.
-
-### 6. Invite collaborators
-
-- Click **Invite** (top-right of the workspace).
-- Add collaborator emails/usernames, or copy the **Join link**.
-- They can edit files and see the same live preview in real time (multiplayer).
+No secrets or environment variables are required on this branch.
 
 ---
 
-## Option B — Frontend-only Repl (lightweight UI collaboration)
+## Pages: static vs. stubbed
 
-Only choose this if collaborators just need to work on the **marketing/UI pages**
-(`app/page.tsx`, `app/pricing`, `app/about`, `app/platform`, `app/faq`, the
-`app/scroll-demo` hero, etc.) and you want to avoid native builds entirely.
+Fully static / design-ready (no backend, unchanged behavior):
+`/`, `/about`, `/enterprise` (+`/[slug]`), `/faq`, `/gallery` (+`/[id]`),
+`/platform` (+`/[slug]`), `/pricing`, `/resources` (+`/[slug]`),
+`/scroll-demo`.
 
-What you'd strip (in a **separate branch/repo**, not here):
-- Delete `app/api/**` route handlers (auth, billing, projects, video, script).
-- Remove server-only deps from `package.json`: `better-sqlite3`,
-  `@remotion/*`, `remotion`, `@napi-rs/canvas`, `sharp`, `ffmpeg-static`,
-  `pdf-parse`, `pdfjs-dist`, `stripe`, `@anthropic-ai/sdk`.
-- Stub any component/server code that imports the above (e.g. DB access, render
-  jobs) so pages render with mock data.
-- Drop `output: "standalone"` and the `serverComponentsExternalPackages` list
-  from `next.config.js` (no longer needed).
+Stubbed for the frontend-only build (render fine, but backend behavior is
+replaced):
 
-**Tradeoffs:** far faster/lighter Repl and no native-build risk, but it's a
-maintenance fork — UI changes made in Replit must be manually merged back, and
-anything touching the API/data layer can't be tested there. For true
-collaboration on the real app, **Option A is better.**
+| Route / component | What changed |
+| --- | --- |
+| `/login`, `/signup` (`components/AuthForm.tsx`) | Form still renders; submit is a no-op that just navigates to the `next` destination (no auth call). |
+| `/create` (`components/Uploader.tsx`) | Keeps the dropzone + voice/aspect-ratio pickers, but does not upload or generate. The "Generate" button is disabled and a "video generation is disabled" notice is shown. Previously called `/api/script`, `/api/video`, `/api/billing/*`. |
+| `/library` (`components/Library.tsx`) | Renders the designed empty state (previously fetched `/api/library`). |
+| `/projects` (`app/projects/page.tsx`) | Lists two hard-coded sample projects (previously read the DB via `lib/figures/store`). |
+| `/projects/[id]` (`app/projects/[id]/page.tsx`) | Shows a hard-coded sample project with two placeholder figures and an audit trail (previously read the DB). |
+| `components/figures/FigureReviewBoard.tsx` | Approve/Reject/Replace buttons update local React state only; figure image `src` still points at the old `/api/.../assets/...` path (renders as a broken image / alt text). |
+| `components/figures/ProjectIntake.tsx` | Choosing/dropping a PDF routes to the sample project instead of uploading. |
 
----
-
-## Environment variables to set as Replit Secrets
-
-Add these under **Tools → Secrets** (key names only — copy your real values from
-your local `.env`, never commit them):
-
-**Required**
-- `ANTHROPIC_API_KEY`
-- `AUTH_SECRET`
-- `NEXT_PUBLIC_APP_URL`  (set to your Repl's public URL)
-
-**Media generation (needed for full pipeline)**
-- `ELEVENLABS_API_KEY`
-- `ELEVENLABS_VOICE_ID`
-- `GEMINI_API_KEY`
-
-**Billing (Stripe)**
-- `STRIPE_SECRET_KEY`
-- `STRIPE_PRICE_ID_CREDITS`
-- `STRIPE_WEBHOOK_SECRET`
-- `STRIPE_CREDITS_PER_PACK`
-- `STRIPE_CREDIT_PACK_LABEL`
-- `STRIPE_PRICE_ID_CREATOR_MONTHLY`
-- `STRIPE_PRICE_ID_CREATOR_YEARLY`
-- `STRIPE_PRICE_ID_LAB_MONTHLY`
-- `STRIPE_PRICE_ID_LAB_YEARLY`
-
-**Optional (have defaults — only set to override)**
-- `FIGURE_ANALYSIS_MODEL`
-- `ELEVENLABS_SPEED`
-- `NARRATION_SPEED`
-- `GEMINI_IMAGE_MODEL`
-- `RENDER_SCALE`
-- `RENDER_CONCURRENCY`
-- `FFMPEG_THREADS`
-- `STRIPE_AUTOMATIC_TAX`
-- `UNLIMITED_TEST_ACCOUNTS`  (or legacy `UNLIMITED_TEST_EMAILS` + `UNLIMITED_TEST_PASSWORD`)
+### Things you may want to revisit
+- **Figure images** in `/projects/[id]` reference the removed asset API, so they
+  show broken-image placeholders. Swap in static images under `public/` if you
+  want the review board to look complete.
+- The **sample project/figure data** is illustrative only — edit the arrays in
+  `app/projects/page.tsx` and `app/projects/[id]/page.tsx` to taste.
 
 ---
 
 ## Troubleshooting
 
-- **App loads but is blank / "connection refused":** ensure the run command
-  includes `-H 0.0.0.0`; Replit can't reach a server bound to `localhost`.
-- **`better-sqlite3` build fails:** re-run `npm install` in the Shell; the Nix
-  toolchain (`python3`, `pkg-config`, `gnumake`, `gcc`) is declared in
-  `replit.nix`.
-- **`sharp`/`canvas` "cannot open shared object file":** the `LD_LIBRARY_PATH`
-  in `replit.nix` covers this; restart the Repl so Nix reloads env vars.
-- **Video render fails:** expected on Replit. Do renders locally; the rest of
-  the app is unaffected.
+- **Blank page / "connection refused":** make sure the server is bound to
+  `-H 0.0.0.0` (the `.replit` run command already does this). Replit can't
+  reach a server bound to `localhost`.
+- **`EMFILE: too many open files` when running `next dev`/`build` locally on
+  macOS:** raise the descriptor limit in the same shell first, e.g.
+  `ulimit -n 10240 && npm run dev`. (Not an issue on Replit.)

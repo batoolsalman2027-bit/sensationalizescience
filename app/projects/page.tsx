@@ -2,16 +2,34 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
-import { listProjects } from "@/lib/figures/store";
-import { getSessionUser } from "@/lib/auth";
 
 export const metadata: Metadata = { title: "Projects — Sensationalize Science" };
-export const dynamic = "force-dynamic";
 
-export default async function ProjectsPage() {
-  const user = await getSessionUser();
-  const projects = listProjects(user?.id ?? null);
+// Frontend-only preview: static placeholder data (no database).
+const projects: {
+  id: string;
+  paperTitle: string | null;
+  sourceFileName: string | null;
+  status: string;
+  createdAt: number;
+}[] = [
+  {
+    id: "demo-synapse",
+    paperTitle: "Activity-dependent stabilization of dendritic spines",
+    sourceFileName: "synapse-stability.pdf",
+    status: "draft_ready",
+    createdAt: Date.now() - 1000 * 60 * 60 * 24 * 2,
+  },
+  {
+    id: "demo-bmsc",
+    paperTitle: "BMSC-derived exosomes in intervertebral disc degeneration",
+    sourceFileName: "bmsc-ivdd.pdf",
+    status: "paper_under_review",
+    createdAt: Date.now() - 1000 * 60 * 60 * 24 * 6,
+  },
+];
 
+export default function ProjectsPage() {
   return (
     <section className="section" style={{ paddingTop: 44 }}>
       <Container>

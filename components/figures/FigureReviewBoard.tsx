@@ -10,7 +10,48 @@ import {
   RefreshCw,
   X,
 } from "lucide-react";
-import type { FigureDecision, RankedFigure } from "@/lib/figures/types";
+// Frontend-only preview: types inlined here (server lib removed).
+export type FigureDecision = "pending" | "approved" | "rejected" | "replaced";
+
+export interface RankedFigure {
+  id: string;
+  figureNumber: number | null;
+  recommended: boolean;
+  section?: string | null;
+  caption: string;
+  assetPath: string;
+  bounds: { page: number };
+  recreationMethod?: string | null;
+  exclusionReason?: string | null;
+  decision: FigureDecision;
+  analysis: {
+    kind: string;
+    panelCount: number;
+    summary?: string | null;
+    resultDirection?: string | null;
+  };
+  scores: {
+    composite: number;
+    scientificImportance: number;
+    narrativeRelevance: number;
+    shortFormSuitability: number;
+    visualClarity: number;
+    animatability: number;
+    rationale?: string | null;
+  };
+  data?: {
+    estimated: boolean;
+    estimateConfidence: number | null;
+    evidence: string;
+    series: {
+      label: string;
+      xLabel: string;
+      yLabel: string;
+      yUnit?: string | null;
+      points: { x: string | number; y: number }[];
+    }[];
+  } | null;
+}
 
 /**
  * Internal quality-control board for a project's extracted figures.
@@ -54,32 +95,13 @@ export default function FigureReviewBoard({
     [figures]
   );
 
-  const decide = useCallback(
-    async (figureId: string, decision: FigureDecision) => {
-      setBusyId(figureId);
-      setErrorId(null);
-      try {
-        const res = await fetch(
-          `/api/projects/${projectId}/figures/${figureId}`,
-          {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ decision }),
-          }
-        );
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "Could not save decision");
-        setFigures((prev) =>
-          prev.map((f) => (f.id === figureId ? { ...f, decision: data.figure.decision } : f))
-        );
-      } catch (err: any) {
-        setErrorId({ id: figureId, message: err.message });
-      } finally {
-        setBusyId(null);
-      }
-    },
-    [projectId]
-  );
+  // Frontend-only preview: decisions update local state only (no backend).
+  const decide = useCallback((figureId: string, decision: FigureDecision) => {
+    setErrorId(null);
+    setFigures((prev) =>
+      prev.map((f) => (f.id === figureId ? { ...f, decision } : f))
+    );
+  }, []);
 
   if (figures.length === 0) {
     return (

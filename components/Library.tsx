@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Download } from "lucide-react";
 
 interface LibVideo {
@@ -10,22 +10,8 @@ interface LibVideo {
 }
 
 export default function Library() {
-  const [videos, setVideos] = useState<LibVideo[] | null>(null);
-
-  useEffect(() => {
-    fetch("/api/library")
-      .then((r) => r.json())
-      .then((d) => setVideos(d.videos ?? []))
-      .catch(() => setVideos([]));
-  }, []);
-
-  if (videos === null) {
-    return (
-      <div className="lib-empty">
-        <span className="spinner" style={{ display: "inline-block" }} />
-      </div>
-    );
-  }
+  // Frontend-only preview: no backend, so the library starts empty.
+  const [videos] = useState<LibVideo[]>([]);
 
   if (videos.length === 0) {
     return (

@@ -23,29 +23,16 @@ export default function ProjectIntake() {
   const inputRef = useRef<HTMLInputElement>(null);
   const lastFileRef = useRef<File | null>(null);
 
+  // Frontend-only preview: no backend pipeline. Route to a sample project so the
+  // reviewer UI is still reachable, instead of uploading and analyzing the PDF.
   const submit = useCallback(
     async (file: File) => {
       lastFileRef.current = file;
       setFileName(file.name);
-      setStage("uploading");
       setError(null);
-
-      try {
-        const form = new FormData();
-        form.append("pdf", file);
-        if (narrative.trim()) form.append("narrative", narrative.trim());
-
-        const res = await fetch("/api/projects", { method: "POST", body: form });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "Could not create the project");
-
-        router.push(`/projects/${data.projectId}`);
-      } catch (err: any) {
-        setError(err.message);
-        setStage("error");
-      }
+      router.push("/projects/demo-synapse");
     },
-    [narrative, router]
+    [router]
   );
 
   const onFile = useCallback(

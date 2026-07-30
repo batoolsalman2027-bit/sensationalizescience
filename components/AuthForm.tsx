@@ -23,25 +23,12 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
     return next;
   }
 
-  async function onSubmit(e: FormEvent) {
+  // Frontend-only preview: no auth backend. Submit just navigates onward.
+  function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setBusy(true);
     setError(null);
-    try {
-      const res = await fetch(`/api/auth/${mode}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Something went wrong");
-      router.push(destinationAfterAuth());
-      router.refresh();
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setBusy(false);
-    }
+    setBusy(true);
+    router.push(destinationAfterAuth());
   }
 
   const switchQs = (() => {
