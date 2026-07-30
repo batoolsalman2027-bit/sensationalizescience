@@ -2,6 +2,13 @@
 const nextConfig = {
   // Required for lean Railway / Docker deploys
   output: "standalone",
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "images.pexels.com" },
+      { protocol: "https", hostname: "me7aitdbxq.ufs.sh" },
+    ],
+  },
   experimental: {
     serverComponentsExternalPackages: [
       "pdf-parse",

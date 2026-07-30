@@ -1,3 +1,10 @@
+/* Tailwind layers. Preflight is disabled in tailwind.config.js so the base
+   reset never overrides the design system below; utility classes still work
+   (used by components/ui/scroll-expansion-hero.tsx). */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* =========================================================================
    Sensationalize Science — design system
    A calm, editorial, scientific aesthetic: warm white, lime green accent,
@@ -2032,3 +2039,12 @@ body > main {
   .qc-buttons { width: 100%; }
   .qc-btn { flex: 1 1 auto; justify-content: center; }
 }
+
+/* =========================================================================
+   Full-bleed scroll hero route
+   ScrollExpandMedia hijacks scroll and expands to 100dvh, so the fixed site
+   header and the reserved main padding would overlap it. The route toggles
+   `scroll-hero-active` on <body> (added on mount, removed on unmount).
+   ========================================================================= */
+body.scroll-hero-active > main { padding-top: 0; }
+body.scroll-hero-active .site-header { display: none; }
