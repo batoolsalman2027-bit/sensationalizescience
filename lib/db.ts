@@ -18,7 +18,9 @@ const SCHEMA = `
     status TEXT NOT NULL,
     videoUrl TEXT,
     error TEXT,
-    createdAt INTEGER NOT NULL
+    createdAt INTEGER NOT NULL,
+    userId TEXT,
+    title TEXT
   );
 
   CREATE TABLE IF NOT EXISTS users (
@@ -118,9 +120,31 @@ const SCHEMA = `
     createdAt INTEGER NOT NULL
   );
 
+  -- Production requests from /create — operator fulfills these manually.
+  CREATE TABLE IF NOT EXISTS video_requests (
+    id TEXT PRIMARY KEY,
+    status TEXT NOT NULL DEFAULT 'new',
+    contactEmail TEXT NOT NULL,
+    userId TEXT,
+    scientificField TEXT NOT NULL,
+    videoLength TEXT NOT NULL,
+    narrationVoice TEXT NOT NULL,
+    aspectRatio TEXT NOT NULL,
+    branding TEXT NOT NULL,
+    sourceFileName TEXT NOT NULL,
+    pdfPath TEXT NOT NULL,
+    logoPath TEXT,
+    logoFileName TEXT,
+    notes TEXT,
+    libraryJobId TEXT,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+  );
+
   CREATE INDEX IF NOT EXISTS idx_figures_project ON figures (projectId);
   CREATE INDEX IF NOT EXISTS idx_provenance_project ON visual_provenance (projectId);
   CREATE INDEX IF NOT EXISTS idx_review_project ON review_events (projectId, createdAt);
+  CREATE INDEX IF NOT EXISTS idx_video_requests_created ON video_requests (createdAt DESC);
 `;
 
 function openDb(): Database.Database {

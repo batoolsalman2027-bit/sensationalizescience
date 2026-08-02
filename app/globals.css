@@ -1824,6 +1824,242 @@ body > main {
 .dropzone-disabled { cursor: default; opacity: 0.65; }
 .upload-badge { width: 68px; height: 68px; border-radius: 20px; background: var(--blue-soft); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
 
+/* ---- Create production-request preferences ---- */
+.create-request { width: 100%; max-width: none; }
+.create-success {
+  text-align: center;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pref-panel {
+  margin-top: 28px;
+  padding: 28px 24px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  display: grid;
+  gap: 26px;
+}
+.pref-panel-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.pref-panel-desc {
+  margin: -12px 0 0;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+.pref-group { display: grid; gap: 10px; }
+.pref-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.pref-select,
+.pref-input {
+  width: 100%;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.pref-select:focus,
+.pref-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px var(--blue-soft);
+}
+.pref-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+.pref-chips-aspect {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.pref-chip {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease), color 0.15s var(--ease);
+}
+.pref-chip:hover:not(:disabled) { border-color: var(--blue); }
+.pref-chip.is-active {
+  background: #5a626c;
+  border-color: #5a626c;
+  color: #fff;
+}
+.pref-chip:disabled { opacity: 0.55; cursor: default; }
+.pref-chip-wide {
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 14px 12px;
+  text-align: left;
+  width: 100%;
+}
+.pref-chip-title { font-size: 15px; font-weight: 700; }
+.pref-chip-hint { font-size: 12px; font-weight: 500; color: var(--ink-soft); line-height: 1.35; }
+.pref-chip-wide.is-active .pref-chip-hint { color: rgba(255, 255, 255, 0.78); }
+.pref-locked-email {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.logo-dropzone {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  padding: 16px 18px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.logo-dropzone:hover { border-color: var(--blue); }
+.logo-dropzone.dropzone-active { border-color: var(--blue); background: var(--blue-soft); }
+
+/* ---- Operator inbox ---- */
+.ops-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; width: 100%; max-width: none; }
+.ops-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+.ops-card-head {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 4px 14px;
+  align-items: center;
+  text-align: left;
+  padding: 16px 18px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  color: inherit;
+}
+.ops-status {
+  grid-row: 1 / span 2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(90, 98, 108, 0.12);
+  color: #5a626c;
+  white-space: nowrap;
+}
+.ops-status-new { background: rgba(125, 211, 33, 0.16); color: #3d7a0a; }
+.ops-status-in_progress { background: rgba(33, 58, 81, 0.12); color: var(--deep); }
+.ops-status-delivered { background: rgba(27, 38, 32, 0.08); color: var(--ink-soft); }
+.ops-card-title { font-size: 16px; font-weight: 700; }
+.ops-card-meta { font-size: 13px; color: var(--ink-soft); grid-column: 2; }
+.ops-card-body {
+  border-top: 1px solid var(--line);
+  padding: 18px 20px 22px;
+  display: grid;
+  gap: 18px;
+}
+.ops-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+}
+.ops-dl dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+}
+.ops-dl dd { margin: 0; font-size: 14.5px; }
+.ops-dl code { font-size: 12px; word-break: break-all; }
+.ops-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.ops-status-row { display: grid; gap: 10px; }
+.ops-deliver {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(90, 98, 108, 0.06);
+  border: 1px solid var(--line);
+}
+.pref-chips-length {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.pref-chips-length .pref-chip,
+.pref-chips-voice .pref-chip {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+.pref-chips-voice {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.pref-chips-branding {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.pref-chips-branding .pref-chip {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+@media (max-width: 700px) {
+  .pref-chips-aspect,
+  .pref-chips-branding,
+  .pref-chips-length { grid-template-columns: 1fr; }
+  .pref-chips-voice { grid-template-columns: 1fr; }
+  .ops-card-head { grid-template-columns: 1fr; }
+  .ops-status { grid-row: auto; justify-self: start; }
+  .ops-card-meta { grid-column: 1; }
+}
+
 .btn-generate {
   display: inline-flex; align-items: center; gap: 10px; background: var(--blue); color: #fff;
   border: none; border-radius: var(--r-pill, 999px); padding: 15px 32px; font-size: 15px; font-weight: 700;

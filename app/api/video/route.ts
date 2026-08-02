@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     consumeEntitlement(entitlement);
 
     const jobId = randomUUID();
-    createJob(jobId);
+    createJob(jobId, { userId: entitlement.user?.id ?? null });
     updateJob(jobId, { status: "processing" });
 
     renderVideo(script, jobId, options)

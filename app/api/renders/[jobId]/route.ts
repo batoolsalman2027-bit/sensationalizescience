@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { Readable } from "node:stream";
+import { getJob } from "@/lib/jobs";
+import { getSessionUser } from "@/lib/auth";
+import { isOperatorSession } from "@/lib/operator";
 import { renderVideoPath } from "@/lib/renders";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Stream a rendered MP4. Needed because Next.js production does not serve
- * files written to `public/` after the build.
+ * Stream a rendered MP4. Accessible only to the owning account or an operator.
  */
 export async function GET(
   req: NextRequest,
@@ -17,6 +19,17 @@ export async function GET(
   const jobId = params.jobId;
   if (!jobId || jobId.includes("..") || jobId.includes("/")) {
     return NextResponse.json({ error: "invalid job" }, { status: 400 });
+  }
+
+  const job = getJob(jobId);
+  if (!job) {
+    return NextResponse.json({ error: "video not found" }, { status: 404 });
+  }
+
+  const user = await getSessionUser();
+  const operator = await isOperatorSession();
+  if (!operator && (!user || job.userId !== user.id)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const filePath = renderVideoPath(jobId);
