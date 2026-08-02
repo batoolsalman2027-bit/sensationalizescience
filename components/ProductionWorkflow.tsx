@@ -82,7 +82,7 @@ export default function ProductionWorkflow() {
             </div>
             <div className="wf-body">
               <p className="wf-step">
-                Step {String(stage.step).padStart(2, "0")}
+                Step {stage.step}
               </p>
               <h3 className="wf-title">{stage.title}</h3>
               <ul className="wf-points">

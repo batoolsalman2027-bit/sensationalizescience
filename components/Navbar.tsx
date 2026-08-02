@@ -151,7 +151,7 @@ export default function Navbar() {
             <Link href={AUTH_NAV.login.href} className="btn btn-ghost">
               {AUTH_NAV.login.label}
             </Link>
-            <Link href={AUTH_NAV.getStarted.href} className="btn btn-primary">
+            <Link href={AUTH_NAV.getStarted.href} className="btn btn-gray">
               {AUTH_NAV.getStarted.label}
             </Link>
           </div>

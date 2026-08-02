@@ -76,8 +76,9 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
     title: "Upload your research",
     points: [
       "Submit the full paper as a PDF",
-      "Add supporting files, figures, and supplementary materials",
       "Include lab branding if you have it",
+      "Accepts preprints, accepted manuscripts, and published papers",
+      "Your paper stays confidential, nothing published or shared without your approval",
     ],
   },
   {
@@ -86,7 +87,6 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
     title: "Set your preferences",
     points: [
       "Choose the intended audience and video length",
-      "Flag which findings deserve the most emphasis",
       "Pick tone, visual style, format, and distribution channel",
     ],
   },
@@ -95,9 +95,9 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
     icon: "Microscope",
     title: "Scientific content review",
     points: [
-      "The paper is analyzed and shaped into a proposed narrative",
+      "The paper is analyzed and shaped into a proposed script that you can preview",
       "The most relevant findings and figures are selected",
-      "Terminology, claims, and citations are checked",
+      "No invented text, structures, or data appear on screen",
     ],
   },
   {
@@ -105,8 +105,8 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
     icon: "Clapperboard",
     title: "AI-assisted video production",
     points: [
-      "Figures become original, video-appropriate visuals",
-      "Scenes, animations, and captions are produced",
+      "Figures are extracted, ranked, and matched to the claims they support",
+      "Scenes and animations are produced with Kling, Runway, and Remotion",
       "Narration is voiced with ElevenLabs",
     ],
   },
@@ -116,7 +116,7 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
     title: "Lab review and approval",
     points: [
       "Your draft arrives inside the platform",
-      "Request edits and correct terminology in place",
+      "Request edits for an optional revision round, included with each video",
       "Nothing ships until your lab approves it",
     ],
   },
@@ -125,8 +125,7 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
     icon: "PackageCheck",
     title: `Delivery in ${TURNAROUND.businessDays} business days`,
     points: [
-      "Formats for websites, conferences, and social media",
-      "Versions suited to journals and institutional comms",
+      "Versions suited to journals and institutional communications",
       "Source files delivered alongside the final cut",
     ],
   },
@@ -134,14 +133,17 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
 
 export const CORE_FEATURES = [
   { icon: "FileText", title: "Scientific script generation", body: "Accurate, readable narration grounded in your paper." },
-  { icon: "Sparkles", title: "Research-specific animations", body: "Visuals that reflect the actual science, not stock clips." },
+  { icon: "Sparkles", title: "Research-specific animations", body: "Visuals that reflect the actual science." },
   { icon: "Mic", title: "Natural voiceovers", body: "Clear AI narration that sounds human." },
   { icon: "Captions", title: "Automatic captions", body: "Word-synced captions ready for silent autoplay." },
   {
     icon: "Share2",
     title: "Social Media",
-    body: "Connected to multiple social media to post directly, no wait",
+    body: "Connected to multiple social media to post directly, no wait.",
   },
+  { icon: "Quote", title: "Citation-first", body: "Every video opens with the full citation: title, authors, DOI." },
+  { icon: "Image", title: "Figures straight from your paper", body: "Your actual figures extracted and rebuilt for video." },
+  { icon: "UserCheck", title: "Expert review before delivery", body: "A team with a scientific background, performs rigorous quality checks every video." },
 ];
 
 export const BUILT_FOR = [

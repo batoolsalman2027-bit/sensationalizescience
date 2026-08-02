@@ -50,7 +50,6 @@ export default function Footer() {
               <Logo size={32} />
               <span className="wordmark">{SITE.name}</span>
             </Link>
-            <p>{SITE.tagline}</p>
           </div>
 
           {COLUMNS.map((col) => (

@@ -14,8 +14,8 @@
 
 :root {
   /* surfaces */
-  --paper: #f8f6f1;        /* warm white page */
-  --paper-2: #f1ede3;      /* stone / ivory alt sections */
+  --paper: #ffffff;        /* white page */
+  --paper-2: #ffffff;      /* white alt sections (was stone/ivory) */
   --card: #ffffff;
   --card-2: #fbfaf6;
 
@@ -43,12 +43,12 @@
   --error: #b23a2b;
   --success: #7dd321;
 
-  /* typography — Unbounded lead, Michroma typed line, Sora body */
-  --font-ui: "Sora", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Syncopate", ui-sans-serif, system-ui, sans-serif;
-  --font-script: "Syncopate", ui-sans-serif, system-ui, sans-serif;
-  --font-lead: "Unbounded", ui-sans-serif, system-ui, sans-serif;
-  --font-typed: "Michroma", ui-sans-serif, system-ui, sans-serif;
+  /* typography — Inter throughout */
+  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-script: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-lead: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-typed: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-prompt: "Inter", ui-sans-serif, system-ui, sans-serif;
 
@@ -150,6 +150,10 @@ button { font-family: inherit; }
   white-space: nowrap;
   max-width: none;
 }
+/* Never let a nowrap title run off a narrow screen — wrap instead. */
+@media (max-width: 640px) {
+  .section-title.nowrap { white-space: normal; }
+}
 
 .subhead {
   max-width: 600px;
@@ -182,6 +186,9 @@ button { font-family: inherit; }
 }
 
 /* ---------- scientific background ---------- */
+/* Hidden — the page uses plain white section backgrounds (no animated dots).
+   Remove this override to bring the animated science background back. */
+.science-bg { display: none; }
 .science-bg {
   position: fixed;
   inset: 0;
@@ -327,8 +334,8 @@ button { font-family: inherit; }
   left: clamp(12px, 3vw, 28px);
   right: clamp(12px, 3vw, 28px);
   border-radius: 18px;
-  background: rgba(248, 246, 241, 0.88);
-  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(33, 58, 81, 0.28);
   box-shadow:
     0 1px 0 rgba(27, 38, 32, 0.04),
     0 18px 40px -24px rgba(27, 38, 32, 0.35);
@@ -418,6 +425,8 @@ body > main {
 .btn:active { transform: translateY(0) scale(0.985); }
 .btn-primary { background: var(--ink); color: var(--paper); }
 .btn-primary:hover { background: #16300a; transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.btn-gray { background: #5a626c; color: #fff; }
+.btn-gray:hover { background: #4a5159; transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 .btn-blue { background: var(--blue); color: #fff; }
 .btn-blue:hover { background: var(--blue-hover); transform: translateY(-2px); box-shadow: 0 12px 26px -12px rgba(125, 211, 33, 0.6); }
 .btn-outline { background: rgba(255,255,255,0.4); color: var(--ink); border-color: var(--line-strong); }
@@ -492,6 +501,30 @@ body > main {
   transition: transform 0.28s var(--ease);
 }
 .feature-card:hover .icon-badge { transform: translateY(-2px) scale(1.04); }
+
+/* Gray feature cards with light text on the white page — translucent gray,
+   with a thin lime hairline frame set inset from the card edge. */
+.feature-card {
+  position: relative;
+  background: #5a626c;
+  border: none;
+}
+.feature-card::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(125, 211, 33, 0.65);
+  border-radius: calc(var(--r-lg) - 7px);
+  pointer-events: none;
+  transition: border-color 0.28s var(--ease);
+}
+.feature-card:hover::before { border-color: var(--blue-2); }
+.feature-card h3 { color: #f8f6f1; }
+.feature-card p { color: #d5d9de; }
+.feature-card .icon-badge {
+  background: rgba(125, 211, 33, 0.18);
+  color: var(--blue-2);
+}
 
 .step-num {
   width: 40px; height: 40px; border-radius: 12px;
@@ -627,7 +660,7 @@ body > main {
 .faq-a { color: var(--ink-soft); font-size: 15px; line-height: 1.65; padding: 0 4px 22px; max-width: 760px; animation: fadeUp 0.25s var(--ease) both; }
 
 /* ---------- footer ---------- */
-.site-footer { position: relative; z-index: 1; border-top: 1px solid var(--line); background: var(--paper-2); margin-top: 40px; }
+.site-footer { position: relative; z-index: 1; border-top: 1px solid var(--line); background: var(--paper); margin-top: 40px; }
 .footer-top { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 36px; padding: 64px 0 44px; }
 .footer-brand p { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin: 16px 0 0; max-width: 260px; }
 .footer-heading { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 14px; }
@@ -721,6 +754,186 @@ body > main {
   width: 100%;
 }
 
+/* ---------- home scroll-expansion hero (components/HomeHero.tsx) ---------- */
+.hh {
+  position: relative;
+  z-index: 1;
+  /* fill the viewport below the fixed navbar (main has 72px padding-top) so
+     the reveal + scroll cue sit fully in view with no spill past the fold */
+  min-height: calc(100dvh - 72px);
+  overflow: hidden;
+  background: #101a24;            /* navy base — no white flash / no CLS */
+}
+.hh-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #101a24;
+}
+.hh-vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.hh-media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  will-change: clip-path;
+}
+.hh-media-img {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.hh-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* holds warm-white type to WCAG AA over any background footage */
+  background: linear-gradient(
+    180deg,
+    rgba(16, 26, 36, 0.62) 0%,
+    rgba(16, 26, 36, 0.34) 42%,
+    rgba(16, 26, 36, 0.74) 100%
+  );
+}
+.hh-textscrim {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 72% 56% at 50% 46%,
+    rgba(11, 17, 23, 0.55) 0%,
+    rgba(11, 17, 23, 0) 70%
+  );
+}
+.hh-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px clamp(20px, 4vw, 56px);
+}
+.hh-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 1000px;
+  width: 100%;
+}
+.hh-eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b5c2d3;
+}
+.hh-rule {
+  display: block;
+  width: 44px;
+  height: 2px;
+  margin: 16px 0 24px;
+  border-radius: 2px;
+  background: var(--blue);        /* the single lime accent */
+}
+.hh-wordmark {
+  margin: 0;
+  font-family: var(--font-lead);
+  font-weight: 700;
+  font-size: clamp(40px, 7.2vw, 96px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #f8f6f1;
+}
+.hh-sentence {
+  margin: 20px 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(20px, 3.1vw, 42px);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  color: #f8f6f1;
+}
+.hh-line2 {
+  display: inline;
+  color: var(--blue);            /* "Reimagined as Video" reveals in lime */
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.hh-ctas {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 34px;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.hh-ctas .btn-blue { color: var(--ink); }                 /* AA: dark ink on lime */
+.hh-ctas .btn-blue:hover { color: var(--ink); }
+.hh-ctas .btn-outline {
+  background: transparent;
+  color: #f8f6f1;
+  border-color: rgba(248, 246, 241, 0.55);
+}
+.hh-ctas .btn-outline:hover {
+  background: rgba(248, 246, 241, 0.1);
+  border-color: #f8f6f1;
+  color: #f8f6f1;
+}
+.hh-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #b5c2d3;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.hh-cue .chev { animation: hh-bob 1.8s var(--ease) infinite; }
+@keyframes hh-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+@media (max-width: 640px) {
+  .hh-inner { padding: 84px clamp(20px, 5vw, 40px); }
+  .hh-sentence { margin-top: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hh-cue .chev { animation: none; }
+}
+
+/* ---------- navy sections (was --paper-2 beige) ---------- */
+.sec-navy { background: var(--deep); }              /* deep navy blue */
+.sec-navy .section-title { color: #f8f6f1; }
+.sec-navy .section-desc { color: #c7d0cb; }
+.sec-navy .split .section-desc { color: #c7d0cb; }
+.sec-navy .btn-outline {
+  background: transparent;
+  color: #f8f6f1;
+  border-color: rgba(248, 246, 241, 0.5);
+}
+.sec-navy .btn-outline:hover {
+  background: rgba(248, 246, 241, 0.1);
+  border-color: #f8f6f1;
+  color: #f8f6f1;
+}
+
 .hero-demo {
   width: 100%;
   display: flex;
@@ -749,10 +962,11 @@ body > main {
 }
 
 .how-it-works {
-  background: var(--paper-2);
   padding-top: 88px;
   padding-bottom: 96px;
 }
+/* Stone / ivory alt section (was on .how-it-works). */
+.sec-stone { background: var(--paper-2); }
 
 /* ---------- production workflow (serpentine process diagram) ----------
    Stages 1-3 run left-to-right on row one, 4-6 on row two, threaded by a
@@ -764,8 +978,12 @@ body > main {
   margin: 0 0 52px;
 }
 .wf-intro .eyebrow { display: inline-block; margin-bottom: 10px; }
-.wf-intro .section-title { margin: 0; font-size: clamp(24px, 3.4vw, 38px); }
-.wf-intro .section-desc { margin: 12px 0 0; margin-left: 0; max-width: none; }
+.wf-intro { max-width: none; }
+.wf-intro .section-title { margin: 0; }
+.wf-intro .section-desc { margin: 12px 0 0; margin-left: 0; max-width: 46rem; }
+/* Sits on one line when there's room, wraps (stays on-page) when the window
+   is too narrow. Never forces a single line off the edge. */
+.wf-heading-oneline { max-width: none; text-wrap: balance; }
 
 .wf {
   list-style: none;

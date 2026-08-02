@@ -15,6 +15,9 @@ import {
   BookOpen,
   Building2,
   Clapperboard,
+  Quote,
+  Image,
+  UserCheck,
   type LucideProps,
 } from "lucide-react";
 
@@ -36,6 +39,9 @@ const MAP: Record<string, React.ComponentType<LucideProps>> = {
   BookOpen,
   Building2,
   Clapperboard,
+  Quote,
+  Image,
+  UserCheck,
 };
 
 export default function Icon({

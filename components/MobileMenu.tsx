@@ -81,7 +81,7 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
               <Link href={AUTH_NAV.login.href} className="btn btn-outline btn-lg" onClick={onClose}>
                 {AUTH_NAV.login.label}
               </Link>
-              <Link href={AUTH_NAV.getStarted.href} className="btn btn-primary btn-lg" onClick={onClose}>
+              <Link href={AUTH_NAV.getStarted.href} className="btn btn-gray btn-lg" onClick={onClose}>
                 {AUTH_NAV.getStarted.label}
               </Link>
             </div>
