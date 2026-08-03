@@ -20,6 +20,7 @@ export type SessionUser = {
   id: string;
   email: string;
   credits: number;
+  freeUsed: boolean;
 };
 
 export type UserRow = {
@@ -27,27 +28,41 @@ export type UserRow = {
   email: string;
   passwordHash: string;
   credits: number;
+  freeUsed: number;
   stripeCustomerId: string | null;
   createdAt: number;
 };
 
+let userColsEnsured = false;
+function ensureUserColumns() {
+  if (userColsEnsured) return;
+  const cols = db.prepare(`PRAGMA table_info(users)`).all() as { name: string }[];
+  if (!cols.some((c) => c.name === "freeUsed")) {
+    db.exec(`ALTER TABLE users ADD COLUMN freeUsed INTEGER NOT NULL DEFAULT 0`);
+  }
+  userColsEnsured = true;
+}
+
 export function findUserByEmail(email: string): UserRow | undefined {
+  ensureUserColumns();
   return db.prepare(`SELECT * FROM users WHERE email = ?`).get(email.toLowerCase()) as
     | UserRow
     | undefined;
 }
 
 export function findUserById(id: string): UserRow | undefined {
+  ensureUserColumns();
   return db.prepare(`SELECT * FROM users WHERE id = ?`).get(id) as UserRow | undefined;
 }
 
 export function createUser(email: string, password: string): UserRow {
+  ensureUserColumns();
   const id = randomUUID();
   const passwordHash = bcrypt.hashSync(password, 10);
   const createdAt = Date.now();
   db.prepare(
-    `INSERT INTO users (id, email, passwordHash, credits, stripeCustomerId, createdAt)
-     VALUES (?, ?, ?, 0, NULL, ?)`
+    `INSERT INTO users (id, email, passwordHash, credits, freeUsed, stripeCustomerId, createdAt)
+     VALUES (?, ?, ?, 0, 0, NULL, ?)`
   ).run(id, email.toLowerCase(), passwordHash, createdAt);
   return findUserById(id)!;
 }
@@ -91,7 +106,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     if (!id) return null;
     const user = findUserById(id);
     if (!user) return null;
-    return { id: user.id, email: user.email, credits: user.credits };
+    return { id: user.id, email: user.email, credits: user.credits, freeUsed: Boolean(user.freeUsed) };
   } catch {
     return null;
   }
@@ -138,13 +153,27 @@ export function addCredits(userId: string, delta: number, reason: string) {
   ).run(randomUUID(), userId, delta, reason, Date.now());
 }
 
-export function spendUserCredit(userId: string): boolean {
+export function spendUserCredit(
+  userId: string,
+  reason = "video_request"
+): boolean {
+  ensureUserColumns();
   const user = findUserById(userId);
   if (!user || user.credits < 1) return false;
   db.prepare(`UPDATE users SET credits = credits - 1 WHERE id = ? AND credits >= 1`).run(userId);
   db.prepare(
     `INSERT INTO credit_ledger (id, userId, visitorId, delta, reason, createdAt)
      VALUES (?, ?, NULL, -1, ?, ?)`
-  ).run(randomUUID(), userId, "video_render", Date.now());
+  ).run(randomUUID(), userId, reason, Date.now());
   return true;
+}
+
+/** Mark the account's one free production request as used. */
+export function markUserFreeUsed(userId: string) {
+  ensureUserColumns();
+  db.prepare(`UPDATE users SET freeUsed = 1 WHERE id = ?`).run(userId);
+  db.prepare(
+    `INSERT INTO credit_ledger (id, userId, visitorId, delta, reason, createdAt)
+     VALUES (?, ?, NULL, -1, ?, ?)`
+  ).run(randomUUID(), userId, "free_request", Date.now());
 }

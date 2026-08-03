@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { UploadCloud, Image as ImageIcon, CheckCircle2 } from "lucide-react";
+import PricingSection from "@/components/PricingSection";
 import {
   BRANDING_OPTIONS,
   NARRATION_VOICES,
@@ -16,6 +17,16 @@ import {
 
 type Stage = "form" | "submitting" | "done" | "error";
 
+type BillingStatus = {
+  authenticated: boolean;
+  email: string | null;
+  credits: number;
+  freeUsed: boolean;
+  unlimited?: boolean;
+  canGenerate: boolean;
+  packLabel: string;
+};
+
 export default function CreateRequestForm() {
   const [prefs, setPrefs] = useState<CreatePreferences>(emptyPreferences);
   const [pdf, setPdf] = useState<File | null>(null);
@@ -27,19 +38,91 @@ export default function CreateRequestForm() {
   const [requestId, setRequestId] = useState<string | null>(null);
   const [sessionEmail, setSessionEmail] = useState<string | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [billing, setBilling] = useState<BillingStatus | null>(null);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [busyPackId, setBusyPackId] = useState<string | null>(null);
+  const [checkoutNote, setCheckoutNote] = useState<string | null>(null);
+  const pendingCheckoutRef = useRef(false);
+
+  const refreshBilling = useCallback(async () => {
+    try {
+      const res = await fetch("/api/billing/status");
+      const d = (await res.json()) as BillingStatus;
+      setBilling(d);
+      if (d?.authenticated && d.email) {
+        setSessionEmail(d.email);
+        setPrefs((p) => ({ ...p, contactEmail: d.email! }));
+      }
+      if (d.canGenerate) setShowPaywall(false);
+      return d;
+    } catch {
+      return null;
+    } finally {
+      setAuthChecked(true);
+    }
+  }, []);
+
+  const startPackCheckout = useCallback(
+    async (packId: "single" | "starter" | "lab" | "department") => {
+      setBusyPackId(packId);
+      setError(null);
+      try {
+        const res = await fetch("/api/billing/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pack: packId }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? "Could not start checkout");
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        }
+        throw new Error("No checkout URL returned");
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Checkout failed");
+        setShowPaywall(true);
+      } finally {
+        setBusyPackId(null);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    fetch("/api/billing/status")
-      .then((r) => r.json())
-      .then((d) => {
-        if (d?.authenticated && d.email) {
-          setSessionEmail(d.email);
-          setPrefs((p) => ({ ...p, contactEmail: d.email }));
-        }
-      })
-      .catch(() => {})
-      .finally(() => setAuthChecked(true));
-  }, []);
+    (async () => {
+      const status = await refreshBilling();
+      const params = new URLSearchParams(window.location.search);
+
+      if (params.get("checkout") === "success") {
+        setCheckoutNote("Payment received. Your credits will appear in a few seconds.");
+        window.history.replaceState({}, "", "/create");
+        await refreshBilling();
+        setTimeout(() => refreshBilling(), 2500);
+        return;
+      }
+      if (params.get("checkout") === "cancel") {
+        setCheckoutNote("Checkout canceled. No charge was made.");
+        setShowPaywall(true);
+        window.history.replaceState({}, "", "/create");
+        return;
+      }
+
+      const pack = params.get("pack");
+      if (
+        (pack === "single" ||
+          pack === "starter" ||
+          pack === "lab" ||
+          pack === "department") &&
+        status?.authenticated &&
+        !pendingCheckoutRef.current
+      ) {
+        pendingCheckoutRef.current = true;
+        window.history.replaceState({}, "", "/create");
+        await startPackCheckout(pack);
+      }
+    })();
+  }, [refreshBilling, startPackCheckout]);
 
   const set = <K extends keyof CreatePreferences>(key: K, value: CreatePreferences[K]) => {
     setPrefs((p) => ({ ...p, [key]: value }));
@@ -65,6 +148,11 @@ export default function CreateRequestForm() {
     setError(null);
     if (!sessionEmail) {
       setError("Sign in so your finished video can appear in your private library");
+      return;
+    }
+    if (billing && !billing.canGenerate) {
+      setShowPaywall(true);
+      setError("You've used your free request. Buy credits to submit another.");
       return;
     }
     if (!pdf) {
@@ -105,9 +193,15 @@ export default function CreateRequestForm() {
       if (res.status === 401) {
         throw new Error(data.error ?? "Sign in to submit a production request");
       }
+      if (res.status === 402 || data.needsCredits) {
+        setShowPaywall(true);
+        await refreshBilling();
+        throw new Error(data.error ?? "Buy credits to submit another request");
+      }
       if (!res.ok) throw new Error(data.error ?? "Submission failed");
       setRequestId(data.id);
       setStage("done");
+      await refreshBilling();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Submission failed");
       setStage("error");
@@ -129,8 +223,8 @@ export default function CreateRequestForm() {
           Sign in to start a request
         </h2>
         <p className="section-desc" style={{ margin: 0, marginLeft: 0 }}>
-          Production requests are tied to your account. When your video is ready, it
-          appears in <strong>My Library</strong>. Only you can see it.
+          Production requests are tied to your account. Your first request is free. When your
+          video is ready, it appears in <strong>My Library</strong>. Only you can see it.
         </p>
         <div style={{ display: "flex", gap: 12, marginTop: 22, flexWrap: "wrap" }}>
           <Link href="/login?next=/create" className="btn btn-gray">
@@ -141,6 +235,57 @@ export default function CreateRequestForm() {
           </Link>
         </div>
       </div>
+    );
+  }
+
+  if (showPaywall || (billing && !billing.canGenerate && stage !== "done")) {
+    return (
+      <section className="fade-up">
+        <h2 className="section-title" style={{ fontSize: 28, textAlign: "center", marginBottom: 8 }}>
+          Buy credits to continue
+        </h2>
+        <p
+          style={{
+            color: "var(--ink-soft)",
+            textAlign: "center",
+            fontSize: 15,
+            margin: "0 auto 28px",
+            maxWidth: 520,
+            lineHeight: 1.55,
+          }}
+        >
+          You&apos;ve used your free production request. One credit equals one request — credits
+          never expire.
+        </p>
+        {checkoutNote && (
+          <p style={{ textAlign: "center", color: "var(--ink-soft)", marginBottom: 16 }}>
+            {checkoutNote}
+          </p>
+        )}
+        {error && (
+          <p style={{ color: "var(--error)", textAlign: "center", marginBottom: 16 }}>{error}</p>
+        )}
+        <PricingSection
+          mode="checkout"
+          authenticated
+          freeUsed={Boolean(billing?.freeUsed)}
+          busyPackId={busyPackId}
+          onSelectPack={(packId) => startPackCheckout(packId)}
+        />
+        <p style={{ textAlign: "center", marginTop: 18, fontSize: 14 }}>
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={() => {
+              setShowPaywall(false);
+              setError(null);
+              refreshBilling();
+            }}
+          >
+            Back
+          </button>
+        </p>
+      </section>
     );
   }
 
@@ -176,7 +321,14 @@ export default function CreateRequestForm() {
               setPdf(null);
               setLogo(null);
               setRequestId(null);
-              setPrefs((p) => ({ ...emptyPreferences(), contactEmail: sessionEmail ?? p.contactEmail }));
+              setError(null);
+              setPrefs((p) => ({
+                ...emptyPreferences(),
+                contactEmail: sessionEmail ?? p.contactEmail,
+              }));
+              refreshBilling().then((d) => {
+                if (d && !d.canGenerate) setShowPaywall(true);
+              });
             }}
           >
             Submit another paper
@@ -197,7 +349,22 @@ export default function CreateRequestForm() {
           My Library
         </Link>
         .
+        {billing && (
+          <>
+            {" "}
+            {billing.unlimited
+              ? "Unlimited requests on this account."
+              : !billing.freeUsed
+                ? "Your first production request is free."
+                : billing.credits > 0
+                  ? `You have ${billing.credits} credit${billing.credits === 1 ? "" : "s"} remaining.`
+                  : null}
+          </>
+        )}
       </p>
+      {checkoutNote && (
+        <p style={{ color: "var(--ink-soft)", fontSize: 14, marginBottom: 14 }}>{checkoutNote}</p>
+      )}
 
       <label
         className={`dropzone${busy ? " dropzone-disabled" : ""}${pdfDrag ? " dropzone-active" : ""}`}

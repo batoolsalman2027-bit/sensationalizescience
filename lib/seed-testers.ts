@@ -59,10 +59,15 @@ export function ensureUnlimitedTesterAccounts(db: Database.Database) {
   const accounts = parseUnlimitedTesterAccounts();
   if (accounts.length === 0) return;
 
+  const cols = db.prepare(`PRAGMA table_info(users)`).all() as { name: string }[];
+  if (!cols.some((c) => c.name === "freeUsed")) {
+    db.exec(`ALTER TABLE users ADD COLUMN freeUsed INTEGER NOT NULL DEFAULT 0`);
+  }
+
   const find = db.prepare(`SELECT id FROM users WHERE email = ?`);
   const insert = db.prepare(
-    `INSERT INTO users (id, email, passwordHash, credits, stripeCustomerId, createdAt)
-     VALUES (?, ?, ?, 0, NULL, ?)`
+    `INSERT INTO users (id, email, passwordHash, credits, freeUsed, stripeCustomerId, createdAt)
+     VALUES (?, ?, ?, 0, 0, NULL, ?)`
   );
   const update = db.prepare(`UPDATE users SET passwordHash = ? WHERE id = ?`);
 

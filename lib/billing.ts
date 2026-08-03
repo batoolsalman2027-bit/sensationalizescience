@@ -3,6 +3,7 @@ import { db } from "./db";
 import {
   getOrCreateVisitorId,
   getSessionUser,
+  markUserFreeUsed,
   spendUserCredit,
   type SessionUser,
 } from "./auth";
@@ -51,10 +52,11 @@ export function markVisitorFreeUsed(visitorId: string) {
 }
 
 /**
- * Can this requester start a paid render?
+ * Can this requester start a production request (or legacy auto-render)?
  * - Unlimited test emails → never blocked
- * - Anonymous / logged-in with free unused → free mode
- * - Logged-in with credits → credit mode
+ * - Logged-in with credits → spend a credit
+ * - Logged-in with free request unused → one free request on the account
+ * - Anonymous with visitor free unused → legacy free (Uploader /api/video)
  * - Otherwise paywall
  */
 export async function checkCanGenerate(): Promise<Entitlement> {
@@ -69,15 +71,22 @@ export async function checkCanGenerate(): Promise<Entitlement> {
     return { ok: true, mode: "credit", user, visitorId };
   }
 
-  if (!visitorFreeUsed(visitorId)) {
+  // Account-scoped free request (Create / signed-in product path)
+  if (user && !user.freeUsed) {
     return { ok: true, mode: "free", user, visitorId };
+  }
+
+  // Legacy anonymous free (visitor cookie) — only when not signed in
+  if (!user && !visitorFreeUsed(visitorId)) {
+    return { ok: true, mode: "free", user: null, visitorId };
   }
 
   if (user) {
     return {
       ok: false,
       code: "PAYWALL",
-      message: "You're out of video credits. Buy more to keep generating.",
+      message:
+        "You've used your free request. Buy credits to submit another production request.",
       visitorId,
       user,
     };
@@ -87,36 +96,46 @@ export async function checkCanGenerate(): Promise<Entitlement> {
     ok: false,
     code: "PAYWALL",
     message:
-      "You've used your free video. Create an account and buy credits to generate more.",
+      "You've used your free video. Create an account and buy credits to request more.",
     visitorId,
     user: null,
   };
 }
 
-/** Call after a render job is successfully started. */
+/** Call after a production request (or legacy render) is successfully accepted. */
 export function consumeEntitlement(ent: Extract<Entitlement, { ok: true }>) {
   if (ent.mode === "unlimited") return;
   if (ent.mode === "free") {
+    if (ent.user) {
+      markUserFreeUsed(ent.user.id);
+      return;
+    }
     markVisitorFreeUsed(ent.visitorId);
     return;
   }
   if (ent.user) {
-    spendUserCredit(ent.user.id);
+    spendUserCredit(ent.user.id, "video_request");
   }
 }
 
 export async function getBillingStatus() {
   const user = await getSessionUser();
   const visitorId = getOrCreateVisitorId();
-  const freeUsed = visitorFreeUsed(visitorId);
   const unlimited = isUnlimitedUser(user);
+  const freeUsed = user
+    ? Boolean(user.freeUsed)
+    : visitorFreeUsed(visitorId);
+  const credits = unlimited ? 999999 : user?.credits ?? 0;
+  const canGenerate = Boolean(
+    unlimited || credits >= 1 || (user ? !user.freeUsed : !freeUsed)
+  );
   return {
     authenticated: Boolean(user),
     email: user?.email ?? null,
-    credits: unlimited ? 999999 : user?.credits ?? 0,
+    credits,
     freeUsed,
     unlimited,
-    canGenerate: Boolean(unlimited || (user && user.credits >= 1) || !freeUsed),
+    canGenerate,
     packLabel: CREDIT_PACK_LABEL,
   };
 }

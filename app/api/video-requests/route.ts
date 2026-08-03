@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
+import { checkCanGenerate, consumeEntitlement } from "@/lib/billing";
 import { requireOperator } from "@/lib/operator";
 import { createVideoRequest, listVideoRequests } from "@/lib/video-requests";
 import {
@@ -22,7 +23,7 @@ export const dynamic = "force-dynamic";
 const MAX_PDF_BYTES = 40 * 1024 * 1024;
 const MAX_LOGO_BYTES = 8 * 1024 * 1024;
 
-/** POST — public submit (authenticated email preferred). GET — operator inbox. */
+/** POST — authenticated submit (checks free request / credits). GET — operator inbox. */
 export async function GET() {
   const gate = await requireOperator();
   if (!gate.ok) {
@@ -50,6 +51,30 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getSessionUser();
+    if (!session) {
+      return NextResponse.json(
+        {
+          error:
+            "Sign in to submit a production request — your finished video appears in My Library",
+          needsAuth: true,
+        },
+        { status: 401 }
+      );
+    }
+
+    const entitlement = await checkCanGenerate();
+    if (!entitlement.ok) {
+      return NextResponse.json(
+        {
+          error: entitlement.message,
+          code: entitlement.code,
+          needsCredits: true,
+        },
+        { status: 402 }
+      );
+    }
+
     const form = await req.formData();
     const pdf = form.get("pdf");
     if (!(pdf instanceof File) || pdf.size === 0) {
@@ -69,16 +94,6 @@ export async function POST(req: NextRequest) {
     const aspectRatio = String(form.get("aspectRatio") ?? "").trim();
     const branding = String(form.get("branding") ?? "").trim();
 
-    const session = await getSessionUser();
-    if (!session) {
-      return NextResponse.json(
-        {
-          error: "Sign in to submit a production request — your finished video appears in My Library",
-          needsAuth: true,
-        },
-        { status: 401 }
-      );
-    }
     const contactEmail = session.email.toLowerCase();
 
     if (!SCIENTIFIC_FIELDS.includes(scientificFieldRaw as (typeof SCIENTIFIC_FIELDS)[number])) {
@@ -136,8 +151,12 @@ export async function POST(req: NextRequest) {
       logoFileName,
     });
 
+    // Deduct free request or 1 credit only after the request is stored.
+    consumeEntitlement(entitlement);
+
     return NextResponse.json({
       id: row.id,
+      entitlementMode: entitlement.mode,
       message:
         "Request received. When production is complete, your video will appear in My Library — visible only on your account.",
     });

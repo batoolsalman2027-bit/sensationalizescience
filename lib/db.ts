@@ -28,6 +28,7 @@ const SCHEMA = `
     email TEXT NOT NULL UNIQUE,
     passwordHash TEXT NOT NULL,
     credits INTEGER NOT NULL DEFAULT 0,
+    freeUsed INTEGER NOT NULL DEFAULT 0,
     stripeCustomerId TEXT,
     createdAt INTEGER NOT NULL
   );
