@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Container from "@/components/Container";
-import OpsInbox from "@/components/OpsInbox";
+import OpsHub from "@/components/OpsHub";
 
 export const metadata: Metadata = {
   title: "Operator inbox · Sensationalize Science",
@@ -18,15 +18,15 @@ export default function OpsPage() {
         <div style={{ marginBottom: 28, maxWidth: 640 }}>
           <span className="eyebrow">Operator</span>
           <h1 className="section-title" style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>
-            Production requests
+            Inbox
           </h1>
           <p className="section-desc" style={{ marginLeft: 0 }}>
-            Submissions from Create land here for your operator account only. Download the
-            paper and logo, produce the video to their preferences, then upload the MP4 to
-            publish it into <strong>that user&apos;s private My Library</strong>.
+            Production requests from Create and messages from the contact form. Deliver videos into
+            each user&apos;s private My Library; reply to contact messages out of band and mark them
+            resolved here.
           </p>
         </div>
-        <OpsInbox />
+        <OpsHub />
       </Container>
     </section>
   );

@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
-import { createContactSubmission } from "@/lib/contact-submissions";
+import { requireOperator } from "@/lib/operator";
+import {
+  countNewContactSubmissions,
+  createContactSubmission,
+  listContactSubmissions,
+} from "@/lib/contact-submissions";
 import { CONTACT_SUBJECTS, type ContactSubjectId } from "@/config/pricing";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_MESSAGE = 20;
@@ -35,6 +41,32 @@ function rateLimited(key: string): boolean {
 
 function isSubject(v: string): v is ContactSubjectId {
   return CONTACT_SUBJECTS.some((s) => s.id === v);
+}
+
+/** GET — operator inbox of contact submissions. */
+export async function GET() {
+  const gate = await requireOperator();
+  if (!gate.ok) {
+    return NextResponse.json({ error: gate.error }, { status: gate.status });
+  }
+
+  const submissions = listContactSubmissions().map((s) => ({
+    id: s.id,
+    name: s.name,
+    email: s.email,
+    subject: s.subject,
+    message: s.message,
+    status: s.status,
+    userId: s.userId,
+    internalNotes: s.internalNotes,
+    createdAt: s.createdAt,
+    resolvedAt: s.resolvedAt,
+  }));
+
+  return NextResponse.json({
+    submissions,
+    newCount: countNewContactSubmissions(),
+  });
 }
 
 export async function POST(req: NextRequest) {
