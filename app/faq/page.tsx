@@ -3,7 +3,7 @@ import Container from "@/components/Container";
 import FaqAccordion from "@/components/FaqAccordion";
 import { FAQ_GROUPS } from "@/config/faq";
 
-export const metadata: Metadata = { title: "FAQ — Sensationalize Science" };
+export const metadata: Metadata = { title: "FAQ · Sensationalize Science" };
 
 export default function FaqPage() {
   return (

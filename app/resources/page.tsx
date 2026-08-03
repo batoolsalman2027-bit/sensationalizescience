@@ -1,43 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/Container";
-import { MAIN_NAV } from "@/config/navigation";
 
-export const metadata: Metadata = { title: "Resources — Sensationalize Science" };
+export const metadata: Metadata = { title: "Resources · Sensationalize Science" };
+
+const LINKS = [
+  { label: "FAQ", href: "/faq", blurb: "Answers on accuracy, creation, ownership, pricing, and publishing." },
+  { label: "Contact", href: "/resources/contact", blurb: "Reach the team about a project, pricing, or a video." },
+];
 
 export default function ResourcesPage() {
-  const resources = MAIN_NAV.find((i) => i.label === "Resources");
-  const sections = resources?.sections ?? [];
-
   return (
     <>
       <section className="page-hero">
         <Container>
           <h1 className="headline" style={{ fontSize: "clamp(40px, 7vw, 84px)" }}>
-            Resources<span className="blue">learn, build, connect</span>
+            Resources<span className="blue">answers and support</span>
           </h1>
-          <p className="subhead">Guides, docs, company info, and community programs for science creators.</p>
+          <p className="subhead">Everything you need to get help and get started.</p>
         </Container>
       </section>
 
       <section className="section">
         <Container>
-          <div className="grid grid-3">
-            {sections.map((section) => (
-              <div key={section.heading} className="card">
-                <h3 style={{ marginBottom: 12 }}>{section.heading}</h3>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {section.items.map((leaf) => (
-                    <Link
-                      key={leaf.href + leaf.label}
-                      href={leaf.href}
-                      style={{ color: "var(--ink-soft)", textDecoration: "none", padding: "7px 0", fontSize: 14.5 }}
-                    >
-                      {leaf.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+          <div className="grid grid-2">
+            {LINKS.map((l) => (
+              <Link key={l.href} href={l.href} className="card" style={{ textDecoration: "none" }}>
+                <h3>{l.label}</h3>
+                <p>{l.blurb}</p>
+              </Link>
             ))}
           </div>
         </Container>

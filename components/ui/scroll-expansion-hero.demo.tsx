@@ -40,7 +40,7 @@ const HeroCopy = () => (
       Sensationalize Science turns peer-reviewed papers into accurate,
       publication-quality short videos. Upload your research, flag the findings
       that matter most, and collaborate with our AI-assisted scientific
-      production workflow — from figure to final cut.
+      production workflow, from figure to final cut.
     </p>
     <p className='text-lg mb-8 text-black dark:text-white'>
       Every script, visual, and citation is reviewed by your lab before it ships,

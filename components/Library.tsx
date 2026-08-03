@@ -66,7 +66,7 @@ export default function Library() {
         </p>
         <p style={{ marginTop: 6, maxWidth: 480 }}>
           Submit a paper from <strong>Create</strong>. When production is complete, your
-          publication-quality video appears here — only on your account.
+          publication-quality video appears here, only on your account.
         </p>
         <Link href="/create" className="btn btn-gray" style={{ marginTop: 18 }}>
           Start a production request

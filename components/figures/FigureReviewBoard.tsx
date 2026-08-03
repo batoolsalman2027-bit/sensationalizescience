@@ -106,7 +106,7 @@ export default function FigureReviewBoard({
             </strong>
             <p>
               These numbers were read off the plot by a model, not quoted from the
-              paper. Check each series against the original figure — direction and
+              paper. Check each series against the original figure, since direction and
               relative magnitude matter most. Estimates have been observed to
               invert results and to mix values between panels of the same figure.
             </p>
@@ -154,7 +154,7 @@ function FigureCard({
       <div className="qc-card-head">
         <div className="qc-title">
           <h3>
-            Figure {figure.figureNumber ?? "—"}
+            Figure {figure.figureNumber ?? "n/a"}
             {figure.recommended && <span className="qc-tag rec">Recommended</span>}
           </h3>
           <div className="qc-tags">
@@ -210,7 +210,7 @@ function FigureCard({
                 {estimated ? (
                   <>
                     <AlertTriangle size={14} strokeWidth={2.5} aria-hidden="true" />
-                    Estimated from the plot — verify against the figure
+                    Estimated from the plot, verify against the figure
                     {figure.data.estimateConfidence !== null && (
                       <span className="qc-conf">
                         model confidence{" "}

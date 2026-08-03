@@ -79,12 +79,6 @@ export default function PricingSection({
                 {freeUsed ? "Free video used" : plan.cta.label}
               </Link>
             );
-          } else if (plan.id === "enterprise") {
-            cta = (
-              <Link href={plan.cta.href} className="btn btn-primary" style={{ width: "100%" }}>
-                {plan.cta.label}
-              </Link>
-            );
           } else if (isPaid && authenticated && onSelectPlan) {
             cta = (
               <button

@@ -11,7 +11,7 @@ import {
 import { getSessionUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  title: "Figure review — Sensationalize Science",
+  title: "Figure review · Sensationalize Science",
 };
 
 // Review state changes as operators work; never serve a cached snapshot.

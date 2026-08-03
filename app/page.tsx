@@ -1,11 +1,10 @@
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import SectionHeader from "@/components/SectionHeader";
-import FeatureCard from "@/components/FeatureCard";
 import ProductionWorkflow from "@/components/ProductionWorkflow";
 import HomeHero from "@/components/HomeHero";
 import Reveal from "@/components/Reveal";
-import { CORE_FEATURES } from "@/config/site";
+import FeatureCarousel from "@/components/ui/FeatureCarousel";
 
 export default function Home() {
   return (
@@ -24,7 +23,7 @@ export default function Home() {
               </h2>
               <p className="section-desc">
                 Six stages, with AI-assisted scientific editors and video-production
-                tools at every step — and your lab&apos;s approval before anything ships.
+                tools at every step, and your lab&apos;s approval before anything ships.
               </p>
             </div>
           </Reveal>
@@ -45,11 +44,7 @@ export default function Home() {
             />
           </Reveal>
           <Reveal>
-            <div className="grid grid-4">
-              {CORE_FEATURES.map((c) => (
-                <FeatureCard key={c.title} icon={c.icon} title={c.title} body={c.body} />
-              ))}
-            </div>
+            <FeatureCarousel />
           </Reveal>
         </Container>
       </section>

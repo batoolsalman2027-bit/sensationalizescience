@@ -239,7 +239,7 @@ export default function OpsInbox() {
                   <div className="ops-deliver">
                     <span className="pref-label">Deliver to their My Library</span>
                     <p style={{ margin: "0 0 10px", fontSize: 13.5, color: "var(--ink-soft)" }}>
-                      Upload the finished MP4. It will appear only in this user’s private library —
+                      Upload the finished MP4. It will appear only in this user’s private library,
                       not emailed, and not visible to other accounts.
                     </p>
                     <div className="ops-actions">

@@ -67,9 +67,9 @@ export const NARRATION_VOICES = [
 export type NarrationVoiceId = (typeof NARRATION_VOICES)[number]["id"];
 
 export const OUTPUT_ASPECTS = [
-  { id: "16:9", label: "16:9", hint: "Landscape — journals, talks, websites" },
-  { id: "9:16", label: "9:16", hint: "Vertical — social and mobile" },
-  { id: "1:1", label: "1:1", hint: "Square — feeds and posters" },
+  { id: "16:9", label: "16:9", hint: "Landscape: journals, talks, websites" },
+  { id: "9:16", label: "9:16", hint: "Vertical: social and mobile" },
+  { id: "1:1", label: "1:1", hint: "Square: feeds and posters" },
 ] as const;
 
 export type OutputAspectId = (typeof OUTPUT_ASPECTS)[number]["id"];

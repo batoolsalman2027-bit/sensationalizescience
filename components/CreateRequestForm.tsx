@@ -130,7 +130,7 @@ export default function CreateRequestForm() {
         </h2>
         <p className="section-desc" style={{ margin: 0, marginLeft: 0 }}>
           Production requests are tied to your account. When your video is ready, it
-          appears in <strong>My Library</strong> — only you can see it.
+          appears in <strong>My Library</strong>. Only you can see it.
         </p>
         <div style={{ display: "flex", gap: 12, marginTop: 22, flexWrap: "wrap" }}>
           <Link href="/login?next=/create" className="btn btn-gray">
@@ -157,7 +157,7 @@ export default function CreateRequestForm() {
           <Link href="/library" style={{ color: "var(--blue)", fontWeight: 700 }}>
             My Library
           </Link>{" "}
-          on your account only — not emailed, and not visible to other users.
+          on your account only, not emailed, and not visible to other users.
         </p>
         {requestId && (
           <p style={{ fontSize: 13, color: "var(--ink-faint)", marginTop: 12 }}>
@@ -226,14 +226,14 @@ export default function CreateRequestForm() {
           {pdf?.name ?? "Drop your paper here, or click to upload"}
         </div>
         <div style={{ color: "var(--ink-soft)", fontSize: 14.5 }}>
-          Full PDF — preprints, accepted manuscripts, or published papers
+          Full PDF: preprints, accepted manuscripts, or published papers
         </div>
       </label>
 
       <div className="pref-panel">
         <h3 className="pref-panel-title">Production preferences</h3>
         <p className="pref-panel-desc">
-          Set these before you submit. Our team uses them to produce your video —
+          Set these before you submit. Our team uses them to produce your video, and
           it will show up in your private library when ready.
         </p>
 

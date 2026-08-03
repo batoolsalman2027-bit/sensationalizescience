@@ -71,22 +71,6 @@ export const PRICING_PLANS: PricingPlan[] = [
       "4K export",
     ],
   },
-  {
-    id: "enterprise",
-    name: "Enterprise",
-    blurb: "For institutions and publishers.",
-    monthly: null,
-    yearly: null,
-    cta: { label: "Contact Sales", href: "/enterprise/contact-sales" },
-    features: [
-      "Unlimited videos",
-      "Bulk video generation",
-      "SSO and advanced security",
-      "Custom branding & templates",
-      "API access",
-      "Dedicated support",
-    ],
-  },
 ];
 
 export function getPlan(planId: string) {
@@ -112,17 +96,17 @@ export interface ComparisonRow {
 }
 
 export const COMPARISON_ROWS: ComparisonRow[] = [
-  { feature: "Videos per month", values: { free: "1 free", creator: "30", lab: "150", enterprise: "Unlimited" } },
-  { feature: "Max resolution", values: { free: "720p", creator: "1080p", lab: "4K", enterprise: "4K" } },
-  { feature: "Watermark-free", values: { free: true, creator: true, lab: true, enterprise: true } },
-  { feature: "Premium voices", values: { free: false, creator: true, lab: true, enterprise: true } },
-  { feature: "Team workspace", values: { free: false, creator: false, lab: true, enterprise: true } },
-  { feature: "Brand customization", values: { free: false, creator: false, lab: true, enterprise: true } },
-  { feature: "Multiple languages", values: { free: false, creator: false, lab: true, enterprise: true } },
-  { feature: "Bulk generation", values: { free: false, creator: false, lab: false, enterprise: true } },
-  { feature: "API access", values: { free: false, creator: false, lab: false, enterprise: true } },
-  { feature: "SSO & security controls", values: { free: false, creator: false, lab: false, enterprise: true } },
-  { feature: "Support", values: { free: "Community", creator: "Email", lab: "Priority", enterprise: "Dedicated" } },
+  { feature: "Videos per month", values: { free: "1 free", creator: "30", lab: "150" } },
+  { feature: "Max resolution", values: { free: "720p", creator: "1080p", lab: "4K" } },
+  { feature: "Watermark-free", values: { free: true, creator: true, lab: true } },
+  { feature: "Premium voices", values: { free: false, creator: true, lab: true } },
+  { feature: "Team workspace", values: { free: false, creator: false, lab: true } },
+  { feature: "Brand customization", values: { free: false, creator: false, lab: true } },
+  { feature: "Multiple languages", values: { free: false, creator: false, lab: true } },
+  { feature: "Bulk generation", values: { free: false, creator: false, lab: false } },
+  { feature: "API access", values: { free: false, creator: false, lab: false } },
+  { feature: "SSO & security controls", values: { free: false, creator: false, lab: false } },
+  { feature: "Support", values: { free: "Community", creator: "Email", lab: "Priority" } },
 ];
 
 export const PRICING_FAQ = [
@@ -136,14 +120,10 @@ export const PRICING_FAQ = [
   },
   {
     q: "Do you offer academic discounts?",
-    a: "Yes — students and verified academic labs qualify for reduced pricing. Contact us to get set up.",
+    a: "Yes. Students and verified academic labs qualify for reduced pricing. Contact us to get set up.",
   },
   {
     q: "What happens if I hit my monthly limit?",
     a: "You can wait for your next cycle or upgrade instantly to keep creating.",
-  },
-  {
-    q: "Is Enterprise pricing custom?",
-    a: "Yes. Enterprise plans are tailored to volume, security, and branding needs. Contact sales for a quote.",
   },
 ];

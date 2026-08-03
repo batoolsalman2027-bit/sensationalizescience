@@ -3,7 +3,7 @@ import Container from "@/components/Container";
 import Reveal from "@/components/Reveal";
 import { GALLERY_CATEGORIES } from "@/config/site";
 
-export const metadata: Metadata = { title: "Gallery — Sensationalize Science" };
+export const metadata: Metadata = { title: "Gallery · Sensationalize Science" };
 
 export default function GalleryPage() {
   return (
@@ -14,7 +14,7 @@ export default function GalleryPage() {
             <span className="eyebrow">Gallery</span>
             <h1 className="section-title">Example videos</h1>
             <p className="section-desc">
-              Real papers, reimagined as short explainer videos — grouped by field of science.
+              Real papers, reimagined as short explainer videos, grouped by field of science.
             </p>
           </div>
         </Reveal>

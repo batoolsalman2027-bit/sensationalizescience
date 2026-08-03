@@ -4,7 +4,7 @@ import Container from "@/components/Container";
 import CreateRequestForm from "@/components/CreateRequestForm";
 
 export const metadata: Metadata = {
-  title: "Create — Sensationalize Science",
+  title: "Create · Sensationalize Science",
   description:
     "Upload your paper and production preferences. Your finished publication-quality video appears in My Library on your account.",
 };

@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import { listProjects } from "@/lib/figures/store";
 import { getSessionUser } from "@/lib/auth";
 
-export const metadata: Metadata = { title: "Projects — Sensationalize Science" };
+export const metadata: Metadata = { title: "Projects · Sensationalize Science" };
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Container from "@/components/Container";
 import ProjectIntake from "@/components/figures/ProjectIntake";
 
-export const metadata: Metadata = { title: "New project — Sensationalize Science" };
+export const metadata: Metadata = { title: "New project · Sensationalize Science" };
 
 export default function NewProjectPage() {
   return (

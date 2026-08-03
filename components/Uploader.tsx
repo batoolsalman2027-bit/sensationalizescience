@@ -109,14 +109,14 @@ export default function Uploader() {
       const params = new URLSearchParams(window.location.search);
 
       if (params.get("checkout") === "success") {
-        setCheckoutNote("Payment received — your plan credits will appear in a few seconds.");
+        setCheckoutNote("Payment received. Your plan credits will appear in a few seconds.");
         refreshBilling();
         window.history.replaceState({}, "", "/create");
         setTimeout(() => refreshBilling(), 2500);
         return;
       }
       if (params.get("checkout") === "cancel") {
-        setCheckoutNote("Checkout canceled — no charge was made.");
+        setCheckoutNote("Checkout canceled. No charge was made.");
         setShowPaywall(true);
         window.history.replaceState({}, "", "/create");
         return;
@@ -239,7 +239,7 @@ export default function Uploader() {
     if (billing.authenticated) {
       return `${billing.credits} video credit${billing.credits === 1 ? "" : "s"} · ${billing.email}`;
     }
-    return "Free video used — choose a plan to continue";
+    return "Free video used. Choose a plan to continue";
   })();
 
   return (
@@ -326,7 +326,7 @@ export default function Uploader() {
           {fileName ?? "Drop your paper here, or click to upload"}
         </div>
         <div style={{ color: "var(--ink-soft)", fontSize: 14.5 }}>
-          Text-based PDFs only — scanned papers need OCR first
+          Text-based PDFs only. Scanned papers need OCR first
         </div>
       </label>
 
@@ -342,7 +342,7 @@ export default function Uploader() {
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 24, justifyContent: "center" }}>
           <span className="spinner" />
           <p style={{ color: "var(--ink-soft)", margin: 0, textAlign: "center" }}>
-            Illustrating, narrating and animating each scene locally — this can
+            Illustrating, narrating and animating each scene locally; this can
             take a few minutes, longer on the very first run…
           </p>
         </div>
@@ -366,7 +366,7 @@ export default function Uploader() {
               lineHeight: 1.55,
             }}
           >
-            You&apos;ve used your free video. Pick Creator or Lab to unlock more generations —
+            You&apos;ve used your free video. Pick Creator or Lab to unlock more generations, and
             payment goes to Sensationalize Science and covers API costs.
           </p>
           {error && (
@@ -424,7 +424,7 @@ export default function Uploader() {
                     <div style={{ color: "var(--blue)", marginTop: 2, fontSize: 12, fontWeight: 600 }}>
                       AI remake of {s.figureId}
                       {script.figures?.find((f) => f.id === s.figureId)?.caption
-                        ? ` — ${script.figures.find((f) => f.id === s.figureId)!.caption.slice(0, 80)}`
+                        ? ` · ${script.figures.find((f) => f.id === s.figureId)!.caption.slice(0, 80)}`
                         : ""}
                     </div>
                   )}

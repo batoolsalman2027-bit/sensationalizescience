@@ -1,13 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
-import { MAIN_NAV } from "@/config/navigation";
 import { SITE } from "@/config/site";
-
-/** Pull a top-level nav item's flattened leaves for a footer column. */
-function leavesOf(label: string) {
-  const item = MAIN_NAV.find((i) => i.label === label);
-  return (item?.sections ?? []).flatMap((s) => s.items);
-}
 
 const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] = [
   {
@@ -28,15 +21,9 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     heading: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Careers", href: "/resources/careers" },
-      { label: "Blog", href: "/resources/blog" },
       { label: "Contact", href: "/resources/contact" },
       { label: "FAQ", href: "/faq" },
     ],
-  },
-  {
-    heading: "Enterprise",
-    links: [...leavesOf("Enterprise").slice(0, 5), { label: "Contact Sales", href: "/enterprise/contact-sales" }],
   },
 ];
 
@@ -66,11 +53,6 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} {SITE.name}. All rights reserved.</span>
-          <span style={{ display: "flex", gap: 18 }}>
-            <Link href="/resources/privacy">Privacy</Link>
-            <Link href="/resources/terms">Terms</Link>
-            <Link href="/resources/security">Security</Link>
-          </span>
         </div>
       </div>
     </footer>

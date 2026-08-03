@@ -48,7 +48,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
       "Total dendritic input stays remarkably stable",
     ],
     script:
-      "Your brain stores memories at synapses — tiny connections between neurons. But synapses constantly appear and vanish. So how do memories last? (placeholder script excerpt)",
+      "Your brain stores memories at synapses, the tiny connections between neurons. But synapses constantly appear and vanish. So how do memories last? (placeholder script excerpt)",
   },
   {
     id: "crispr-base-editing",

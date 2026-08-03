@@ -3,7 +3,7 @@ import Container from "@/components/Container";
 import OpsInbox from "@/components/OpsInbox";
 
 export const metadata: Metadata = {
-  title: "Operator inbox — Sensationalize Science",
+  title: "Operator inbox · Sensationalize Science",
   robots: { index: false, follow: false },
 };
 

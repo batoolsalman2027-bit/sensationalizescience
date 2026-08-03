@@ -160,7 +160,7 @@ export default function HomeHero() {
   };
 
   return (
-    <section className="hh" aria-label="Sensationalize Science — Scientific papers, reimagined as video">
+    <section className="hh" aria-label="Sensationalize Science: Scientific papers, reimagined as video">
       <div className="hh-bg" aria-hidden="true" style={{ opacity: 1 - progress * 0.55 }}>
         <video
           ref={bgRef}

@@ -120,7 +120,7 @@ export default function ProjectIntake() {
             <label htmlFor="paper-upload" className="intake-cta">
               Choose a PDF
             </label>
-            <p>or drag it here — text-based PDFs only, scans need OCR first</p>
+            <p>or drag it here. Text-based PDFs only, scans need OCR first</p>
           </>
         )}
       </div>

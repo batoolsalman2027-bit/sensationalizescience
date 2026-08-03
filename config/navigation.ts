@@ -44,72 +44,12 @@ export const MAIN_NAV: NavItem[] = [
   {
     label: "Resources",
     href: "/resources",
-    layout: "columns",
+    layout: "list",
     sections: [
       {
-        heading: "Learn",
         items: [
-          { label: "Blog", href: "/resources/blog" },
-          { label: "Science Communication Guide", href: "/resources/science-communication-guide" },
-          { label: "Tutorials", href: "/resources/tutorials" },
-          { label: "Creator Academy", href: "/resources/creator-academy" },
           { label: "FAQ", href: "/faq" },
-        ],
-      },
-      {
-        heading: "Company",
-        items: [
-          { label: "About", href: "/about" },
-          { label: "Careers", href: "/resources/careers" },
           { label: "Contact", href: "/resources/contact" },
-          { label: "Press", href: "/resources/press" },
-        ],
-      },
-      {
-        heading: "Trust",
-        items: [
-          { label: "Security", href: "/resources/security" },
-          { label: "Privacy", href: "/resources/privacy" },
-          { label: "Terms", href: "/resources/terms" },
-          { label: "Trust Center", href: "/resources/trust-center" },
-        ],
-      },
-      {
-        heading: "Community",
-        items: [
-          { label: "Research Spotlight", href: "/resources/research-spotlight" },
-          { label: "Featured Labs", href: "/resources/featured-labs" },
-          { label: "Student Program", href: "/resources/student-program" },
-          { label: "Creator Program", href: "/resources/creator-program" },
-        ],
-      },
-      {
-        heading: "Developers",
-        items: [
-          { label: "API", href: "/resources/api" },
-          { label: "Documentation", href: "/resources/documentation" },
-          { label: "Integrations", href: "/resources/integrations" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Enterprise",
-    href: "/enterprise",
-    layout: "grid",
-    sections: [
-      {
-        items: [
-          { label: "Universities", href: "/enterprise/universities", description: "Scale science communication across campus." },
-          { label: "Research Institutes", href: "/enterprise/research-institutes", description: "Share findings with the public faster." },
-          { label: "Scientific Journals", href: "/enterprise/scientific-journals", description: "Video abstracts for every publication." },
-          { label: "Publishers", href: "/enterprise/publishers", description: "Turn catalogs into engaging shorts." },
-          { label: "Biotech and Pharma", href: "/enterprise/biotech-and-pharma", description: "Communicate R&D with clarity." },
-          { label: "Enterprise Security", href: "/enterprise/enterprise-security", description: "SSO, audit logs, and data controls." },
-          { label: "Bulk Video Generation", href: "/enterprise/bulk-video-generation", description: "Generate hundreds of videos at once." },
-          { label: "Custom Branding", href: "/enterprise/custom-branding", description: "Your logo, colors, and templates." },
-          { label: "API Access", href: "/enterprise/api-access", description: "Automate video creation via API." },
-          { label: "Contact Sales", href: "/enterprise/contact-sales", description: "Talk to our team about a plan." },
         ],
       },
     ],

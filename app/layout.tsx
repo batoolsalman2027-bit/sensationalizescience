@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScienceBackground from "@/components/ScienceBackground";
 import { SITE } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: `${SITE.name} — ${SITE.tagline}`,
+  title: `${SITE.name} · ${SITE.tagline}`,
   description:
     "Turn scientific papers into short-form animated videos with clear AI voiceovers for TikTok, Reels, Shorts, LinkedIn, and more.",
 };
@@ -28,6 +29,7 @@ export default function RootLayout({
       </head>
       <body>
         <ScienceBackground />
+        <AnnouncementBar />
         <Navbar />
         <main>{children}</main>
         <Footer />

@@ -13,8 +13,8 @@ export const SITE = {
  * anywhere delivery time is quoted so the promise can be changed in one place.
  */
 export const TURNAROUND = {
-  businessDays: "3–5",
-  label: "3–5 business days",
+  businessDays: "3 to 5",
+  label: "3 to 5 business days",
 };
 
 export const HERO = {
@@ -38,7 +38,7 @@ export const WHY_IT_MATTERS = [
   {
     icon: "Users",
     title: "Reach audiences beyond academia",
-    body: "Meet people where they scroll — TikTok, Reels, Shorts, and LinkedIn.",
+    body: "Meet people where they scroll: TikTok, Reels, Shorts, and LinkedIn.",
   },
   {
     icon: "Clock",
@@ -132,18 +132,12 @@ export const PRODUCTION_WORKFLOW: WorkflowStage[] = [
 ];
 
 export const CORE_FEATURES = [
-  { icon: "FileText", title: "Scientific script generation", body: "Accurate, readable narration grounded in your paper." },
-  { icon: "Sparkles", title: "Research-specific animations", body: "Visuals that reflect the actual science." },
-  { icon: "Mic", title: "Natural voiceovers", body: "Clear AI narration that sounds human." },
-  { icon: "Captions", title: "Automatic captions", body: "Word-synced captions ready for silent autoplay." },
-  {
-    icon: "Share2",
-    title: "Social Media",
-    body: "Connected to multiple social media to post directly, no wait.",
-  },
-  { icon: "Quote", title: "Citation-first", body: "Every video opens with the full citation: title, authors, DOI." },
-  { icon: "Image", title: "Figures straight from your paper", body: "Your actual figures extracted and rebuilt for video." },
-  { icon: "UserCheck", title: "Expert review before delivery", body: "A team with a scientific background, performs rigorous quality checks every video." },
+  { icon: "Sparkles", title: "Research-specific animations", body: "Visuals that reflect the actual science.", image: "/carousel/feature-2.jpg" },
+  { icon: "Mic", title: "Natural voiceovers", body: "Clear AI narration that sounds human.", image: "/carousel/feature-3.jpg" },
+  { icon: "Captions", title: "Automatic captions", body: "Word-synced captions ready for silent autoplay.", image: "/carousel/feature-4.jpg" },
+  { icon: "Quote", title: "Citation-first", body: "Every video opens with the full citation: title, authors, DOI.", image: "/carousel/feature-6.jpg" },
+  { icon: "Image", title: "Figures straight from your paper", body: "Your actual figures extracted and rebuilt for video.", image: "/carousel/feature-7.jpg" },
+  { icon: "UserCheck", title: "Expert review before delivery", body: "A team with a scientific background, performs rigorous quality checks every video.", image: "/carousel/feature-8.jpg" },
 ];
 
 export const BUILT_FOR = [
@@ -192,11 +186,11 @@ export const FINAL_CTA = {
 
 export const ABOUT = {
   mission:
-    "Make world-class science understandable — and watchable — for everyone, not just other experts.",
+    "Make world-class science understandable, and watchable, for everyone, not just other experts.",
   problem:
     "Most research never reaches beyond a small circle of specialists. Findings that could inform, inspire, or help people stay locked inside PDFs. Turning a paper into engaging video today takes skills and hours most scientists don't have.",
   vision:
-    "A world where every important finding has a clear, accurate, publication-quality video — produced with the people who did the work, and approved by them before it ships.",
+    "A world where every important finding has a clear, accurate, publication-quality video, produced with the people who did the work and approved by them before it ships.",
   // PLACEHOLDER founding story — replace with the real story.
   story:
     "Sensationalize Science started when a group of researchers and builders kept watching great papers disappear into obscurity. This is placeholder founding-story copy to be replaced.",

@@ -3,9 +3,9 @@ import Container from "@/components/Container";
 import Library from "@/components/Library";
 
 export const metadata: Metadata = {
-  title: "My Library — Sensationalize Science",
+  title: "My Library · Sensationalize Science",
   description:
-    "Your private library of publication-quality research videos — visible only on your account.",
+    "Your private library of publication-quality research videos, visible only on your account.",
 };
 
 export default function LibraryPage() {
@@ -17,7 +17,7 @@ export default function LibraryPage() {
             My Library
           </h1>
           <p className="section-desc" style={{ maxWidth: "none" }}>
-            Videos produced for your account. Private to you — other users cannot see them.
+            Videos produced for your account. Private to you, so other users cannot see them.
           </p>
         </div>
         <Library />

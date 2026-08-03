@@ -1,5 +1,5 @@
 /**
- * FAQ content, grouped by category. Edit here — the FAQ page and the home FAQ
+ * FAQ content, grouped by category. Edit here. The FAQ page and the home FAQ
  * section both read from this file.
  */
 
@@ -10,59 +10,105 @@ export interface FaqGroup {
 
 export const FAQ_GROUPS: FaqGroup[] = [
   {
-    category: "General",
+    category: "The basics",
     questions: [
-      { q: "What is Sensationalize Science?", a: "A tool that turns scientific papers into short, animated, narrated videos ready for TikTok, Reels, Shorts, LinkedIn, and more." },
-      { q: "Who is it for?", a: "Researchers, labs, universities, journals, biotech companies, and science creators who want their work seen beyond academia." },
-      { q: "Do I need any video editing skills?", a: "No. Upload a paper and you get a finished video. You can optionally fine-tune everything before export." },
+      {
+        q: "What is Sensationalize Science?",
+        a: "Sensationalize Science turns a research paper into a short, structured video. You upload a PDF; you get back a narrated video that moves through the paper's motivation, methods, results, and significance, with visuals from the paper's own figures and data.",
+      },
+      {
+        q: "Wait, “sensationalize”? Isn't that the thing science communication is supposed to avoid?",
+        a: "Fair question, and the name is deliberate. “Sensational” comes from sensus, of the senses. We're not inflating your findings, we're making them sensory. The claims in your video stay exactly as careful as the claims in your paper.",
+      },
+      {
+        q: "Who is it for?",
+        a: "Researchers who want a publication-quality video abstract without hiring a production team.",
+      },
+      {
+        q: "What do I actually get?",
+        a: "An MP4 (60 to 120 seconds), the narration script, and a video that has undergone quality control checks from our team at Sensationalize Science.",
+      },
+      {
+        q: "How long does it take?",
+        a: "Once you upload your PDF, expect a 2 to 3 business day turnaround for a typical paper. This ensures our quality control team has time to provide you with the best video possible.",
+      },
     ],
   },
   {
-    category: "Scientific accuracy",
+    category: "How it works",
     questions: [
-      { q: "How accurate are the generated videos?", a: "Scripts are grounded in your paper's actual content. You review and approve the script, visuals, terminology, and citations before anything is exported." },
-      { q: "Can I edit the script?", a: "Yes. You can edit the narration line by line and adjust wording, pacing, and emphasis." },
-      { q: "Does it invent findings?", a: "No. The system is built to summarize what's in your paper. You remain in control and can correct anything before publishing." },
+      {
+        q: "What are the steps?",
+        a: "Four. We parse the PDF, including its text, figures, tables, and captions. Our AI model then drafts a scene-by-scene script structured around the paper's own sections. We generate or adapt a visual for each scene. Then we assemble narration, motion, and captions into the finished video.",
+      },
+      {
+        q: "Can I edit it?",
+        a: "Yes. If you are not happy with the results of your first video, you can reach out to the team at Sensationalize Science, and they will re-render scenes of your choosing.",
+      },
     ],
   },
   {
-    category: "Video creation",
+    category: "Accuracy",
     questions: [
-      { q: "How long does it take?", a: "Most videos are ready in a few minutes." },
-      { q: "How long are the videos?", a: "Short-form by default — typically under 60 seconds — and tuned for vertical feeds." },
-      { q: "Can I customize the visuals and voice?", a: "Yes. Choose voices, adjust the storyboard, and apply your brand." },
+      {
+        q: "How do you keep it from making claims the paper doesn't make?",
+        a: "Each scene is traceable back to the section it came from, so you can check any line against its source in a few seconds.",
+      },
+      {
+        q: "Does the video cite the paper?",
+        a: "Yes. The full citation and DOI appear on screen, and in the description text we generate alongside the video.",
+      },
     ],
   },
   {
-    category: "Ownership and copyright",
+    category: "Your paper, your rights",
     questions: [
-      { q: "Who owns the videos I create?", a: "You do. Videos you generate are yours to use and publish." },
-      { q: "Can I use them commercially?", a: "Yes, on paid plans. Check your plan for watermark and licensing details." },
-      { q: "What about the underlying paper's rights?", a: "You are responsible for ensuring you have the rights to the paper content you upload." },
+      {
+        q: "Do I own the video?",
+        a: "Yes.",
+      },
+      {
+        q: "Can I upload a paper I didn't write?",
+        a: "Only if you have the right to. Open-access papers under a CC license are generally fine with attribution. Rights to what you upload are your responsibility.",
+      },
+      {
+        q: "Is my unpublished work safe here?",
+        a: "Uploaded papers are private to your account, and are never published to our public gallery unless you give permission.",
+      },
+      {
+        q: "Can I use this on a manuscript under review?",
+        a: "Yes, and many people build the video during review so it's ready the day the paper lands.",
+      },
     ],
   },
   {
-    category: "Privacy and unpublished research",
+    category: "Practical",
     questions: [
-      { q: "Is my unpublished research safe?", a: "Your uploads are private to your account. We do not publish or share your content." },
-      { q: "Do you train models on my papers?", a: "No — your uploaded papers are not used to train models." },
-      { q: "Can I delete my data?", a: "Yes. You can delete your uploads and generated videos at any time." },
+      {
+        q: "What does it cost?",
+        a: "Your first video is generated for free. After that, each video costs $100.",
+      },
+      {
+        q: "Are captions included?",
+        a: "Yes, captions are included so the video works on mute and with screen readers.",
+      },
+      {
+        q: "Where can I post the videos?",
+        a: "Anywhere: journal supplementary material, conference sites, lab pages, LinkedIn, X, YouTube, TikTok. You can choose to generate the video in three different aspect ratios.",
+      },
     ],
   },
   {
-    category: "Pricing",
+    category: "Support",
     questions: [
-      { q: "Is there a free plan?", a: "Yes. The Free plan lets you try it on a few papers each month." },
-      { q: "Can I change plans?", a: "Yes, upgrade or downgrade anytime; changes apply next cycle." },
-      { q: "Do you offer academic discounts?", a: "Yes, for students and verified academic labs. Contact us to set it up." },
-    ],
-  },
-  {
-    category: "Exporting and publishing",
-    questions: [
-      { q: "What formats can I export?", a: "Vertical and square formats sized for TikTok, Reels, Shorts, LinkedIn, and YouTube." },
-      { q: "Can I download the raw video file?", a: "Yes. Download an MP4 and post it anywhere." },
-      { q: "Do you publish directly to platforms?", a: "Direct publishing is on our roadmap; for now you export and upload." },
+      {
+        q: "Something came out wrong. What now?",
+        a: "Contact us at batoolsalman2027@u.northwestern.edu.",
+      },
+      {
+        q: "Question not covered?",
+        a: "Contact us at batoolsalman2027@u.northwestern.edu.",
+      },
     ],
   },
 ];
