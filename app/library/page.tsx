@@ -12,11 +12,11 @@ export default function LibraryPage() {
   return (
     <section className="section" style={{ paddingTop: 48 }}>
       <Container>
-        <div style={{ marginBottom: 28 }}>
+        <div style={{ marginBottom: 28, textAlign: "center" }}>
           <h1 className="section-title" style={{ fontSize: "clamp(30px, 5vw, 52px)" }}>
             My Library
           </h1>
-          <p className="section-desc" style={{ maxWidth: "none" }}>
+          <p className="section-desc" style={{ maxWidth: "none", marginLeft: "auto", marginRight: "auto" }}>
             Videos produced for your account. Private to you, so other users cannot see them.
           </p>
         </div>
