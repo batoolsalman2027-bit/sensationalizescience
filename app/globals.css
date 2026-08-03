@@ -621,6 +621,7 @@ body > main {
 .toggle-btn.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-xs); }
 
 .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+.price-grid-packs { grid-template-columns: repeat(3, 1fr); }
 .price-card {
   background: var(--card); border: 1px solid var(--line); border-radius: var(--r-xl);
   padding: 28px; display: flex; flex-direction: column; box-shadow: var(--shadow-xs);
@@ -635,9 +636,28 @@ body > main {
 }
 .price-amount { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; font-size: 46px; line-height: 1; margin: 8px 0 2px; }
 .price-per { color: var(--ink-soft); font-size: 13.5px; }
+.price-save { color: var(--blue); font-size: 13px; font-weight: 700; margin-top: 4px; }
 .price-features { list-style: none; padding: 0; margin: 22px 0; display: flex; flex-direction: column; gap: 11px; flex: 1; }
 .price-features li { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; color: var(--ink); }
 .price-features li svg { color: var(--blue); flex-shrink: 0; margin-top: 1px; }
+
+/* ---------- credit includes (replaces plan comparison table) ---------- */
+.credit-includes {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--card);
+  padding: 28px 24px;
+}
+.credit-includes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+.credit-includes-heading {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
 
 /* ---------- comparison table ---------- */
 .compare-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--card); }
@@ -2213,6 +2233,7 @@ body > main {
 }
 @media (max-width: 760px) {
   .grid-3, .grid-4, .price-grid { grid-template-columns: repeat(2, 1fr); }
+  .credit-includes-grid { grid-template-columns: 1fr; }
   .split { grid-template-columns: 1fr; }
   .section { padding: 68px 0; }
 }

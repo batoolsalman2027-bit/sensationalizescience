@@ -17,7 +17,8 @@ export default function PricingPage() {
             Simple pricing<span className="blue">for every scientist</span>
           </h1>
           <p className="subhead">
-            Start free. Upgrade when you&apos;re ready to publish more. Prices shown are placeholders.
+            One credit equals one finished video. Start free, then buy credits when you&apos;re
+            ready — they never expire.
           </p>
         </Container>
       </section>
@@ -30,7 +31,7 @@ export default function PricingPage() {
 
       <section className="section">
         <Container>
-          <SectionHeader eyebrow="Compare" title="Compare plans" />
+          <SectionHeader eyebrow="Included" title="What every credit includes" />
           <ComparisonTable />
         </Container>
       </section>
