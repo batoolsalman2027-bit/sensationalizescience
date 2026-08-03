@@ -141,10 +141,25 @@ const SCHEMA = `
     updatedAt INTEGER NOT NULL
   );
 
+  CREATE TABLE IF NOT EXISTS contact_submissions (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    message TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'new',
+    userId TEXT,
+    internalNotes TEXT,
+    createdAt INTEGER NOT NULL,
+    resolvedAt INTEGER
+  );
+
   CREATE INDEX IF NOT EXISTS idx_figures_project ON figures (projectId);
   CREATE INDEX IF NOT EXISTS idx_provenance_project ON visual_provenance (projectId);
   CREATE INDEX IF NOT EXISTS idx_review_project ON review_events (projectId, createdAt);
   CREATE INDEX IF NOT EXISTS idx_video_requests_created ON video_requests (createdAt DESC);
+  CREATE INDEX IF NOT EXISTS idx_contact_created ON contact_submissions (createdAt DESC);
+  CREATE INDEX IF NOT EXISTS idx_contact_status ON contact_submissions (status);
 `;
 
 function openDb(): Database.Database {

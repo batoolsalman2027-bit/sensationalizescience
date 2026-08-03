@@ -86,7 +86,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
     questions: [
       {
         q: "What does it cost?",
-        a: "Your first video is generated for free. After that, each video costs $100.",
+        a: "Your first video is free. After that, credits start at $100 per video, with discounts on larger packs. Credits never expire.",
       },
       {
         q: "Are captions included?",
@@ -103,11 +103,11 @@ export const FAQ_GROUPS: FaqGroup[] = [
     questions: [
       {
         q: "Something came out wrong. What now?",
-        a: "Contact us at batoolsalman2027@u.northwestern.edu.",
+        a: "Use the contact form at the bottom of this page (or on Contact) and choose Bug / Quality issue. We'll reply within 2 business days.",
       },
       {
         q: "Question not covered?",
-        a: "Contact us at batoolsalman2027@u.northwestern.edu.",
+        a: "Scroll to the contact form below and send us a message. We reply within 2 business days.",
       },
     ],
   },

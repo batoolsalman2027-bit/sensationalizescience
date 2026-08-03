@@ -1,34 +1,26 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Container from "@/components/Container";
-import Button from "@/components/Button";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = { title: "Contact · Sensationalize Science" };
-
-const EMAIL = "batoolsalman2027@u.northwestern.edu";
 
 export default function ContactPage() {
   return (
     <section className="page-hero">
-      <Container>
+      <Container style={{ maxWidth: 640 }}>
         <h1 className="headline" style={{ fontSize: "clamp(40px, 7vw, 84px)" }}>
           Contact<span className="blue">we&apos;d love to hear from you</span>
         </h1>
         <p className="subhead">
-          Questions about a project, pricing, or a video that came out wrong? Reach the team directly
-          and we&apos;ll get back to you.
+          Questions about a project, pricing, bulk credits, or a video that came out wrong? Send a
+          message and we&apos;ll reply within 2 business days.
         </p>
-        <div className="hero-ctas">
-          <Button href={`mailto:${EMAIL}`} variant="blue" large>
-            Email us
-          </Button>
+        <div style={{ marginTop: 28 }}>
+          <Suspense fallback={null}>
+            <ContactForm />
+          </Suspense>
         </div>
-        <p style={{ color: "var(--ink-soft)", fontSize: 14, marginTop: 16 }}>
-          Or write to us at{" "}
-          <a href={`mailto:${EMAIL}`} style={{ color: "var(--blue)" }}>
-            {EMAIL}
-          </a>
-          .
-        </p>
       </Container>
     </section>
   );
