@@ -2502,3 +2502,92 @@ body > main {
    ========================================================================= */
 body.scroll-hero-active > main { padding-top: 0; }
 body.scroll-hero-active .site-header { display: none; }
+
+/* =========================================================================
+   Gallery — example videos grouped by field of science
+   ========================================================================= */
+.gallery-category { margin-top: 56px; }
+.gallery-category:first-of-type { margin-top: 8px; }
+
+.gallery-category-title {
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* One card now; wraps cleanly to 2–3 across as more videos are added. */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
+  gap: 28px;
+}
+
+.gallery-card {
+  margin: 0;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease), border-color 0.28s var(--ease);
+}
+.gallery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--line-strong);
+}
+
+.gallery-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--deep);
+  border-bottom: 1px solid var(--line);
+}
+
+.gallery-card-body { padding: 22px 24px 24px; }
+.gallery-card-title {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.gallery-card-caption {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+  margin: 0;
+  word-break: break-word;
+}
+
+.gallery-soon {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+.gallery-soon .tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill, 999px);
+  padding: 6px 13px;
+  flex: none;
+}

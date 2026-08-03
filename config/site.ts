@@ -208,3 +208,42 @@ export const ABOUT = {
     { name: "Placeholder Lead", role: "Head of Design" },
   ],
 };
+
+/* -------------------------------------------------------------------------- */
+/* Gallery — finished example videos, grouped by field of science.            */
+/* Add a new field of science by appending another category; add a video by   */
+/* appending to a category's `videos`. Card title is the paper title; caption */
+/* is authors + DOI. Media lives in /public/gallery.                          */
+/* -------------------------------------------------------------------------- */
+
+export type GalleryVideo = {
+  /** Paper title, shown as the card heading. */
+  title: string;
+  /** Authors and DOI, shown as the card caption. */
+  caption: string;
+  /** Path under /public to the .mp4. */
+  src: string;
+  /** Path under /public to the poster image shown before playback. */
+  poster: string;
+};
+
+export type GalleryCategory = {
+  /** Field of science, e.g. "Clinical Medicine". */
+  category: string;
+  videos: GalleryVideo[];
+};
+
+export const GALLERY_CATEGORIES: GalleryCategory[] = [
+  {
+    category: "Clinical Medicine",
+    videos: [
+      {
+        title:
+          "Bone mesenchymal stem cells based on matrix hydrogels attenuate intervertebral disc degeneration by suppressing oxidative stress-induced ferroptosis",
+        caption: "Song Fu et al. · Scientific Reports (2025) · doi:10.1038/s41598-025-00278-x",
+        src: "/gallery/clinical-medicine-lumbar-spine.mp4",
+        poster: "/gallery/clinical-medicine-poster.jpg",
+      },
+    ],
+  },
+];
