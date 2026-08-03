@@ -54,9 +54,9 @@ export default function Home() {
         <Container>
           <Reveal>
             <span className="eyebrow">Pricing</span>
-            <h2 className="section-title">Start free. Scale when you publish more.</h2>
+            <h2 className="section-title">One credit. One finished video.</h2>
             <p className="section-desc" style={{ maxWidth: "none" }}>
-              Create your first video for free, with plans for creators, labs, and institutions when you&apos;re ready to upgrade
+              Start with one free video, then buy credits in packs — from a single paper to a full department. Credits never expire.
             </p>
             <div className="hero-ctas">
               <Button href="/pricing" variant="blue" large>See pricing</Button>

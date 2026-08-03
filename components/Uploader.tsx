@@ -56,7 +56,7 @@ export default function Uploader() {
   const [dragActive, setDragActive] = useState(false);
   const [billing, setBilling] = useState<BillingStatus | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [busyPlanId, setBusyPlanId] = useState<string | null>(null);
+  const [busyPackId, setBusyPackId] = useState<string | null>(null);
   const [checkoutNote, setCheckoutNote] = useState<string | null>(null);
   const [voiceId, setVoiceId] = useState(VOICES[0].id);
   const [aspectRatio, setAspectRatio] = useState<AspectRatioId>(ASPECT_RATIOS[0].id);
@@ -76,15 +76,15 @@ export default function Uploader() {
     }
   }, []);
 
-  const startPlanCheckout = useCallback(
-    async (planId: "creator" | "lab" | "credits", interval: "month" | "year" = "month") => {
-      setBusyPlanId(planId);
+  const startPackCheckout = useCallback(
+    async (packId: "single" | "starter" | "lab" | "department") => {
+      setBusyPackId(packId);
       setError(null);
       try {
         const res = await fetch("/api/billing/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ plan: planId, interval }),
+          body: JSON.stringify({ pack: packId }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? "Could not start checkout");
@@ -93,11 +93,11 @@ export default function Uploader() {
           return;
         }
         throw new Error("No checkout URL returned");
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Checkout failed");
         setShowPaywall(true);
       } finally {
-        setBusyPlanId(null);
+        setBusyPackId(null);
       }
     },
     []
@@ -109,7 +109,7 @@ export default function Uploader() {
       const params = new URLSearchParams(window.location.search);
 
       if (params.get("checkout") === "success") {
-        setCheckoutNote("Payment received. Your plan credits will appear in a few seconds.");
+        setCheckoutNote("Payment received. Your credits will appear in a few seconds.");
         refreshBilling();
         window.history.replaceState({}, "", "/create");
         setTimeout(() => refreshBilling(), 2500);
@@ -122,19 +122,21 @@ export default function Uploader() {
         return;
       }
 
-      const plan = params.get("plan");
-      const interval = params.get("interval") === "year" ? "year" : "month";
+      const pack = params.get("pack");
       if (
-        (plan === "creator" || plan === "lab") &&
+        (pack === "single" ||
+          pack === "starter" ||
+          pack === "lab" ||
+          pack === "department") &&
         status?.authenticated &&
         !pendingCheckoutRef.current
       ) {
         pendingCheckoutRef.current = true;
         window.history.replaceState({}, "", "/create");
-        await startPlanCheckout(plan, interval);
+        await startPackCheckout(pack);
       }
     })();
-  }, [refreshBilling, startPlanCheckout]);
+  }, [refreshBilling, startPackCheckout]);
 
   // ---- Stage 1: upload PDF -> get script ----
   const handleFile = useCallback(async (file: File) => {
@@ -366,8 +368,8 @@ export default function Uploader() {
               lineHeight: 1.55,
             }}
           >
-            You&apos;ve used your free video. Pick Creator or Lab to unlock more generations, and
-            payment goes to Sensationalize Science and covers API costs.
+            You&apos;ve used your free video. Buy a credit pack to keep generating —
+            one credit equals one finished video, and credits never expire.
           </p>
           {error && (
             <p style={{ color: "var(--error)", textAlign: "center", marginBottom: 16 }}>{error}</p>
@@ -384,8 +386,8 @@ export default function Uploader() {
             mode="checkout"
             authenticated={Boolean(billing?.authenticated)}
             freeUsed={Boolean(billing?.freeUsed)}
-            busyPlanId={busyPlanId}
-            onSelectPlan={(planId, interval) => startPlanCheckout(planId, interval)}
+            busyPackId={busyPackId}
+            onSelectPack={(packId) => startPackCheckout(packId)}
           />
         </section>
       )}

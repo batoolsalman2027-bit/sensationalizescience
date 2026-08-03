@@ -14,7 +14,7 @@ export default function LoginPage() {
             Log in
           </h1>
           <p style={{ color: "var(--ink-soft)", textAlign: "center", fontSize: 14, margin: "0 0 22px" }}>
-            Access your credits and keep generating research videos.
+            Access your credits and keep requesting research videos.
           </p>
           <Suspense fallback={null}>
             <AuthForm mode="login" />

@@ -7,11 +7,12 @@ import {
   type SessionUser,
 } from "./auth";
 
-/** Credits granted per Stripe pack purchase. */
-export const CREDITS_PER_PACK = Number(process.env.STRIPE_CREDITS_PER_PACK ?? 5);
-/** Display price for UI (actual charge is the Stripe Price). */
+/** Display label for UI when credits are depleted. */
 export const CREDIT_PACK_LABEL =
-  process.env.STRIPE_CREDIT_PACK_LABEL ?? "$9.99 for 5 videos";
+  process.env.STRIPE_CREDIT_PACK_LABEL ?? "Credit packs from $100";
+
+/** @deprecated Prefer pack-specific credits from config/pricing. */
+export const CREDITS_PER_PACK = Number(process.env.STRIPE_CREDITS_PER_PACK ?? 5);
 
 /** Emails that can generate without spending credits (testers / owner). */
 function unlimitedEmails(): Set<string> {

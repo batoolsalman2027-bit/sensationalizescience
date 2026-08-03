@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { addCredits } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getStripe } from "@/lib/stripe";
-import { CREDITS_PER_PACK } from "@/lib/billing";
-import { getPlan } from "@/config/pricing";
+import { getPack } from "@/config/pricing";
 
 export const runtime = "nodejs";
 
@@ -14,7 +13,8 @@ function grantOnce(userId: string, credits: number, reason: string) {
 }
 
 /**
- * Stripe webhook — grant video credits after Checkout / invoice payment.
+ * Stripe webhook — grant video credits after one-time Checkout payment.
+ * Legacy subscription renewals remain handled for existing customers.
  */
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
@@ -30,31 +30,33 @@ export async function POST(req: NextRequest) {
   let event;
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
-  } catch (err: any) {
-    console.error("[stripe webhook] signature error", err?.message);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Invalid signature";
+    console.error("[stripe webhook] signature error", message);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as {
       id: string;
-      mode?: string;
       metadata?: {
         userId?: string;
         credits?: string;
         kind?: string;
+        pack?: string;
         plan?: string;
-        interval?: string;
       };
     };
 
     if (session.metadata?.kind === "credit_pack" && session.metadata.userId) {
-      const credits = Number(session.metadata.credits || CREDITS_PER_PACK);
+      const pack = session.metadata.pack ? getPack(session.metadata.pack) : undefined;
+      const credits = Number(
+        session.metadata.credits || (pack?.credits ?? 0)
+      );
       grantOnce(session.metadata.userId, credits, `stripe_credit_pack:${session.id}`);
     }
 
-    // First subscription invoice may also fire invoice.paid — we grant on checkout
-    // for immediate credit, and use invoice.paid only for renewals.
+    // Legacy subscription start (existing customers)
     if (session.metadata?.kind === "subscription" && session.metadata.userId) {
       const credits = Number(session.metadata.credits || 0);
       grantOnce(session.metadata.userId, credits, `stripe_sub_start:${session.id}`);
@@ -66,15 +68,16 @@ export async function POST(req: NextRequest) {
       id: string;
       billing_reason?: string | null;
       subscription?: string | { id: string } | null;
-      lines?: { data?: Array<{ price?: { id?: string; metadata?: Record<string, string> } }> };
     };
 
-    // Skip the first invoice — already handled via checkout.session.completed.
     if (invoice.billing_reason === "subscription_create") {
       return NextResponse.json({ received: true });
     }
 
-    if (invoice.billing_reason !== "subscription_cycle" && invoice.billing_reason !== "subscription_update") {
+    if (
+      invoice.billing_reason !== "subscription_cycle" &&
+      invoice.billing_reason !== "subscription_update"
+    ) {
       return NextResponse.json({ received: true });
     }
 
@@ -90,8 +93,8 @@ export async function POST(req: NextRequest) {
     const planId = sub.metadata?.plan;
     if (!userId || !planId) return NextResponse.json({ received: true });
 
-    const plan = getPlan(planId);
-    const perMonth = Number(sub.metadata?.creditsPerMonth || plan?.creditsPerMonth || 0);
+    // Legacy: old Creator/Lab subscription renewals
+    const perMonth = Number(sub.metadata?.creditsPerMonth || 0);
     const interval = sub.items.data[0]?.price?.recurring?.interval;
     const credits = interval === "year" ? perMonth * 12 : perMonth;
     grantOnce(userId, credits, `stripe_invoice:${invoice.id}`);

@@ -13,12 +13,22 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const [busy, setBusy] = useState(false);
 
   function destinationAfterAuth() {
-    const plan = search.get("plan");
-    const interval = search.get("interval") === "year" ? "year" : "month";
+    const pack = search.get("pack");
     const next = search.get("next") || "/create";
-    if (plan === "creator" || plan === "lab") {
-      const qs = new URLSearchParams({ plan, interval });
+    if (
+      pack === "single" ||
+      pack === "starter" ||
+      pack === "lab" ||
+      pack === "department"
+    ) {
+      const qs = new URLSearchParams({ pack });
       return `${next}?${qs.toString()}`;
+    }
+    // Legacy plan= query from old subscription CTAs
+    const plan = search.get("plan");
+    if (plan === "creator" || plan === "lab") {
+      const mapped = plan === "creator" ? "starter" : "lab";
+      return `${next}?pack=${mapped}`;
     }
     return next;
   }

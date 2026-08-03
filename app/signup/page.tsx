@@ -14,8 +14,8 @@ export default function SignupPage() {
             Create your account
           </h1>
           <p style={{ color: "var(--ink-soft)", textAlign: "center", fontSize: 14, margin: "0 0 22px" }}>
-            Your first video is free. Upgrade to Creator or Lab when you&apos;re ready, and payment goes
-            to Sensationalize Science and covers generation costs.
+            Your first video is free. Buy credits when you&apos;re ready — one credit
+            equals one finished video, and credits never expire.
           </p>
           <Suspense fallback={null}>
             <AuthForm mode="signup" />
