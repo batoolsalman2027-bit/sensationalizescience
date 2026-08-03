@@ -111,13 +111,16 @@ export default function PricingSection({
               </Link>
             );
           } else if (paid && authenticated && onSelectPack) {
+            const paidId = pack.id;
             cta = (
               <button
                 type="button"
                 className={`btn ${pack.featured ? "btn-blue" : "btn-primary"}`}
                 style={{ width: "100%" }}
                 disabled={Boolean(busyPackId)}
-                onClick={() => onSelectPack(pack.id)}
+                onClick={() => {
+                  if (isPaidPackId(paidId)) onSelectPack(paidId);
+                }}
               >
                 {busy ? "Opening Stripe…" : pack.cta.label}
               </button>
