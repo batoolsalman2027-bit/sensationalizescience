@@ -1,34 +1,48 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { X, ChevronRight, ArrowLeft } from "lucide-react";
 import Logo from "./Logo";
-import { MAIN_NAV, AUTH_NAV, type NavItem } from "@/config/navigation";
+import NavAccount from "./NavAccount";
+import { MAIN_NAV, type NavItem } from "@/config/navigation";
 import { SITE } from "@/config/site";
 
 export default function MobileMenu({ onClose }: { onClose: () => void }) {
   const [sub, setSub] = useState<NavItem | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Portal to <body> so iOS Safari doesn't trap position:fixed inside the
+  // header's backdrop-filter / border-radius containing block.
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Lock background scroll while open; Escape closes.
   useEffect(() => {
-    const prev = document.body.style.overflow;
+    const prevOverflow = document.body.style.overflow;
+    const prevTouch = document.body.style.touchAction;
     document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
+      document.body.style.touchAction = prevTouch;
       document.removeEventListener("keydown", onKey);
     };
   }, [onClose]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div className="mobile-overlay" role="dialog" aria-modal="true" aria-label="Menu">
       <div className="mobile-head">
         {sub ? (
-          <button className="mobile-back" onClick={() => setSub(null)} aria-label="Back">
+          <button type="button" className="mobile-back" onClick={() => setSub(null)} aria-label="Back">
             <ArrowLeft size={18} /> Back
           </button>
         ) : (
@@ -37,7 +51,7 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
             <span className="wordmark">{SITE.name}</span>
           </Link>
         )}
-        <button className="icon-btn" onClick={onClose} aria-label="Close menu">
+        <button type="button" className="icon-btn" onClick={onClose} aria-label="Close menu">
           <X size={22} />
         </button>
       </div>
@@ -66,7 +80,12 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
           <>
             {MAIN_NAV.map((item) =>
               item.sections ? (
-                <button key={item.label} className="mobile-row" onClick={() => setSub(item)}>
+                <button
+                  key={item.label}
+                  type="button"
+                  className="mobile-row"
+                  onClick={() => setSub(item)}
+                >
                   {item.label}
                   <ChevronRight size={20} strokeWidth={2} />
                 </button>
@@ -78,16 +97,12 @@ export default function MobileMenu({ onClose }: { onClose: () => void }) {
             )}
 
             <div className="mobile-cta-row">
-              <Link href={AUTH_NAV.login.href} className="btn btn-outline btn-lg" onClick={onClose}>
-                {AUTH_NAV.login.label}
-              </Link>
-              <Link href={AUTH_NAV.getStarted.href} className="btn btn-gray btn-lg" onClick={onClose}>
-                {AUTH_NAV.getStarted.label}
-              </Link>
+              <NavAccount variant="mobile" onNavigate={onClose} />
             </div>
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

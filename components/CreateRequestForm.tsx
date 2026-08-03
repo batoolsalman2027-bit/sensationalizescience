@@ -54,6 +54,9 @@ export default function CreateRequestForm() {
         setPrefs((p) => ({ ...p, contactEmail: d.email! }));
       }
       if (d.canGenerate) setShowPaywall(false);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("billing:refresh"));
+      }
       return d;
     } catch {
       return null;

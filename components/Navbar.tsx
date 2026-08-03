@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, Menu } from "lucide-react";
 import Logo from "./Logo";
 import MobileMenu from "./MobileMenu";
-import { MAIN_NAV, AUTH_NAV, type NavItem } from "@/config/navigation";
+import NavAccount from "./NavAccount";
+import { MAIN_NAV, type NavItem } from "@/config/navigation";
 import { SITE } from "@/config/site";
 
 function DropdownPanel({ item }: { item: NavItem }) {
@@ -148,12 +149,7 @@ export default function Navbar() {
           <div className="nav-spacer" />
 
           <div className="nav-cta-group">
-            <Link href={AUTH_NAV.login.href} className="btn btn-ghost">
-              {AUTH_NAV.login.label}
-            </Link>
-            <Link href={AUTH_NAV.getStarted.href} className="btn btn-gray">
-              {AUTH_NAV.getStarted.label}
-            </Link>
+            <NavAccount />
           </div>
 
           <button
@@ -161,9 +157,9 @@ export default function Navbar() {
             className="nav-toggle"
             aria-label="Open menu"
             aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen(true)}
+            onClick={() => setMobileOpen((v) => !v)}
           >
-            <Menu size={22} />
+            <Menu size={22} aria-hidden />
           </button>
         </nav>
       </div>

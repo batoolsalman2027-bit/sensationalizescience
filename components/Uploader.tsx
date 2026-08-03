@@ -70,6 +70,9 @@ export default function Uploader() {
       const data = (await res.json()) as BillingStatus;
       setBilling(data);
       if (data.canGenerate) setShowPaywall(false);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("billing:refresh"));
+      }
       return data;
     } catch {
       return null;
