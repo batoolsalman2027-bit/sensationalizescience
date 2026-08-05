@@ -240,4 +240,16 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
       },
     ],
   },
+  {
+    category: "Cancer Genomics",
+    videos: [
+      {
+        title:
+          "Multiplex single-cell chemical genomics reveals the kinase dependence of the response to targeted therapy",
+        caption: "McFaline-Figueroa et al. · Cell Genomics (2024) · doi:10.1016/j.xgen.2023.100487",
+        src: "/gallery/cancer-genomics-kinase-screen.mp4",
+        poster: "/gallery/cancer-genomics-poster.jpg",
+      },
+    ],
+  },
 ];

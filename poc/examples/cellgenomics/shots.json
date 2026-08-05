@@ -1,0 +1,162 @@
+{
+  "paper": {
+    "title": "Multiplex single-cell chemical genomics reveals the kinase dependence of the response to targeted therapy",
+    "firstAuthor": "McFaline-Figueroa",
+    "authorsDisplay": "McFaline-Figueroa et al.",
+    "journal": "Cell Genomics",
+    "year": "2024",
+    "doi": "10.1016/j.xgen.2023.100487",
+    "isPreprint": false
+  },
+  "shots": [
+    {
+      "id": "title",
+      "kind": "title",
+      "section": "title",
+      "durationSec": 2,
+      "narration": ""
+    },
+    {
+      "id": "s1",
+      "kind": "video",
+      "section": "intro",
+      "sectionLabel": "INTRODUCTION",
+      "seconds": 8,
+      "narration": "Glioblastoma is the deadliest brain cancer. Targeted drugs can hit it hard, and at first, they work.",
+      "klingPrompt": "Cinematic medical 3D render, a translucent human brain with a dense irregular glioblastoma tumor mass embedded in one hemisphere, surrounding brain tissue slowly turning translucent to reveal the tumor's rough vascularized surface growing more defined, the camera slowly pushing in toward the tumor, dark clinical studio void with soft volumetric top light and a faint warm rim, deep blue and teal palette, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, floating disconnected anatomy, cartoon CGI, neon, sci-fi hologram, lens flare, morphing, flicker"
+    },
+    {
+      "id": "s2",
+      "kind": "video",
+      "section": "intro",
+      "seconds": 8,
+      "narration": "But tumors adapt. Under the drug, most cancer cells die, yet a stubborn few hang on.",
+      "klingPrompt": "Phase-contrast microscopy footage, a dense field of cultured glioblastoma cells under drug treatment, most cells rounding up, shrinking and detaching from the substrate as debris drifts while a few cells remain stubbornly attached, locked-off camera at high magnification, even diffuse Kohler illumination, cool clinical grey-blue palette with a faint red cast on the dying cells, photoreal, shallow depth of field, 16:9",
+      "avoid": "text, numbers, labels, fluorescent dyes, cartoon explosions, glowing particles, morphing, flicker, duplicated identical cells"
+    },
+    {
+      "id": "s3",
+      "kind": "video",
+      "section": "intro",
+      "seconds": 6,
+      "narration": "The survivors rewire themselves and grow back. The question is which genes let them escape.",
+      "onscreen": "Which genes let cancer cells rewire around a drug?",
+      "klingPrompt": "Phase-contrast microscopy footage, a small cluster of surviving glioblastoma cells among cleared substrate, the cells spreading and beginning to divide again as one cell elongates and pinches into two, the camera pushing in slowly and steadily, even diffuse illumination, cool grey-blue palette with a restrained warm amber accent on the dividing cells, photoreal, high magnification, 16:9",
+      "avoid": "text, numbers, labels, glowing particles, cartoon, morphing, flicker, duplicated identical cells"
+    },
+    {
+      "id": "f1",
+      "kind": "figure",
+      "section": "methods",
+      "sectionLabel": "METHODS",
+      "figureLabel": "Figure 1A",
+      "sourcePage": 4,
+      "durationSec": 14,
+      "narration": "To find those genes, the team built sci-Plex-G-x-E, a platform that runs a genetic screen and a drug screen at the same time, inside single cells. Each cell carries a CRISPR perturbation and a drug exposure, and its full transcriptome is the readout."
+    },
+    {
+      "id": "s5",
+      "kind": "video",
+      "section": "methods",
+      "seconds": 8,
+      "narration": "They silenced each of 522 human kye-nay-siz with CRISPR across pooled cancer cells,",
+      "klingPrompt": "Macro benchtop laboratory footage, a fine pipette tip above a single well of a multiwell plate releasing a droplet of pink cell suspension that diffuses into the clear medium, then a gloved hand steadily withdrawing, locked-off camera at close range, bright even LED illumination inside a sterile hood, cool clinical whites and blues, photoreal, shallow depth of field, 16:9",
+      "avoid": "faces, screens, text on plates, labels, cartoon CGI, extra fingers, deformed hands, morphing"
+    },
+    {
+      "id": "s6",
+      "kind": "video",
+      "section": "methods",
+      "seconds": 8,
+      "narration": "exposed them to four drugs that shut down the tumor's growth-signaling pathway, and sequenced over a million single cells.",
+      "klingPrompt": "Microscopy footage, a stream of individual translucent cell nuclei flowing one by one through a narrow microfluidic channel, each nucleus briefly enveloped in a clear droplet as it passes, the camera tracking the steady flow, dark field with soft blue backlight and faint amber highlights on the droplets, photoreal, high magnification, 16:9",
+      "avoid": "text, numbers, labels, glowing particles, neon, morphing, flicker, duplicated identical nuclei"
+    },
+    {
+      "id": "f5",
+      "kind": "figure",
+      "section": "methods",
+      "figureLabel": "Figure 3A",
+      "sourcePage": 6,
+      "durationSec": 10,
+      "narration": "In all, more than 14,000 gene-by-drug combinations: a wiring diagram of how each gene shapes the response to therapy."
+    },
+    {
+      "id": "s8",
+      "kind": "video",
+      "section": "results",
+      "sectionLabel": "RESULTS",
+      "seconds": 8,
+      "narration": "Block the tumor's central MEK signal, and the cancer cells stall. They stop dividing.",
+      "klingPrompt": "Phase-contrast microscopy footage, a moderately dense field of glioblastoma cells under MEK-inhibitor treatment, the cells ceasing to divide and holding static while the empty gaps between them stay unchanged, a few cells flattening and enlarging, locked-off camera, even diffuse illumination, cool grey-blue clinical palette, photoreal, high magnification, 16:9",
+      "avoid": "text, numbers, labels, glowing particles, cartoon, morphing, flicker, duplicated identical cells"
+    },
+    {
+      "id": "f2",
+      "kind": "figure",
+      "section": "results",
+      "figureLabel": "Figure 4",
+      "sourcePage": 9,
+      "durationSec": 16,
+      "zooms": 2,
+      "narration": "But the cells fight back. Across every drug and all three cell lines, they switch on the same shared adaptive program: one set of genes rising with dose, another falling, a coordinated escape response."
+    },
+    {
+      "id": "s10",
+      "kind": "video",
+      "section": "results",
+      "seconds": 8,
+      "narration": "That program lets a resistant subpopulation start dividing again. Adaptive resistance, captured transcriptome by transcriptome.",
+      "klingPrompt": "Phase-contrast microscopy footage, a sparse field of glioblastoma cells in which a resistant subpopulation resumes dividing and steadily spreads to fill the empty substrate between them, cells elongating and migrating outward, locked-off camera, even diffuse illumination, cool grey-blue palette with a restrained warm amber accent on the proliferating cells, photoreal, high magnification, 16:9",
+      "avoid": "text, numbers, labels, glowing particles, cartoon, morphing, flicker, duplicated identical cells"
+    },
+    {
+      "id": "f3",
+      "kind": "figure",
+      "section": "results",
+      "figureLabel": "Figure 5",
+      "sourcePage": 10,
+      "durationSec": 16,
+      "zooms": 2,
+      "narration": "Mapping the program back onto the kye-nohm pinpointed the drivers: dozens of kye-nay-siz, from CDK2 to TIE1 to BRD4, that the cancer leans on to adapt."
+    },
+    {
+      "id": "f4a",
+      "kind": "figure",
+      "section": "results",
+      "figureLabel": "Figure 6H",
+      "sourcePage": 12,
+      "durationSec": 9,
+      "narration": "The problem is redundancy. Hit one node, like MEK, and the signal simply reroutes, through RAF, AKT, and NF-kappa-B."
+    },
+    {
+      "id": "f4b",
+      "kind": "figure",
+      "section": "discussion",
+      "sectionLabel": "SIGNIFICANCE",
+      "figureLabel": "Figure 6H",
+      "sourcePage": 12,
+      "durationSec": 9,
+      "narration": "So the screen nominated combinations. Pair the MEK inhibitor with a second drug, targeting CDC7, CDK4 and 6, or NF-kappa-B, and the adaptive program collapses."
+    },
+    {
+      "id": "s14",
+      "kind": "video",
+      "section": "discussion",
+      "seconds": 8,
+      "narration": "Combinations chosen this way didn't just slow the cells. They closed the escape route.",
+      "klingPrompt": "Phase-contrast microscopy footage, a field of glioblastoma cells under a two-drug combination, the cells uniformly rounding up, detaching and clearing from the substrate with no surviving cluster resuming growth, locked-off camera, even diffuse illumination, cool grey-blue palette with a faint red cast, photoreal, high magnification, 16:9",
+      "avoid": "text, numbers, labels, glowing particles, cartoon, morphing, flicker, duplicated identical cells"
+    },
+    {
+      "id": "s15",
+      "kind": "video",
+      "section": "discussion",
+      "seconds": 8,
+      "narration": "This is still work in cancer cells, not patients. But it turns drug resistance into something you can map, and design around, before it starts.",
+      "klingPrompt": "Cinematic medical 3D render, a whole human brain resting in soft light with the previously tumor-burdened region now smooth and quiet, the camera slowly pulling out and craning upward to reveal the full brain, dark clinical void warming from cool blue to a gentle amber, photoreal subsurface scattering, volumetric light, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, tumor mass, floating disconnected anatomy, cartoon CGI, neon, lens flare, morphing, flicker"
+    }
+  ]
+}
