@@ -2874,3 +2874,81 @@ body.scroll-hero-active .announcement-bar { display: none; }
   .fc-frame { aspect-ratio: 16 / 10; }
   .fc-rail { gap: 8px; margin-top: 32px; }
 }
+
+/* =========================================================================
+   Journals marquee — "Journals that accept video abstracts"
+   Full-bleed infinite scroll of wordmark chips. Pure CSS; pauses on hover.
+   ========================================================================= */
+.jm-section { padding-top: 0; }
+.jm-prompt {
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+  margin: 0 0 34px;
+}
+.jm {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.jm-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  white-space: nowrap;
+  padding: 6px 8px;
+  width: max-content;
+  will-change: transform;
+  animation: jm-scroll 44s linear infinite;
+}
+.jm:hover .jm-track { animation-play-state: paused; }
+.jm-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 64px;
+  padding: 0 30px;
+  transition: opacity 0.2s var(--ease);
+}
+.jm-logo {
+  height: 34px;
+  width: auto;
+  max-width: 240px;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+}
+.jm-logo--lg { height: 50px; max-width: 300px; }
+.jm-fallback { align-items: baseline; gap: 8px; }
+.jm-name {
+  font-family: var(--font-ui);
+  font-size: 1.02rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.jm-pub {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.jm-item--more .jm-name { color: var(--blue-hover); font-weight: 700; }
+
+@keyframes jm-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jm-track { animation: none; transform: none; flex-wrap: wrap; justify-content: center; white-space: normal; }
+  .jm { -webkit-mask-image: none; mask-image: none; }
+}

@@ -5,6 +5,7 @@ import ProductionWorkflow from "@/components/ProductionWorkflow";
 import HomeHero from "@/components/HomeHero";
 import Reveal from "@/components/Reveal";
 import FeatureCarousel from "@/components/ui/FeatureCarousel";
+import JournalsMarquee from "@/components/JournalsMarquee";
 
 export default function Home() {
   return (
@@ -29,6 +30,20 @@ export default function Home() {
           </Reveal>
           <ProductionWorkflow />
         </Container>
+      </section>
+
+      {/* ---------- Journals that accept video abstracts ---------- */}
+      <section className="section jm-section" aria-labelledby="journals-heading">
+        <Container>
+          <Reveal>
+            <p className="jm-prompt" id="journals-heading">
+              Journals that accept video abstracts
+            </p>
+          </Reveal>
+        </Container>
+        <Reveal>
+          <JournalsMarquee />
+        </Reveal>
       </section>
 
       {/* ---------- Features ---------- */}
