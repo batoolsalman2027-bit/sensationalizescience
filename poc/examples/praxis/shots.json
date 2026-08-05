@@ -1,0 +1,69 @@
+{
+  "paper": {
+    "title": "Hemispheric contributions to praxis: imitation of gestures and pantomime of tool use following left and right hemisphere damage",
+    "firstAuthor": "Frenkel-Toledo",
+    "authorsDisplay": "Frenkel-Toledo et al.",
+    "journal": "Scientific Reports",
+    "year": "2026",
+    "doi": "10.1038/s41598-026-65259-0",
+    "isPreprint": false
+  },
+  "shots": [
+    { "id": "title", "kind": "title", "section": "title", "durationSec": 2, "narration": "" },
+
+    { "id": "s1", "kind": "video", "section": "intro", "sectionLabel": "INTRODUCTION", "seconds": 8,
+      "narration": "After a stroke, some people can still move their arm, yet they can no longer show how to use a familiar tool.",
+      "klingPrompt": "Cinematic documentary footage, an older adult standing at a bathroom sink holding a toothbrush, the hand hesitating and fumbling as it fails to start the familiar brushing motion, the toothbrush turning awkwardly in the fingers, locked-off camera at chest height, soft morning light from a side window, cool clinical palette with warm skin tones, shallow depth of field, photoreal, 16:9",
+      "avoid": "text, letters, numbers, labels, distorted hands, extra fingers, deformed hands, cartoon CGI, morphing, flicker" },
+
+    { "id": "s2", "kind": "video", "section": "intro", "seconds": 8,
+      "narration": "This is apraxia: a breakdown not of strength, but of the brain's plan for skilled movement. It shows up two ways. Copying a gesture you're shown,",
+      "klingPrompt": "Cinematic documentary footage, two people seated across a small table, one hand demonstrating a simple hand gesture while the other person's hand tries to copy it and falters mid-movement, close on the two hands, locked-off camera, soft even clinical light, cool palette with warm skin tones, shallow depth of field, photoreal, 16:9",
+      "avoid": "text, numbers, labels, distorted hands, extra fingers, deformed hands, cartoon CGI, morphing, flicker" },
+
+    { "id": "s3", "kind": "video", "section": "intro", "seconds": 8,
+      "narration": "and miming how to use a tool from memory. Do these two abilities live in the same place in the brain?",
+      "onscreen": "Imitation and pantomime — one brain system, or two?",
+      "klingPrompt": "Cinematic documentary footage, an older adult seated, miming the act of turning a key in mid-air on command, the wrist rotation stalling and the fingers losing the shape of the grip, the camera pushing in slowly toward the hand, soft clinical light, cool palette with warm skin tones, shallow depth of field, photoreal, 16:9",
+      "avoid": "text, numbers, labels, a real key, distorted hands, extra fingers, deformed hands, cartoon CGI, morphing, flicker" },
+
+    { "id": "f1", "kind": "figure", "section": "methods", "sectionLabel": "METHODS", "figureLabel": "Figure 1", "sourcePage": 33, "durationSec": 13,
+      "narration": "To find out, researchers studied 78 stroke survivors, some with left-brain damage, some with right, and mapped exactly where each stroke had struck." },
+
+    { "id": "s5", "kind": "video", "section": "methods", "seconds": 8,
+      "narration": "Everyone took two standard tests: one for imitating gestures, one for pantomiming tool use.",
+      "klingPrompt": "Cinematic documentary footage, a clinician's hands demonstrating a sequence of simple finger and hand gestures across a table toward a patient, the fingers forming clear shapes one after another, locked-off camera, soft even clinical light, cool clinical palette with warm skin tones, shallow depth of field, photoreal, 16:9",
+      "avoid": "text, numbers, labels, screens, distorted hands, extra fingers, deformed hands, cartoon CGI, morphing, flicker" },
+
+    { "id": "s6", "kind": "video", "section": "methods", "seconds": 8,
+      "narration": "Their brain scans were aligned to a common template, so damage could be compared, voxel by voxel, against performance.",
+      "klingPrompt": "Cinematic medical 3D render, a semi-transparent human brain slowly rotating to reveal a darkened region of tissue damage in one hemisphere, surrounding healthy tissue faintly translucent, the camera orbiting slowly, dark clinical studio void with soft volumetric light, deep blue and teal palette, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, colored data overlays, floating disconnected anatomy, cartoon CGI, neon, lens flare, morphing, flicker" },
+
+    { "id": "f2", "kind": "figure", "section": "results", "sectionLabel": "RESULTS", "figureLabel": "Figure 2", "sourcePage": 34, "durationSec": 15,
+      "narration": "The maps revealed something striking. The regions where damage broke pantomime were mostly not the regions where damage broke imitation. Two different territories." },
+
+    { "id": "s10", "kind": "video", "section": "results", "seconds": 8,
+      "narration": "And the two hemispheres were organized differently.",
+      "klingPrompt": "Cinematic medical 3D render, a whole human brain viewed from above, the camera tracking slowly from the left hemisphere across the midline to the right hemisphere, the cortical folds catching soft light, dark clinical void, deep blue and teal palette with a faint warm rim, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, colored data overlays, cartoon CGI, neon, lens flare, morphing, flicker" },
+
+    { "id": "f3", "kind": "figure", "section": "results", "figureLabel": "Figure 3", "sourcePage": 35, "durationSec": 17,
+      "narration": "In the left brain, about a quarter of the critical spots mattered for both skills, meeting along a major white-matter highway. In the right brain, almost none did. There, damage tended to knock out just one skill or the other." },
+
+    { "id": "s13", "kind": "video", "section": "discussion", "sectionLabel": "SIGNIFICANCE", "seconds": 8,
+      "narration": "That matters for recovery. If imitation and pantomime can break separately, therapy can target the specific skill a person has lost,",
+      "klingPrompt": "Cinematic documentary footage, a therapist gently guiding an older patient's hand through the motion of using a tool, both hands moving together in a slow deliberate arc, close framing, soft warm daylight in a bright therapy room, cool palette warming to amber, shallow depth of field, photoreal, 16:9",
+      "avoid": "text, numbers, labels, equipment clutter, distorted hands, extra fingers, deformed hands, cartoon CGI, morphing, flicker" },
+
+    { "id": "s14", "kind": "video", "section": "discussion", "seconds": 8, "continuityRef": "s1",
+      "narration": "rather than treating apraxia as a single problem.",
+      "klingPrompt": "Cinematic documentary footage, the same older adult standing at a bathroom sink, now raising the toothbrush and completing the brushing motion smoothly and confidently, locked-off camera at chest height, soft morning light from a side window, cool palette with warm skin tones, shallow depth of field, photoreal, 16:9",
+      "avoid": "text, numbers, labels, distorted hands, extra fingers, deformed hands, cartoon CGI, morphing, flicker" },
+
+    { "id": "s15", "kind": "video", "section": "discussion", "seconds": 8,
+      "narration": "And it overturns an old assumption, that praxis is purely left-brained. Both hemispheres shape how we turn intention into skilled action.",
+      "klingPrompt": "Cinematic documentary footage, a calm sunlit rehabilitation room with an empty chair beside a small table of everyday objects, dust motes drifting slowly in a shaft of warm daylight, the camera pushing in gently, cool palette warming to amber, photoreal, shallow depth of field, 16:9",
+      "avoid": "text, numbers, labels, people, clutter, cartoon CGI, morphing, flicker" }
+  ]
+}

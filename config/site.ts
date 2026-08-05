@@ -252,4 +252,16 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
       },
     ],
   },
+  {
+    category: "Neuroscience",
+    videos: [
+      {
+        title:
+          "Hemispheric contributions to praxis: imitation of gestures and pantomime of tool use following left and right hemisphere damage",
+        caption: "Frenkel-Toledo et al. · Scientific Reports (2026) · doi:10.1038/s41598-026-65259-0",
+        src: "/gallery/praxis-hemispheres-apraxia.mp4",
+        poster: "/gallery/praxis-hemispheres-poster.jpg",
+      },
+    ],
+  },
 ];
