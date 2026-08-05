@@ -1,0 +1,215 @@
+{
+  "paper": {
+    "title": "CAMK2D causes heart failure in mice with RBM20 cardiomyopathy",
+    "firstAuthor": "van den Hoogenhof",
+    "authorsDisplay": "van den Hoogenhof et al.",
+    "journal": "Nature Cardiovascular Research",
+    "year": "2026",
+    "doi": "10.1038/s44161-026-00818-2",
+    "isPreprint": false,
+    "evidentiaryLevel": "mouse models (Rbm20 KO, Camk2d KO, DKO, Rbm20-p.Arg636Gln KI); pharmacological proof-of-principle with hesperadin in mice — do not imply human cure"
+  },
+  "pronunciation": {
+    "CAMK2D": "cam-kay-two-dee",
+    "RBM20": "R-B-M-twenty",
+    "cardiomyopathy": "car-dee-oh-my-OPP-uh-thee",
+    "hesperadin": "hess-PAIR-uh-din",
+    "kinase": "KY-nase",
+    "Camk2d": "cam-kay-two-dee"
+  },
+  "figures": [
+    {
+      "id": "f3a",
+      "label": "Figure 3A",
+      "sourcePage": 5,
+      "role": "schematic",
+      "section": "methods",
+      "crop": [
+        0.04,
+        0.042,
+        0.5,
+        0.115
+      ]
+    },
+    {
+      "id": "f2",
+      "label": "Figure 2",
+      "sourcePage": 4,
+      "role": "primary-outcome",
+      "section": "results",
+      "crop": [
+        0.035,
+        0.055,
+        0.965,
+        0.655
+      ]
+    },
+    {
+      "id": "f3",
+      "label": "Figure 3",
+      "sourcePage": 5,
+      "role": "secondary-outcome",
+      "section": "results",
+      "crop": [
+        0.035,
+        0.04,
+        0.97,
+        0.485
+      ]
+    },
+    {
+      "id": "f4",
+      "label": "Figure 4",
+      "sourcePage": 6,
+      "role": "primary-outcome",
+      "section": "results",
+      "crop": [
+        0.035,
+        0.04,
+        0.97,
+        0.535
+      ]
+    }
+  ],
+  "shots": [
+    {
+      "id": "title",
+      "kind": "title",
+      "section": "title",
+      "durationSec": 2,
+      "narration": ""
+    },
+    {
+      "id": "s1",
+      "kind": "video",
+      "section": "intro",
+      "sectionLabel": "INTRODUCTION",
+      "seconds": 8,
+      "narration": "Some families inherit an aggressive form of heart failure. It strikes early, and the heart can stop without warning.",
+      "klingPrompt": "Cinematic medical 3D render, a translucent human heart with a dilated left ventricle, surrounding myocardium slowly turning translucent to reveal the thinned chamber wall and enlarged cavity growing more defined, the camera slowly pushing in toward the dilated ventricle, dark clinical studio void with soft volumetric top light and a faint warm rim, deep blue and teal palette, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, lungs, liver, full torso, floating disconnected anatomy, cartoon CGI, neon, sci-fi hologram, lens flare, morphing, flicker"
+    },
+    {
+      "id": "s2",
+      "kind": "video",
+      "section": "intro",
+      "seconds": 8,
+      "narration": "In R-B-M-twenty cardiomyopathy, a splicing factor fails, and the left ventricle dilates and weakens.",
+      "klingPrompt": "Cinematic medical 3D render, a human heart filling the frame, the left ventricle steadily enlarging and dilating as its wall thins and the chamber balloons outward with each weak labored beat, locked-off camera at organ scale, dark clinical studio void with soft volumetric top light, deep blue and teal palette with a restrained deep-red cast on the strained myocardium, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, lungs, liver, full torso, floating disconnected anatomy, cartoon CGI, neon, sci-fi hologram, lens flare, morphing, flicker"
+    },
+    {
+      "id": "s3",
+      "kind": "video",
+      "section": "intro",
+      "seconds": 6,
+      "narration": "One splicing target is the KY-nase cam-kay-two-dee. Does it drive the disease?",
+      "onscreen": "Does CAMK2D drive RBM20 heart failure?",
+      "klingPrompt": "Cinematic medical 3D render, a close view of a dilated left ventricle continuing a slow weak beat, surrounding myocardium faintly translucent, the camera pushing in slowly and steadily toward the chamber, dark clinical void, deep blue and teal palette, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, glowing molecules, floating disconnected anatomy, neon, cartoon CGI, morphing, flicker"
+    },
+    {
+      "id": "f3a",
+      "kind": "figure",
+      "section": "methods",
+      "sectionLabel": "METHODS",
+      "figureLabel": "Figure 3A",
+      "sourcePage": 5,
+      "durationSec": 10,
+      "narration": "To test that, researchers built mouse models: knockouts of R-B-M-twenty, of cam-kay-two-dee, and a double knockout of both."
+    },
+    {
+      "id": "s5",
+      "kind": "video",
+      "section": "methods",
+      "seconds": 8,
+      "narration": "They housed the animals in a research facility, then measured heart function by echo and challenged them for lethal arrhythmias.",
+      "klingPrompt": "Cinematic documentary footage inside a clean research animal facility, laboratory mice moving and grooming inside clear ventilated IVC cages on a metal rack, one mouse walking along the cage floor while another rears up briefly, the camera slowly tracking along the cage row, soft even fluorescent facility light, cool clinical palette, photoreal, shallow depth of field, 16:9",
+      "avoid": "text, numbers, labels, distress imagery, restraint devices, cruelty, open wounds, faces of people, cartoon CGI, morphing, flicker"
+    },
+    {
+      "id": "s6",
+      "kind": "video",
+      "section": "methods",
+      "seconds": 8,
+      "narration": "In a knock-in disease model carrying a human mutation, they then tested a cam-kay-two inhibitor, hess-PAIR-uh-din.",
+      "klingPrompt": "Macro laboratory footage, a fine pipette tip above a single well of a multiwell plate releasing a droplet of clear amber drug solution that diffuses into the medium, then a gloved hand steadily withdrawing, locked-off camera at close range, bright even LED illumination inside a sterile hood, cool clinical whites and blues, photoreal, shallow depth of field, 16:9",
+      "avoid": "faces, screens, text on plates, labels, cartoon CGI, extra fingers, deformed hands, morphing"
+    },
+    {
+      "id": "s8",
+      "kind": "video",
+      "section": "results",
+      "sectionLabel": "RESULTS",
+      "seconds": 8,
+      "narration": "Lose R-B-M-twenty alone, and the heart fails — the ventricle dilates, pumping collapses, and arrhythmias turn lethal.",
+      "klingPrompt": "Cinematic medical 3D render, a dilated mouse heart beating weakly and unevenly, the left chamber staying enlarged as the walls barely move with each labored cycle, locked-off camera at organ scale, dark clinical void, deep blue and teal palette with a faint deep-red cast, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, floating disconnected anatomy, cartoon CGI, neon, lens flare, morphing, flicker"
+    },
+    {
+      "id": "f2",
+      "kind": "figure",
+      "section": "results",
+      "figureLabel": "Figure 2",
+      "sourcePage": 4,
+      "durationSec": 16,
+      "narration": "Delete cam-kay-two-dee as well, and double-knockout mice were protected — better ejection fraction, less dilation, and far fewer deaths after an arrhythmia challenge."
+    },
+    {
+      "id": "s10",
+      "kind": "video",
+      "section": "results",
+      "seconds": 8,
+      "narration": "Splicing of other R-B-M-twenty targets was still broken. So the rescue was not a general fix of splicing.",
+      "klingPrompt": "Cinematic medical 3D render, a mouse heart transitioning from a dilated weak chamber to a tighter stronger beat as the walls thicken slightly with each cycle, locked-off camera at organ scale, dark clinical void warming slightly toward amber, deep blue and teal palette, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, floating disconnected anatomy, cartoon CGI, neon, lens flare, morphing, flicker"
+    },
+    {
+      "id": "f3",
+      "kind": "figure",
+      "section": "results",
+      "figureLabel": "Figure 3",
+      "sourcePage": 5,
+      "durationSec": 14,
+      "narration": "Put any single cam-kay-two-dee splice variant back into the protected hearts, and dysfunction returned. Overactivation of the KY-nase — not which isoform — drove the failure."
+    },
+    {
+      "id": "f4",
+      "kind": "figure",
+      "section": "results",
+      "figureLabel": "Figure 4",
+      "sourcePage": 6,
+      "durationSec": 14,
+      "narration": "In knock-in mice with a human disease mutation, daily hess-PAIR-uh-din restored ejection fraction within weeks, without clearing the mutant protein's cytoplasmic granules."
+    },
+    {
+      "id": "s12",
+      "kind": "video",
+      "section": "results",
+      "seconds": 8,
+      "narration": "Phosphoproteomics confirmed it: cam-kay-two-dee activity rose with disease, and the drug dialed much of it back.",
+      "klingPrompt": "Cinematic medical 3D render, a close cross-section of contracting myocardium with fibers sliding past each other in a steady stronger rhythm after a weaker start, locked-off camera, soft volumetric light, deep blue and teal palette with a restrained warm amber accent, photoreal subsurface scattering, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, glowing particles, molecular blobs, neon, cartoon CGI, morphing, flicker"
+    },
+    {
+      "id": "s14",
+      "kind": "video",
+      "section": "discussion",
+      "sectionLabel": "SIGNIFICANCE",
+      "seconds": 8,
+      "narration": "This is still mouse work — not a human trial. But it reframes R-B-M-twenty heart failure as something a selective cam-kay-two drug might treat.",
+      "klingPrompt": "Cinematic medical 3D render, a whole mouse heart resting quietly in soft light with the previously dilated chamber now compact and still, the camera slowly pulling out and craning upward to reveal the full heart, dark clinical void warming from cool blue to a gentle amber, photoreal subsurface scattering, volumetric light, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, floating disconnected anatomy, cartoon CGI, neon, lens flare, morphing, flicker, smiling people montage"
+    },
+    {
+      "id": "s15",
+      "kind": "video",
+      "section": "discussion",
+      "seconds": 8,
+      "continuityRef": "s1",
+      "narration": "Cause-directed therapy for this genetic cardiomyopathy is no longer only gene editing. Inhibiting the KY-nase cam-kay-two-dee is now a testable path.",
+      "klingPrompt": "Cinematic medical 3D render, a whole human heart resting in soft light with a quiet compact left ventricle, the camera slowly pulling out to reveal the full heart, dark clinical void warming from cool blue to a gentle amber, photoreal subsurface scattering, volumetric light, shallow depth of field, 16:9",
+      "avoid": "text, letters, numbers, labels, dilated failure, floating disconnected anatomy, cartoon CGI, neon, lens flare, morphing, flicker"
+    }
+  ]
+}

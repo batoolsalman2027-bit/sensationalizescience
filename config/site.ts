@@ -229,7 +229,7 @@ export type GalleryCategory = {
 
 export const GALLERY_CATEGORIES: GalleryCategory[] = [
   {
-    category: "Clinical Medicine",
+    category: "Medicine & Clinical Research",
     videos: [
       {
         title:
@@ -238,10 +238,17 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
         src: "/gallery/clinical-medicine-lumbar-spine.mp4",
         poster: "/gallery/clinical-medicine-poster.jpg",
       },
+      {
+        title:
+          "Hemispheric contributions to praxis: imitation of gestures and pantomime of tool use following left and right hemisphere damage",
+        caption: "Frenkel-Toledo et al. · Scientific Reports (2026) · doi:10.1038/s41598-026-65259-0",
+        src: "/gallery/praxis-hemispheres-apraxia.mp4",
+        poster: "/gallery/praxis-hemispheres-poster.jpg",
+      },
     ],
   },
   {
-    category: "Cancer Genomics",
+    category: "Biology and Genomics",
     videos: [
       {
         title:
@@ -249,18 +256,6 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
         caption: "McFaline-Figueroa et al. · Cell Genomics (2024) · doi:10.1016/j.xgen.2023.100487",
         src: "/gallery/cancer-genomics-kinase-screen.mp4",
         poster: "/gallery/cancer-genomics-poster.jpg",
-      },
-    ],
-  },
-  {
-    category: "Neuroscience",
-    videos: [
-      {
-        title:
-          "Hemispheric contributions to praxis: imitation of gestures and pantomime of tool use following left and right hemisphere damage",
-        caption: "Frenkel-Toledo et al. · Scientific Reports (2026) · doi:10.1038/s41598-026-65259-0",
-        src: "/gallery/praxis-hemispheres-apraxia.mp4",
-        poster: "/gallery/praxis-hemispheres-poster.jpg",
       },
     ],
   },
